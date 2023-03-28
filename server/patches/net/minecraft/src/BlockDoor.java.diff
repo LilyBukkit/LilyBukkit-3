@@ -1,5 +1,50 @@
 --- BlockDoor.java
 +++ BlockDoor.java
+@@ -14,15 +14,15 @@
+         this.setBlockBounds(0.5f - f3, 0.0f, 0.5f - f3, 0.5f + f3, f4, 0.5f + f3);
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public int getRenderType() {
+         return 7;
+     }
+-    
++
+     @Override
+     public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+@@ -30,10 +30,10 @@
+         return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+     }
+-    
++
+     @Override
+     public void setBlockBoundsBasedOnState(final IBlockAccess blockAccess, final int x, final int y, final int z) {
+         this.setDoorRotation(this.getState(blockAccess.getBlockMetadata(x, y, z)));
+     }
+-    
++
+     public void setDoorRotation(final int metadata) {
+         final float f2 = 0.1875f;
+@@ -52,10 +52,10 @@
+         }
+     }
+-    
++
+     @Override
+     public void onBlockClicked(final World world, final int x, final int y, final int z, final EntityPlayer entityPlayer) {
+         this.blockActivated(world, x, y, z, entityPlayer);
+     }
+-    
++
+     @Override
+     public boolean blockActivated(final World world, final int x, final int y, final int z, final EntityPlayer entityPlayer) {
 @@ -67,4 +67,13 @@
              if (world.getBlockId(x, y - 1, z) == this.blockID) {
                  this.blockActivated(world, x, y - 1, z, entityPlayer);
@@ -40,3 +85,64 @@
 +        }
          if (Math.random() < 0.5) {
              world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, "random.door_open", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
+@@ -83,5 +110,5 @@
+         return true;
+     }
+-    
++
+     public void onPoweredBlockChange(final World world, final int x, final int y, final int z, final boolean flag) {
+         final int i6 = world.getBlockMetadata(x, y, z);
+@@ -108,5 +135,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+@@ -137,4 +164,21 @@
+             }
+             else if (flag > 0 && Block.blocksList[flag].canProvidePower()) {
++                //LilyBukkit start
++                org.bukkit.World bworld = world.getWorld();
++                org.bukkit.block.Block block = bworld.getBlockAt(x, y, z);
++                org.bukkit.block.Block blockTop = bworld.getBlockAt(x, y + 1, z);
++
++                int power = block.getBlockPower();
++                int powerTop = blockTop.getBlockPower();
++                if (powerTop > power) power = powerTop;
++                int oldPower = (world.getBlockMetadata(x, y, z) & 4) > 0 ? 15 : 0;
++
++                if (oldPower == 0 ^ power == 0) {
++                    BlockRedstoneEvent eventRedstone = new BlockRedstoneEvent(block, oldPower, power);
++                    world.getServer().getPluginManager().callEvent(eventRedstone);
++
++                    this.onPoweredBlockChange(world, x, y, z, eventRedstone.getNewCurrent() > 0);
++                }
++                //LilyBukkit end
+                 final boolean z3 = world.isBlockIndirectlyGettingPowered(x, y, z) || world.isBlockIndirectlyGettingPowered(x, y + 1, z);
+                 this.onPoweredBlockChange(world, x, y, z, z3);
+@@ -142,10 +186,10 @@
+         }
+     }
+-    
++
+     @Override
+     public int idDropped(final int count, final Random random) {
+         return ((count & 0x8) != 0x0) ? 0 : ((this.material == Material.iron) ? Item.doorSteel.shiftedIndex : Item.doorWood.shiftedIndex);
+     }
+-    
++
+     @Override
+     public MovingObjectPosition collisionRayTrace(final World world, final int x, final int y, final int z, final Vec3D vector1, final Vec3D vector2) {
+@@ -153,9 +197,9 @@
+         return super.collisionRayTrace(world, x, y, z, vector1, vector2);
+     }
+-    
++
+     public int getState(final int flag) {
+         return ((flag & 0x4) == 0x0) ? (flag - 1 & 0x3) : (flag & 0x3);
+     }
+-    
++
+     @Override
+     public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
