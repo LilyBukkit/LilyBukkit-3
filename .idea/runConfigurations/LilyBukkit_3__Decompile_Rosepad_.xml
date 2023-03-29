@@ -13,7 +13,6 @@
           <option value="prepare" />
           <option value="injectClasses" />
           <option value="processPatches" />
-          <option value="pack" />
         </list>
       </option>
       <option name="vmOptions" />

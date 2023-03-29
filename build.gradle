@@ -18,7 +18,7 @@ java {
 
 tasks.register("setupJDK") {
     doLast {
-        Utils.java17path = System.getenv("TOOLKIT_JAVA17")
+        Utils.java17path = null
 
         if (Utils.java17path == null) {
             def jdkpath = Paths.get(project.rootDir.toString(), "tools/jdk17")

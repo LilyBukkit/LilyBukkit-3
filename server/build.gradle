@@ -11,8 +11,15 @@ repositories {
 }
 
 dependencies {
-    implementation project(":rml")
+    //implementation project(":rml")
     implementation 'org.java-websocket:Java-WebSocket:1.5.3'
+    //CraftBukkit deps
+    implementation 'net.sf.jopt-simple:jopt-simple:3.2'
+    implementation 'jline:jline:0.9.94'
+    implementation 'org.xerial:sqlite-jdbc:3.7.2'
+    implementation 'mysql:mysql-connector-java:5.1.14'
+    implementation 'org.avaje:ebean:2.7.3'
+    //LilyBukkit deps
 }
 
 group 'net.buj'
