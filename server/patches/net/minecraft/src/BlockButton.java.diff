@@ -1,6 +1,15 @@
 --- BlockButton.java
 +++ BlockButton.java
-@@ -8,25 +8,25 @@
+@@ -3,4 +3,8 @@
+ import java.util.Random;
+ 
++//LilyBukkit start
++import org.bukkit.event.block.BlockRedstoneEvent;
++//LilyBukkit end
++
+ public class BlockButton extends Block {
+     protected BlockButton(final int id, final int blockIndex) {
+@@ -8,25 +12,25 @@
          this.setTickOnLoad(true);
      }
 -    
@@ -31,7 +40,7 @@
 +
      @Override
      public void onBlockPlaced(final World world, final int x, final int y, final int z, final int notifyFlag) {
-@@ -48,22 +48,19 @@
+@@ -48,22 +52,19 @@
          world.setBlockMetadataWithNotify(x, y, z, i6 + i7);
      }
 -    
@@ -59,21 +68,21 @@
 +
      @Override
      public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
-@@ -89,5 +86,5 @@
+@@ -89,5 +90,5 @@
          }
      }
 -    
 +
      private boolean checkIfAttachedToBlock(final World world, final int x, final int y, final int z) {
          if (!this.canPlaceBlockAt(world, x, y, z)) {
-@@ -98,5 +95,5 @@
+@@ -98,5 +99,5 @@
          return true;
      }
 -    
 +
      @Override
      public void setBlockBoundsBasedOnState(final IBlockAccess blockAccess, final int x, final int y, final int z) {
-@@ -113,71 +110,81 @@
+@@ -113,71 +114,81 @@
          if (i6 == 1) {
              this.setBlockBounds(0.0f, f8, 0.5f - f10, f11, f9, 0.5f + f10);
 -        }
@@ -196,7 +205,7 @@
 +            } else {
                  world.notifyBlocksOfNeighborChange(x, y - 1, z, this.blockID);
              }
-@@ -185,10 +192,10 @@
+@@ -185,10 +196,10 @@
          super.onBlockRemoval(world, x, y, z);
      }
 -    
@@ -209,7 +218,7 @@
 +
      @Override
      public boolean isIndirectlyPoweringTo(final World world, final int x, final int y, final int z, final int flag) {
-@@ -200,10 +207,10 @@
+@@ -200,10 +211,10 @@
          return (i7 == 5 && flag == 1) || (i7 == 4 && flag == 2) || (i7 == 3 && flag == 3) || (i7 == 2 && flag == 4) || (i7 == 1 && flag == 5);
      }
 -    
@@ -222,7 +231,7 @@
 +
      @Override
      public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
-@@ -215,15 +222,11 @@
+@@ -215,15 +226,11 @@
              if (i7 == 1) {
                  world.notifyBlocksOfNeighborChange(x - 1, y, z, this.blockID);
 -            }

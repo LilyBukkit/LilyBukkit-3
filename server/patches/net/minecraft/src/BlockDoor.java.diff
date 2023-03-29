@@ -1,6 +1,15 @@
 --- BlockDoor.java
 +++ BlockDoor.java
-@@ -14,15 +14,15 @@
+@@ -3,4 +3,8 @@
+ import java.util.Random;
+ 
++//LilyBukkit start
++import org.bukkit.event.block.BlockRedstoneEvent;
++//LilyBukkit end
++
+ public class BlockDoor extends Block {
+     protected BlockDoor(final int id, final Material material) {
+@@ -14,15 +18,15 @@
          this.setBlockBounds(0.5f - f3, 0.0f, 0.5f - f3, 0.5f + f3, f4, 0.5f + f3);
      }
 -    
@@ -19,7 +28,7 @@
 +
      @Override
      public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
-@@ -30,10 +30,10 @@
+@@ -30,10 +34,10 @@
          return super.getCollisionBoundingBoxFromPool(world, x, y, z);
      }
 -    
@@ -32,7 +41,7 @@
 +
      public void setDoorRotation(final int metadata) {
          final float f2 = 0.1875f;
-@@ -52,10 +52,10 @@
+@@ -52,10 +56,10 @@
          }
      }
 -    
@@ -45,7 +54,7 @@
 +
      @Override
      public boolean blockActivated(final World world, final int x, final int y, final int z, final EntityPlayer entityPlayer) {
-@@ -67,4 +67,13 @@
+@@ -67,4 +71,13 @@
              if (world.getBlockId(x, y - 1, z) == this.blockID) {
                  this.blockActivated(world, x, y - 1, z, entityPlayer);
 +                if (entityPlayer instanceof EntityPlayerMP) {
@@ -59,7 +68,7 @@
 +                }
              }
              return true;
-@@ -72,7 +81,25 @@
+@@ -72,7 +85,25 @@
          if (world.getBlockId(x, y + 1, z) == this.blockID) {
              world.setBlockMetadataWithNotify(x, y + 1, z, (i6 ^ 0x4) + 8);
 +            if (entityPlayer instanceof EntityPlayerMP) {
@@ -85,21 +94,21 @@
 +        }
          if (Math.random() < 0.5) {
              world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, "random.door_open", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
-@@ -83,5 +110,5 @@
+@@ -83,5 +114,5 @@
          return true;
      }
 -    
 +
      public void onPoweredBlockChange(final World world, final int x, final int y, final int z, final boolean flag) {
          final int i6 = world.getBlockMetadata(x, y, z);
-@@ -108,5 +135,5 @@
+@@ -108,5 +139,5 @@
          }
      }
 -    
 +
      @Override
      public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
-@@ -137,4 +164,21 @@
+@@ -137,4 +168,21 @@
              }
              else if (flag > 0 && Block.blocksList[flag].canProvidePower()) {
 +                //LilyBukkit start
@@ -121,7 +130,7 @@
 +                //LilyBukkit end
                  final boolean z3 = world.isBlockIndirectlyGettingPowered(x, y, z) || world.isBlockIndirectlyGettingPowered(x, y + 1, z);
                  this.onPoweredBlockChange(world, x, y, z, z3);
-@@ -142,10 +186,10 @@
+@@ -142,10 +190,10 @@
          }
      }
 -    
@@ -134,7 +143,7 @@
 +
      @Override
      public MovingObjectPosition collisionRayTrace(final World world, final int x, final int y, final int z, final Vec3D vector1, final Vec3D vector2) {
-@@ -153,9 +197,9 @@
+@@ -153,9 +201,9 @@
          return super.collisionRayTrace(world, x, y, z, vector1, vector2);
      }
 -    

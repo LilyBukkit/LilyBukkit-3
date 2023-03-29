@@ -1,6 +1,21 @@
 --- BlockFire.java
 +++ BlockFire.java
-@@ -11,10 +11,10 @@
+@@ -3,51 +3,57 @@
+ import java.util.Random;
+ 
++//LilyBukkit start
++import org.bukkit.event.block.BlockIgniteEvent;
++import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
++import org.bukkit.event.block.BlockBurnEvent;
++//LilyBukkit end
++
+ public class BlockFire extends Block {
+     private int[] chanceToEncourageFire;
+     private int[] abilityToCatchFire;
+-    
++
+     protected BlockFire(final int id, final int blockIndex) {
+         super(id, blockIndex, Material.fire);
          this.chanceToEncourageFire = new int[256];
          this.abilityToCatchFire = new int[256];
 -        this.initializeBlock(Block.planks.blockID, 5, 20);
@@ -17,17 +32,140 @@
 +        this.initializeBlock(Block.CLOTH.blockID, 30, 60);
          this.setTickOnLoad(true);
      }
-@@ -94,5 +94,5 @@
+-    
++
+     private void initializeBlock(final int blockID, final int chance, final int ability) {
+         this.chanceToEncourageFire[blockID] = chance;
+         this.abilityToCatchFire[blockID] = ability;
+     }
+-    
++
+     @Override
+     public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+         return null;
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public int getRenderType() {
+         return 3;
+     }
+-    
++
+     @Override
+     public int quantityDropped(final Random random) {
+         return 0;
+     }
+-    
++
+     @Override
+     public int tickRate() {
+         return 10;
+     }
+-    
++
+     @Override
+     public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
+@@ -72,4 +78,10 @@
+             this.tryToCatchBlockOnFire(world, x, y, z - 1, 300, random);
+             this.tryToCatchBlockOnFire(world, x, y, z + 1, 300, random);
++            //LilyBukkit - Call to stop spread of fire
++            org.bukkit.Server server = world.getServer();
++            org.bukkit.World bworld = world.getWorld();
++
++            IgniteCause igniteCause = BlockIgniteEvent.IgniteCause.SPREAD;
++            //LilyBukkit end
+             for (int i7 = x - 1; i7 <= x + 1; ++i7) {
+                 for (int i8 = z - 1; i8 <= z + 1; ++i8) {
+@@ -82,5 +94,18 @@
+                             final int i11 = this.getChanceOfNeighborsEncouragingFire(world, i7, i9, i8);
+                             if (i11 > 0 && random.nextInt(i10) <= i11) {
+-                                world.setBlockWithNotify(i7, i9, i8, this.blockID);
++                                //LilyBukkit start = Call to stop spread of fire.
++                                org.bukkit.block.Block block = bworld.getBlockAt(i7, i8, i9);
++
++                                if (block.getTypeId() != Block.FIRE.blockID) {
++                                    BlockIgniteEvent event = new BlockIgniteEvent(block, igniteCause, null);
++                                    server.getPluginManager().callEvent(event);
++
++                                    if (event.isCancelled()) {
++                                        continue;
++                                    }
++
++                                    world.setBlockWithNotify(i7, i9, i8, this.blockID); //<- Vanilla call
++                                }
++                                //LilyBukkit end
+                             }
+                         }
+@@ -90,9 +115,9 @@
+         }
+     }
+-    
++
+     private void tryToCatchBlockOnFire(final World world, final int x, final int y, final int z, final int chance, final Random random) {
          final int i7 = this.abilityToCatchFire[world.getBlockId(x, y, z)];
          if (random.nextInt(chance) < i7) {
 -            final boolean z2 = world.getBlockId(x, y, z) == Block.tnt.blockID;
 +            final boolean z2 = world.getBlockId(x, y, z) == Block.TNT.blockID;
              if (random.nextInt(2) == 0) {
                  world.setBlockWithNotify(x, y, z, this.blockID);
-@@ -102,5 +102,5 @@
+@@ -102,13 +127,13 @@
              }
              if (z2) {
 -                Block.tnt.onBlockDestroyedByPlayer(world, x, y, z, 0);
 +                Block.TNT.onBlockDestroyedByPlayer(world, x, y, z, 0);
              }
          }
+     }
+-    
++
+     private boolean canNeighborBurn(final World world, final int x, final int y, final int z) {
+         return this.canBlockCatchFire(world, x + 1, y, z) || this.canBlockCatchFire(world, x - 1, y, z) || this.canBlockCatchFire(world, x, y - 1, z) || this.canBlockCatchFire(world, x, y + 1, z) || this.canBlockCatchFire(world, x, y, z - 1) || this.canBlockCatchFire(world, x, y, z + 1);
+     }
+-    
++
+     private int getChanceOfNeighborsEncouragingFire(final World world, final int x, final int y, final int z) {
+         final byte b5 = 0;
+@@ -124,24 +149,24 @@
+         return i6;
+     }
+-    
++
+     @Override
+     public boolean isCollidable() {
+         return false;
+     }
+-    
++
+     public boolean canBlockCatchFire(final IBlockAccess blockAccess, final int x, final int y, final int z) {
+         return this.chanceToEncourageFire[blockAccess.getBlockId(x, y, z)] > 0;
+     }
+-    
++
+     public int getChanceToEncourageFire(final World world, final int x, final int y, final int z, final int flag) {
+         final int i6 = this.chanceToEncourageFire[world.getBlockId(x, y, z)];
+         return (i6 > flag) ? i6 : flag;
+     }
+-    
++
+     @Override
+     public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
+         return world.isBlockNormalCube(x, y - 1, z) || this.canNeighborBurn(world, x, y, z);
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+@@ -150,5 +175,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void onBlockAdded(final World world, final int x, final int y, final int z) {
