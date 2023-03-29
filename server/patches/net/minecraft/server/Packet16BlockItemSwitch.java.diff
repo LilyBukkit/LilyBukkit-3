@@ -1,0 +1,44 @@
+--- Packet16BlockItemSwitch.java
++++ Packet16BlockItemSwitch.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -8,13 +8,13 @@
+     public int entityId;
+     public int id;
+-    
++
+     public Packet16BlockItemSwitch() {
+     }
+-    
++
+     public Packet16BlockItemSwitch(final int entityID, final int id) {
+         this.entityId = entityID;
+         this.id = id;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -22,5 +22,5 @@
+         this.id = dataInputStream.readShort();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -28,10 +28,10 @@
+         dataOutputStream.writeShort(this.id);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleBlockItemSwitch(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

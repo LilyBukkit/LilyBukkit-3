@@ -1,0 +1,49 @@
+--- NextTickListEntry.java
++++ NextTickListEntry.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class NextTickListEntry implements Comparable {
+@@ -9,9 +9,9 @@
+     public long scheduledTime;
+     private long tickEntryID;
+-    
++
+     static {
+         NextTickListEntry.nextTickEntryID = 0L;
+     }
+-    
++
+     public NextTickListEntry(final int xCoord, final int yCoord, final int zCoord, final int blockID) {
+         this.tickEntryID = NextTickListEntry.nextTickEntryID++;
+@@ -21,5 +21,5 @@
+         this.blockID = blockID;
+     }
+-    
++
+     public boolean equals(final Object object) {
+         if (!(object instanceof NextTickListEntry)) {
+@@ -29,18 +29,18 @@
+         return this.xCoord == nextTickListEntry2.xCoord && this.yCoord == nextTickListEntry2.yCoord && this.zCoord == nextTickListEntry2.zCoord && this.blockID == nextTickListEntry2.blockID;
+     }
+-    
++
+     public int hashCode() {
+         return (this.xCoord * 128 * 1024 + this.zCoord * 128 + this.yCoord) * 256 + this.blockID;
+     }
+-    
++
+     public NextTickListEntry setScheduledTime(final long scheduledTime) {
+         this.scheduledTime = scheduledTime;
+         return this;
+     }
+-    
++
+     public int comparer(final NextTickListEntry nextTickListEntry1) {
+         return (this.scheduledTime < nextTickListEntry1.scheduledTime) ? -1 : ((this.scheduledTime > nextTickListEntry1.scheduledTime) ? 1 : ((this.tickEntryID < nextTickListEntry1.tickEntryID) ? -1 : ((this.tickEntryID > nextTickListEntry1.tickEntryID) ? 1 : 0)));
+     }
+-    
++
+     public int compareTo(final Object nextTickListEntry) {
+         return this.comparer((NextTickListEntry)nextTickListEntry);

@@ -1,0 +1,43 @@
+--- PathPoint.java
++++ PathPoint.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class PathPoint {
+@@ -12,5 +12,5 @@
+     PathPoint previous;
+     public boolean isFirst;
+-    
++
+     public PathPoint(final int xCoord, final int yCoord, final int zCoord) {
+         this.index = -1;
+@@ -21,5 +21,5 @@
+         this.hash = (xCoord | yCoord << 10 | zCoord << 20);
+     }
+-    
++
+     public float distanceTo(final PathPoint pathPoint) {
+         final float f2 = (float)(pathPoint.xCoord - this.xCoord);
+@@ -28,17 +28,17 @@
+         return MathHelper.sqrt_float(f2 * f2 + f3 * f3 + f4 * f4);
+     }
+-    
++
+     public boolean equals(final Object object) {
+         return ((PathPoint)object).hash == this.hash;
+     }
+-    
++
+     public int hashCode() {
+         return this.hash;
+     }
+-    
++
+     public boolean isAssigned() {
+         return this.index >= 0;
+     }
+-    
++
+     public String toString() {
+         return String.valueOf(this.xCoord) + ", " + this.yCoord + ", " + this.zCoord;

@@ -1,0 +1,45 @@
+--- EntityFallingSand.java
++++ EntityFallingSand.java
+@@ -1,13 +1,13 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class EntityFallingSand extends Entity {
+     public int blockID;
+     public int fallTime;
+-    
++
+     public EntityFallingSand(final World world) {
+         super(world);
+         this.fallTime = 0;
+     }
+-    
++
+     public EntityFallingSand(final World world, final float x, final float y, final float z, final int blockID) {
+         super(world);
+@@ -26,10 +26,10 @@
+         this.prevPosZ = z;
+     }
+-    
++
+     @Override
+     public boolean canBeCollidedWith() {
+         return !this.isDead;
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+@@ -68,10 +68,10 @@
+         }
+     }
+-    
++
+     @Override
+     protected void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         nbttagcompound.setByte("Tile", (byte)this.blockID);
+     }
+-    
++
+     @Override
+     protected void readEntityFromNBT(final NBTTagCompound nbttagcompound) {

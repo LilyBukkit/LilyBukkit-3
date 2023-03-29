@@ -1,0 +1,96 @@
+--- PlayerManager.java
++++ PlayerManager.java
+@@ -1,7 +1,6 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.IOException;
+ import java.util.ArrayList;
+-import net.minecraft.server.MinecraftServer;
+ import java.util.List;
+ 
+@@ -11,5 +10,5 @@
+     private List playerInstancesToUpdate;
+     private MinecraftServer mcServer;
+-    
++
+     public PlayerManager(final MinecraftServer mcServer) {
+         this.players = (List)new ArrayList();
+@@ -18,5 +17,5 @@
+         this.mcServer = mcServer;
+     }
+-    
++
+     public void updatePlayerInstances() throws IOException {
+         for (int i1 = 0; i1 < this.playerInstancesToUpdate.size(); ++i1) {
+@@ -25,5 +24,5 @@
+         this.playerInstancesToUpdate.clear();
+     }
+-    
++
+     private PlayerInstance getPlayerInstance(final int i1, final int i2, final boolean z3) {
+         final long j4 = i1 + 2147483647L | i2 + 2147483647L << 32;
+@@ -35,5 +34,5 @@
+         return playerInstance6;
+     }
+-    
++
+     public void sendTileEntity(final Packet packet, final int x, final int y, final int z) {
+         final int i5 = x >> 4;
+@@ -44,5 +43,5 @@
+         }
+     }
+-    
++
+     public void markBlockNeedsUpdate(final int x, final int y, final int z) {
+         final int i4 = x >> 4;
+@@ -53,5 +52,5 @@
+         }
+     }
+-    
++
+     public void addPlayer(final EntityPlayerMP entityPlayerMP) {
+         this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat(new StringBuilder("§e").append(entityPlayerMP.username).append(" joined the game.").toString()));
+@@ -67,5 +66,5 @@
+         this.players.add(entityPlayerMP);
+     }
+-    
++
+     public void removePlayer(final EntityPlayerMP entityPlayerMP) {
+         this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat(new StringBuilder("§e").append(entityPlayerMP.username).append(" left the game.").toString()));
+@@ -82,5 +81,5 @@
+         this.players.remove(entityPlayerMP);
+     }
+-    
++
+     private boolean a(final int i1, final int i2, final int i3, final int i4) {
+         final int i5 = i1 - i3;
+@@ -88,5 +87,5 @@
+         return i5 >= -10 && i5 <= 10 && (i6 >= -10 && i6 <= 10);
+     }
+-    
++
+     public void updateMountedMovingPlayer(final EntityPlayerMP entityPlayerMP) {
+         final int i2 = (int)entityPlayerMP.posX >> 4;
+@@ -119,17 +118,17 @@
+         }
+     }
+-    
++
+     public int getMaxTrackingDistance() {
+         return 144;
+     }
+-    
++
+     static MinecraftServer getMinecraftServer(final PlayerManager playerManager) {
+         return playerManager.mcServer;
+     }
+-    
++
+     static MCHashTable2 getPlayerInstances(final PlayerManager playerManager) {
+         return playerManager.playerInstances;
+     }
+-    
++
+     static List getPlayerInstancesToUpdate(final PlayerManager playerManager) {
+         return playerManager.playerInstancesToUpdate;

@@ -1,0 +1,16 @@
+--- IInventory.java
++++ IInventory.java
+@@ -1,7 +1,11 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public interface IInventory {
+     int getSizeInventory();
+-    
++
+     ItemStack getStackInSlot(final int slot);
++
++    //LilyBukkit start
++    public abstract ItemStack[] getContents();
++    //LilyBukkit end
+ }

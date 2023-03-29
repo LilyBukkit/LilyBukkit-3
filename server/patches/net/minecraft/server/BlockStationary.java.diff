@@ -1,0 +1,68 @@
+--- BlockStationary.java
++++ BlockStationary.java
+@@ -1,6 +1,10 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+ 
++//LilyBukkit start
++import org.bukkit.event.block.BlockIgniteEvent;
++//LilyBukkit end
++
+ public class BlockStationary extends BlockFluid {
+     protected BlockStationary(final int id, final Material material) {
+@@ -11,5 +15,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+@@ -19,5 +23,5 @@
+         }
+     }
+-    
++
+     private void setNotStationary(final World world, final int x, final int y, final int z) {
+         final int i5 = world.getBlockMetadata(x, y, z);
+@@ -28,8 +32,12 @@
+         world.editingBlocks = false;
+     }
+-    
++
+     @Override
+     public void updateTick(final World world, int x, int y, int z, final Random random) {
+         if (this.material == Material.lava) {
++            //LilyBukkit start = prevent lava putting something on fire.
++            org.bukkit.World bworld = world.getWorld();
++            BlockIgniteEvent.IgniteCause igniteCause = BlockIgniteEvent.IgniteCause.LAVA;
++            //LilyBukkit end
+             for (int i6 = random.nextInt(3), i7 = 0; i7 < i6; ++i7) {
+                 x += random.nextInt(3) - 1;
+@@ -39,5 +47,17 @@
+                 if (i8 == 0) {
+                     if (this.isFlammable(world, x - 1, y, z) || this.isFlammable(world, x + 1, y, z) || this.isFlammable(world, x, y, z - 1) || this.isFlammable(world, x, y, z + 1) || this.isFlammable(world, x, y - 1, z) || this.isFlammable(world, x, y + 1, z)) {
+-                        world.setBlockWithNotify(x, y, z, Block.fire.blockID);
++                        //LilyBukkit start - prevent lava putting something on fire
++                        org.bukkit.block.Block block = bworld.getBlockAt(x,y,z);
++
++                        if (block.getTypeId() != Block.FIRE.blockID) {
++                            BlockIgniteEvent event = new BlockIgniteEvent((block, igniteCause, null));
++                            world.getServer().getPluginManager().callEvent(event);
++
++                            if (event.isCancelled()){
++                                continue;
++                            }
++                        }
++                        //LilyBukkit end
++                        world.setBlockWithNotify(x, y, z, Block.FIRE.blockID);
+                         return;
+                     }
+@@ -49,5 +69,5 @@
+         }
+     }
+-    
++
+     private boolean isFlammable(final World world, final int x, final int y, final int z) {
+         return world.getBlockMaterial(x, y, z).getCanBurn();

@@ -1,0 +1,23 @@
+--- PlayerListBox.java
++++ PlayerListBox.java
+@@ -1,6 +1,5 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Vector;
+-import net.minecraft.server.MinecraftServer;
+ import javax.swing.JList;
+ 
+@@ -8,10 +7,10 @@
+     private MinecraftServer mcServer;
+     private int playerCount;
+-    
++
+     public PlayerListBox(final MinecraftServer minecraftServer) {
+         this.playerCount = 0;
+         (this.mcServer = minecraftServer).addToOnlinePlayerList(this);
+     }
+-    
++
+     public void addAllPlayers() {
+         if (this.playerCount++ % 20 == 0) {

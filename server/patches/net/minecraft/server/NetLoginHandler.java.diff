@@ -1,0 +1,197 @@
+--- NetLoginHandler.java
++++ NetLoginHandler.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.net.HttpURLConnection;
+@@ -5,5 +5,6 @@
+ import java.io.IOException;
+ import java.net.Socket;
+-import net.minecraft.server.MinecraftServer;
++
++import java.net.URLEncoder;
+ import java.util.Random;
+ import java.util.logging.Logger;
+@@ -17,35 +18,35 @@
+     private long loginStart;
+     private String username;
++    private String password;
+     private Packet1Login packet1login;
+     private String serverId;
+-    private boolean isULPP;
+     private int ULPPVersion;
+-    private boolean isULPPOnline;
+-    private static final long loginTimeout = 30000L;
+-    
++    private int ROSEVersion;
++    private static final long LOGIN_TIMEOUT = 30000L;
++
+     static {
+         NetLoginHandler.logger = Logger.getLogger("Minecraft");
+         NetLoginHandler.rand = new Random();
+     }
+-    
++
+     public NetLoginHandler(final MinecraftServer minecraftServer, final Socket socket, final String threadName) throws IOException {
+         this.finishedProcessing = false;
+         this.loginStart = System.currentTimeMillis();
+         this.username = null;
++        this.password = "";
+         this.packet1login = null;
+         this.serverId = "";
+-        this.isULPP = false;
+         this.ULPPVersion = 0;
+-        this.isULPPOnline = false;
++        this.ROSEVersion = 0;
+         this.mcServer = minecraftServer;
+         this.netManager = new NetworkManager(socket, threadName, this);
+     }
+-    
+-    public void tryLogin() throws IOException {
++
++    public void tryLogin() {
+         if (this.packet1login != null) {
+             this.doLogin(this.packet1login);
+             this.packet1login = null;
+         }
+-        if (this.loginStart + 30000L < System.currentTimeMillis()) {
++        if (this.loginStart + LOGIN_TIMEOUT < System.currentTimeMillis()) {
+             this.kickUser("Took too long to log in");
+         }
+@@ -54,12 +55,12 @@
+         }
+     }
+-    
++
+     public void kickUser(final String playerName) {
+-        NetLoginHandler.logger.info(new StringBuilder("Disconnecting ").append(this.getUserAndIPString()).append(": ").append(playerName).toString());
++        NetLoginHandler.logger.info("Disconnecting " + this.getUserAndIPString() + ": " + playerName);
+         this.netManager.addToSendQueue(new Packet255KickDisconnect(playerName));
+         this.netManager.serverShutdown();
+         this.finishedProcessing = true;
+     }
+-    
++
+     @Override
+     public void handleHandshake(final Packet2Handshake packet) {
+@@ -72,28 +73,41 @@
+         }
+     }
+-    
++
+     @Override
+     public void handleLogin(final Packet1Login packet) {
+         this.username = packet.username;
++        this.password = packet.password;
+         if (packet.protocolVersion != 2) {
+             this.kickUser("Outdated client!");
+         }
+-        this.isULPP = ULPPManager.IsVersionString(packet.password);
+-        if (this.isULPP) {
+-            this.ULPPVersion = ULPPManager.GetVersion(packet.password);
+-            this.isULPPOnline = ULPPManager.IsOnline(packet.password);
++        if (ULPPManager.supportsExtension(packet.password, "ULPP", 1, 1)) {
++            this.ULPPVersion = 1;
+         }
++        if (ULPPManager.supportsExtension(packet.password, "ROSE", 2, 2)) {
++            this.ROSEVersion = 2;
++        }
+         this.doLogin(packet);
+     }
+-    
++
+     @Override
+     public void handleULPPLoggedIn(final Packet129ULPPLoggedIn packet) {
++        if (this.username == null) {
++            NetLoginHandler.logger.info("'unknown' failed to authenticate");
++            this.kickUser("Unable to authenticate using ULPP");
++            return;
++        }
++        if (this.ULPPVersion != 1) {
++            NetLoginHandler.logger.info(this.username + " failed to authenticate");
++            this.kickUser("Unable to authenticate using ULPP");
++            return;
++        }
+         try {
+-            final URL checkURL = new URL(new StringBuilder("https://sessionserver.mojang.com/session/minecraft/hasJoined?username=").append(this.username).append("&serverId=").append(this.mcServer.serverId).toString());
++            final URL checkURL = new URL("https://sessionserver.mojang.com/session/minecraft/hasJoined?username="
++                    + URLEncoder.encode(this.username, "utf-8") + "&serverId=" + this.mcServer.serverId);
+             final HttpURLConnection conn = (HttpURLConnection)checkURL.openConnection();
+             conn.connect();
+             final int returnCode = conn.getResponseCode();
+             if (returnCode != 200) {
+-                NetLoginHandler.logger.info(String.valueOf(this.username) + " failed to authenticate");
++                NetLoginHandler.logger.info(this.username + " failed to authenticate");
+                 this.kickUser("Unable to authenticate using ULPP");
+                 return;
+@@ -102,12 +116,12 @@
+         catch (IOException e) {
+             e.printStackTrace();
+-            NetLoginHandler.logger.info(String.valueOf(this.username) + " failed to authenticate");
++            NetLoginHandler.logger.info(this.username + " failed to authenticate");
+             this.kickUser("Unable to authenticate using ULPP");
+             return;
+         }
+-        NetLoginHandler.logger.info(String.valueOf(this.username) + " authenticated using ULPP");
+-        final EntityPlayerMP loggedInPlayer = this.mcServer.configManager.login(this, this.username, "", true);
++        final EntityPlayerMP loggedInPlayer = this.mcServer.configManager.login(this, this.username, this.password, true);
+         if (loggedInPlayer == null) {
+             this.finishedProcessing = true;
++            return;
+         }
+         final int minVersion = Integer.min(this.ULPPVersion, 1);
+@@ -119,11 +133,12 @@
+         this.mcServer.networkServer.addPlayer(ULPPLoginServerHandler);
+         ULPPLoginServerHandler.sendPacket(new Packet4UpdateTime(this.mcServer.worldMngr.worldTime));
++        NetLoginHandler.logger.info(this.username + " authenticated using ULPP");
+         this.finishedProcessing = true;
+     }
+-    
++
+     public void doLogin(final Packet1Login loginPacket) {
+         final int minVersion = Integer.min(this.ULPPVersion, 1);
+         final int usedULPPVer = 1;
+-        if (this.isULPPOnline && minVersion > 0 && this.mcServer.ULPPOnlineMode) {
++        if (this.ULPPVersion == 1 && this.mcServer.ULPPOnlineMode) {
+             this.netManager.addToSendQueue(new Packet1Login("", this.mcServer.serverId, usedULPPVer));
+             return;
+@@ -131,5 +146,5 @@
+         final EntityPlayerMP entityPlayerMP2 = this.mcServer.configManager.login(this, loginPacket.username, loginPacket.password, false);
+         if (entityPlayerMP2 != null) {
+-            NetLoginHandler.logger.info(String.valueOf(this.getUserAndIPString()) + " logged in with ULPP" + Integer.toString(this.ULPPVersion));
++            NetLoginHandler.logger.info(this.getUserAndIPString() + " logged in with ULPP" + this.ULPPVersion);
+             NetServerHandler netServerHandler3;
+             if (minVersion == 0) {
+@@ -149,24 +164,24 @@
+         this.finishedProcessing = true;
+     }
+-    
++
+     @Override
+     public void handleErrorMessage(final String message) {
+-        NetLoginHandler.logger.info(String.valueOf(this.getUserAndIPString()) + " lost connection");
++        NetLoginHandler.logger.info(this.getUserAndIPString() + " lost connection");
+         this.finishedProcessing = true;
+     }
+-    
++
+     @Override
+     public void registerPacket(final Packet packet) {
+         this.kickUser("Protocol error");
+     }
+-    
++
+     public String getUserAndIPString() {
+-        return (this.username != null) ? (String.valueOf(this.username) + " [" + this.netManager.getRemoteAddress().toString() + "]") : this.netManager.getRemoteAddress().toString();
++        return (this.username != null) ? (this.username + " [" + this.netManager.getRemoteAddress().toString() + "]") : this.netManager.getRemoteAddress().toString();
+     }
+-    
++
+     static String getServerId(final NetLoginHandler loginHandler) {
+         return loginHandler.serverId;
+     }
+-    
++
+     static Packet1Login setLoginPacket(final NetLoginHandler loginHandler, final Packet1Login loginPacket) {
+         return loginHandler.packet1login = loginPacket;

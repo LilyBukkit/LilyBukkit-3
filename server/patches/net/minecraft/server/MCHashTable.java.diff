@@ -1,0 +1,98 @@
+--- MCHashTable.java
++++ MCHashTable.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class MCHashTable {
+@@ -7,19 +7,19 @@
+     private final float growFactor = 0.75f;
+     private transient volatile int versionStamp;
+-    
++
+     public MCHashTable() {
+         this.slots = new MCHashEntry[16];
+         this.threshold = 12;
+     }
+-    
++
+     private static int computeHash(int hash) {
+         hash ^= (hash >>> 20 ^ hash >>> 12);
+         return hash ^ hash >>> 7 ^ hash >>> 4;
+     }
+-    
++
+     private static int getSlotIndex(final int i0, final int i1) {
+         return i0 & i1 - 1;
+     }
+-    
++
+     public Object lookup(final int i1) {
+         final int i2 = computeHash(i1);
+@@ -31,9 +31,9 @@
+         return null;
+     }
+-    
++
+     public boolean containsItem(final int i1) {
+         return this.lookupEntry(i1) != null;
+     }
+-    
++
+     final MCHashEntry lookupEntry(final int i1) {
+         final int i2 = computeHash(i1);
+@@ -45,5 +45,5 @@
+         return null;
+     }
+-    
++
+     public void addKey(final int i1, final Object object2) {
+         final int i2 = computeHash(i1);
+@@ -57,5 +57,5 @@
+         this.insert(i2, i1, object2, i3);
+     }
+-    
++
+     private void grow(final int i1) {
+         final MCHashEntry[] mCHashEntry2 = this.slots;
+@@ -71,5 +71,5 @@
+         }
+     }
+-    
++
+     private void copyTo(final MCHashEntry[] mCHashEntry1) {
+         final MCHashEntry[] mCHashEntry2 = this.slots;
+@@ -89,10 +89,10 @@
+         }
+     }
+-    
++
+     public Object removeObject(final int i1) {
+         final MCHashEntry mCHashEntry2 = this.removeEntry(i1);
+         return (mCHashEntry2 == null) ? null : mCHashEntry2.valueEntry;
+     }
+-    
++
+     final MCHashEntry removeEntry(final int i1) {
+         final int i2 = computeHash(i1);
+@@ -117,5 +117,5 @@
+         return mCHashEntry5;
+     }
+-    
++
+     public void clearMap() {
+         ++this.versionStamp;
+@@ -126,5 +126,5 @@
+         this.count = 0;
+     }
+-    
++
+     private void insert(final int i1, final int i2, final Object object3, final int i4) {
+         final MCHashEntry mCHashEntry5 = this.slots[i4];
+@@ -134,5 +134,5 @@
+         }
+     }
+-    
++
+     static int getHash(final int i0) {
+         return computeHash(i0);

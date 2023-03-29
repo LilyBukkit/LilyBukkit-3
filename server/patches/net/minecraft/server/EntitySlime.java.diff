@@ -1,0 +1,95 @@
+--- EntitySlime.java
++++ EntitySlime.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class EntitySlime extends EntityLiving implements IMobs {
+@@ -6,5 +6,5 @@
+     private int slimeJumpDelay;
+     public int size;
+-    
++
+     public EntitySlime(final World world) {
+         super(world);
+@@ -17,5 +17,5 @@
+         this.setSlimeSize(this.size);
+     }
+-    
++
+     public void setSlimeSize(final int size) {
+         this.size = size;
+@@ -24,5 +24,5 @@
+         this.setPosition(this.posX, this.posY, this.posZ);
+     }
+-    
++
+     @Override
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+@@ -30,5 +30,5 @@
+         nbttagcompound.setInteger("Size", this.size - 1);
+     }
+-    
++
+     @Override
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+@@ -36,5 +36,5 @@
+         this.size = nbttagcompound.getInteger("Size") + 1;
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+@@ -57,5 +57,5 @@
+         this.squishFactor *= 0.6f;
+     }
+-    
++
+     @Override
+     protected void updateEntityActionState() {
+@@ -86,5 +86,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void setEntityDead() {
+@@ -101,5 +101,5 @@
+         super.setEntityDead();
+     }
+-    
++
+     @Override
+     public void onCollideWithPlayer(final EntityPlayer entityPlayer) {
+@@ -108,20 +108,20 @@
+         }
+     }
+-    
++
+     @Override
+     protected String getHurtSound() {
+         return "mob.slime";
+     }
+-    
++
+     @Override
+     protected String getDeathSound() {
+         return "mob.slime";
+     }
+-    
++
+     @Override
+     protected int getDropItemId() {
+         return (this.size == 1) ? Item.slimeBall.shiftedIndex : 0;
+     }
+-    
++
+     @Override
+     public boolean getCanSpawnHere() {
+@@ -129,5 +129,5 @@
+         return (this.size == 1 || this.worldObj.difficultySetting > 0) && this.rand.nextInt(10) == 0 && chunk1.getRandomWithSeed(987234911L).nextInt(10) == 0 && this.posY < 16.0;
+     }
+-    
++
+     @Override
+     protected float getSoundVolume() {

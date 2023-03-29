@@ -1,0 +1,84 @@
+--- MCHashTable2.java
++++ MCHashTable2.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class MCHashTable2 {
+@@ -7,23 +7,23 @@
+     private final float growFactor = 0.75f;
+     private transient volatile int versionStamp;
+-    
++
+     public MCHashTable2() {
+         this.slots = new MCHashEntry2[16];
+         this.threshold = 12;
+     }
+-    
++
+     private static int computeHash(final long hash) {
+         return computeHash((int)(hash ^ hash >>> 32));
+     }
+-    
++
+     private static int computeHash(int i0) {
+         i0 ^= (i0 >>> 20 ^ i0 >>> 12);
+         return i0 ^ i0 >>> 7 ^ i0 >>> 4;
+     }
+-    
++
+     private static int getSlotIndex(final int i0, final int i1) {
+         return i0 & i1 - 1;
+     }
+-    
++
+     public Object lookup(final long j1) {
+         final int i3 = computeHash(j1);
+@@ -35,5 +35,5 @@
+         return null;
+     }
+-    
++
+     public void addKey(final long j1, final Object object3) {
+         final int i4 = computeHash(j1);
+@@ -47,5 +47,5 @@
+         this.insert(i4, j1, object3, i5);
+     }
+-    
++
+     private void grow(final int i1) {
+         final MCHashEntry2[] mCHashEntry22 = this.slots;
+@@ -61,5 +61,5 @@
+         }
+     }
+-    
++
+     private void copyTo(final MCHashEntry2[] mCHashEntry21) {
+         final MCHashEntry2[] mCHashEntry22 = this.slots;
+@@ -79,10 +79,10 @@
+         }
+     }
+-    
++
+     public Object removeObject(final long j1) {
+         final MCHashEntry2 mCHashEntry23 = this.removeEntry(j1);
+         return (mCHashEntry23 == null) ? null : mCHashEntry23.valueEntry;
+     }
+-    
++
+     final MCHashEntry2 removeEntry(final long j1) {
+         final int i3 = computeHash(j1);
+@@ -107,5 +107,5 @@
+         return mCHashEntry26;
+     }
+-    
++
+     private void insert(final int i1, final long j2, final Object object4, final int i5) {
+         final MCHashEntry2 mCHashEntry26 = this.slots[i5];
+@@ -115,5 +115,5 @@
+         }
+     }
+-    
++
+     static int getHash(final long j0) {
+         return computeHash(j0);

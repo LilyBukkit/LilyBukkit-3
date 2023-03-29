@@ -1,0 +1,20 @@
+--- NetULPP1ServerHandler.java
++++ NetULPP1ServerHandler.java
+@@ -1,14 +1,13 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+-import net.minecraft.server.MinecraftServer;
+ import java.util.logging.Logger;
+ 
+ public class NetULPP1ServerHandler extends NetServerHandler {
+     public static Logger logger;
+-    
++
+     static {
+         NetULPP1ServerHandler.logger = Logger.getLogger("Minecraft");
+     }
+-    
++
+     public NetULPP1ServerHandler(final MinecraftServer minecraftServer1, final NetworkManager networkManager2, final EntityPlayerMP entityPlayerMP3) {
+         super(minecraftServer1, networkManager2, entityPlayerMP3);

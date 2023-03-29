@@ -1,0 +1,59 @@
+--- Path.java
++++ Path.java
+@@ -1,13 +1,13 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class Path {
+     private PathPoint[] pathPoints;
+     private int count;
+-    
++
+     public Path() {
+         this.pathPoints = new PathPoint[1024];
+         this.count = 0;
+     }
+-    
++
+     public PathPoint addPoint(final PathPoint pathPoint) {
+         if (pathPoint.index >= 0) {
+@@ -24,9 +24,9 @@
+         return pathPoint;
+     }
+-    
++
+     public void clearPath() {
+         this.count = 0;
+     }
+-    
++
+     public PathPoint dequeue() {
+         final PathPoint pathPoint1 = this.pathPoints[0];
+@@ -44,5 +44,5 @@
+         return pathPoint1;
+     }
+-    
++
+     public void changeDistance(final PathPoint pathPoint, final float distanceToTarget) {
+         final float f3 = pathPoint.distanceToTarget;
+@@ -55,5 +55,5 @@
+         }
+     }
+-    
++
+     private void sortBack(int index) {
+         final PathPoint pathPoint2 = this.pathPoints[index];
+@@ -72,5 +72,5 @@
+         pathPoint2.index = index;
+     }
+-    
++
+     private void sortForward(int index) {
+         final PathPoint pathPoint2 = this.pathPoints[index];
+@@ -114,5 +114,5 @@
+         pathPoint2.index = index;
+     }
+-    
++
+     public boolean isPathEmpty() {
+         return this.count == 0;

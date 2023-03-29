@@ -1,0 +1,41 @@
+--- EntityCreature.java
++++ EntityCreature.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class EntityCreature extends EntityLiving {
+@@ -5,10 +5,10 @@
+     protected Entity entityToAttack;
+     protected boolean hasAttacked;
+-    
++
+     public EntityCreature(final World world) {
+         super(world);
+         this.hasAttacked = false;
+     }
+-    
++
+     @Override
+     protected void updateEntityActionState() {
+@@ -122,16 +122,16 @@
+         }
+     }
+-    
++
+     protected void attackEntity(final Entity entity, final float damage) {
+     }
+-    
++
+     protected float getBlockPathWeight(final int x, final int y, final int z) {
+         return 0.0f;
+     }
+-    
++
+     protected Entity findPlayerToAttack() {
+         return null;
+     }
+-    
++
+     @Override
+     public boolean getCanSpawnHere() {

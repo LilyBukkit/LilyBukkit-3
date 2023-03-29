@@ -1,0 +1,49 @@
+--- MapGenCaves.java
++++ MapGenCaves.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -7,5 +7,5 @@
+         this.generateCaveNode(i1, i2, data, d4, d6, d8, 1.0f + this.rand.nextFloat() * 6.0f, 0.0f, 0.0f, -1, -1, 0.5);
+     }
+-    
++
+     protected void generateCaveNode(final int x, final int z, final byte[] data, double d4, double d6, double d8, final float f10, float f11, float f12, int i13, int i14, final double d15) {
+         final double d16 = x * 16 + 8;
+@@ -89,5 +89,5 @@
+                                 final int i26 = (i23 * 16 + i24) * 128 + i25;
+                                 if (i25 >= 0 && i25 < 128) {
+-                                    if (data[i26] == Block.waterMoving.blockID || data[i26] == Block.waterStill.blockID) {
++                                    if (data[i26] == Block.WATER_MOVING.blockID || data[i26] == Block.WATER_STILL.blockID) {
+                                         z4 = true;
+                                     }
+@@ -110,15 +110,15 @@
+                                     if (d26 > -0.7 && d24 * d24 + d26 * d26 + d25 * d25 < 1.0) {
+                                         final byte b51 = data[i27];
+-                                        if (b51 == Block.grass.blockID) {
++                                        if (b51 == Block.GRASS.blockID) {
+                                             z5 = true;
+                                         }
+-                                        if (b51 == Block.stone.blockID || b51 == Block.dirt.blockID || b51 == Block.grass.blockID) {
++                                        if (b51 == Block.STONE.blockID || b51 == Block.DIRT.blockID || b51 == Block.GRASS.blockID) {
+                                             if (i28 < 10) {
+-                                                data[i27] = (byte)Block.lavaMoving.blockID;
++                                                data[i27] = (byte)Block.LAVA_MOVING.blockID;
+                                             }
+                                             else {
+                                                 data[i27] = 0;
+-                                                if (z5 && data[i27 - 1] == Block.dirt.blockID) {
+-                                                    data[i27 - 1] = (byte)Block.grass.blockID;
++                                                if (z5 && data[i27 - 1] == Block.DIRT.blockID) {
++                                                    data[i27 - 1] = (byte)Block.GRASS.blockID;
+                                                 }
+                                             }
+@@ -138,5 +138,5 @@
+         }
+     }
+-    
++
+     @Override
+     protected void recursiveGenerate(final World world, final int i2, final int i3, final int i4, final int i5, final byte[] data) {

@@ -1,0 +1,53 @@
+--- BlockChest.java
++++ BlockChest.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -5,5 +5,5 @@
+ public class BlockChest extends BlockContainer {
+     private Random random;
+-    
++
+     protected BlockChest(final int id) {
+         super(id, Material.wood);
+@@ -11,10 +11,10 @@
+         this.blockIndexInTexture = 26;
+     }
+-    
++
+     @Override
+     public int getBlockTextureFromSide(final int side) {
+         return (side == 1) ? (this.blockIndexInTexture - 1) : ((side == 0) ? (this.blockIndexInTexture - 1) : ((side == 3) ? (this.blockIndexInTexture + 1) : this.blockIndexInTexture));
+     }
+-    
++
+     @Override
+     public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
+@@ -34,9 +34,9 @@
+         return i5 <= 1 && !this.isThereANeighborChest(world, x - 1, y, z) && !this.isThereANeighborChest(world, x + 1, y, z) && !this.isThereANeighborChest(world, x, y, z - 1) && !this.isThereANeighborChest(world, x, y, z + 1);
+     }
+-    
++
+     private boolean isThereANeighborChest(final World world, final int x, final int y, final int z) {
+         return world.getBlockId(x, y, z) == this.blockID && (world.getBlockId(x - 1, y, z) == this.blockID || world.getBlockId(x + 1, y, z) == this.blockID || world.getBlockId(x, y, z - 1) == this.blockID || world.getBlockId(x, y, z + 1) == this.blockID);
+     }
+-    
++
+     @Override
+     public void onBlockRemoval(final World world, final int x, final int y, final int z) {
+@@ -66,5 +66,5 @@
+         super.onBlockRemoval(world, x, y, z);
+     }
+-    
++
+     @Override
+     public boolean blockActivated(final World world, final int x, final int y, final int z, final EntityPlayer entityPlayer) {
+@@ -100,5 +100,5 @@
+         return true;
+     }
+-    
++
+     @Override
+     protected TileEntity getBlockEntity() {

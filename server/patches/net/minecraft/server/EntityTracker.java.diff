@@ -1,0 +1,57 @@
+--- EntityTracker.java
++++ EntityTracker.java
+@@ -1,16 +1,14 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.ArrayList;
+-import java.util.Iterator;
+ import java.util.HashSet;
+-import net.minecraft.server.MinecraftServer;
+ import java.util.Set;
+ 
+ public class EntityTracker {
+-    private Set trackedEntitySet;
++private Set<EntityTrackerEntry> trackedEntitySet;
+     private MCHashTable trackedEntityHashTable;
+     private MinecraftServer mcServer;
+     private int maxTrackingDistanceThreshold;
+-    
++
+     public EntityTracker(final MinecraftServer minecraftServer) {
+         this.trackedEntitySet = (Set)new HashSet();
+@@ -19,5 +17,5 @@
+         this.maxTrackingDistanceThreshold = minecraftServer.configManager.getMaxTrackingDistance();
+     }
+-    
++
+     public void trackEntity(final Entity entity1) {
+         if (entity1 instanceof EntityPlayerMP) {
+@@ -40,5 +38,5 @@
+         }
+     }
+-    
++
+     public void trackEntity(final Entity entity1, int i2, final int i3) {
+         if (i2 > this.maxTrackingDistanceThreshold) {
+@@ -53,5 +51,5 @@
+         entityTrackerEntry4.updatePlayerEntities(this.mcServer.worldMngr.playerEntities);
+     }
+-    
++
+     public void untrackEntity(final Entity entity1) {
+         final EntityTrackerEntry entityTrackerEntry2 = (EntityTrackerEntry)this.trackedEntityHashTable.removeObject(entity1.entityID);
+@@ -61,5 +59,5 @@
+         }
+     }
+-    
++
+     public void updateTrackedEntities() {
+         final ArrayList arrayList1 = new ArrayList();
+@@ -79,5 +77,5 @@
+         }
+     }
+-    
++
+     public void sendPacketToTrackedPlayers(final Entity entity1, final Packet packet2) {
+         final EntityTrackerEntry entityTrackerEntry3 = (EntityTrackerEntry)this.trackedEntityHashTable.lookup(entity1.entityID);

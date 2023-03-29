@@ -1,0 +1,27 @@
+--- BlockLog.java
++++ BlockLog.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -8,15 +8,15 @@
+         this.blockIndexInTexture = 20;
+     }
+-    
++
+     @Override
+     public int quantityDropped(final Random random) {
+         return 1;
+     }
+-    
++
+     @Override
+     public int idDropped(final int count, final Random random) {
+-        return Block.wood.blockID;
++        return Block.WOOD.blockID;
+     }
+-    
++
+     @Override
+     public int getBlockTextureFromSide(final int side) {

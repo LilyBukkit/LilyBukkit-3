@@ -1,0 +1,36 @@
+--- NibbleArray.java
++++ NibbleArray.java
+@@ -1,15 +1,15 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class NibbleArray {
+     public final byte[] data;
+-    
++
+     public NibbleArray(final int data) {
+         this.data = new byte[data >> 1];
+     }
+-    
++
+     public NibbleArray(final byte[] data) {
+         this.data = data;
+     }
+-    
++
+     public int get(final int i1, final int i2, final int i3) {
+         final int i4 = i1 << 11 | i3 << 7 | i2;
+@@ -18,5 +18,5 @@
+         return (i6 == 0) ? (this.data[i5] & 0xF) : (this.data[i5] >> 4 & 0xF);
+     }
+-    
++
+     public void set(final int i1, final int i2, final int i3, final int i4) {
+         final int i5 = i1 << 11 | i3 << 7 | i2;
+@@ -30,5 +30,5 @@
+         }
+     }
+-    
++
+     public boolean isValid() {
+         return this.data != null;

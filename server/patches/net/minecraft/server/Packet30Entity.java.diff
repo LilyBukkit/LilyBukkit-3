@@ -1,0 +1,43 @@
+--- Packet30Entity.java
++++ Packet30Entity.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -13,29 +13,29 @@
+     public byte pitch;
+     public boolean rotating;
+-    
++
+     public Packet30Entity() {
+         this.rotating = false;
+     }
+-    
++
+     public Packet30Entity(final int entityID) {
+         this.rotating = false;
+         this.entityId = entityID;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+         this.entityId = dataInputStream.readInt();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+         dataOutputStream.writeInt(this.entityId);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleEntity(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

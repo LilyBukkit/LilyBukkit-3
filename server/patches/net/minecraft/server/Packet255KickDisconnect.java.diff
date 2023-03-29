@@ -1,0 +1,41 @@
+--- Packet255KickDisconnect.java
++++ Packet255KickDisconnect.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -7,27 +7,27 @@
+ public class Packet255KickDisconnect extends Packet {
+     public String reason;
+-    
++
+     public Packet255KickDisconnect() {
+     }
+-    
++
+     public Packet255KickDisconnect(final String reason) {
+         this.reason = reason;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+         this.reason = dataInputStream.readUTF();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+         dataOutputStream.writeUTF(this.reason);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleKickDisconnect(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

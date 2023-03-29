@@ -1,0 +1,28 @@
+--- Packet12PlayerLook.java
++++ Packet12PlayerLook.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -9,5 +9,5 @@
+         this.rotating = true;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -16,5 +16,5 @@
+         super.readPacketData(dataInputStream);
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -23,5 +23,5 @@
+         super.writePacket(dataOutputStream);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

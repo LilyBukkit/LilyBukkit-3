@@ -1,0 +1,24 @@
+--- BlockBreakable.java
++++ BlockBreakable.java
+@@ -1,17 +1,17 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class BlockBreakable extends Block {
+     private boolean localFlag;
+-    
++
+     protected BlockBreakable(final int id, final int blockIndex, final Material material, final boolean localFlag) {
+         super(id, blockIndex, material);
+         this.localFlag = localFlag;
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public boolean shouldSideBeRendered(final IBlockAccess blockAccess, final int x, final int y, final int z, final int side) {

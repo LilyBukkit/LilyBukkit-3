@@ -1,0 +1,60 @@
+--- NetworkListenThread.java
++++ NetworkListenThread.java
+@@ -1,8 +1,7 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.logging.Level;
+ import java.io.IOException;
+ import java.net.InetAddress;
+-import net.minecraft.server.MinecraftServer;
+ import java.util.ArrayList;
+ import java.net.ServerSocket;
+@@ -18,9 +17,9 @@
+     private ArrayList playerList;
+     public MinecraftServer mcServer;
+-    
++
+     static {
+         NetworkListenThread.logger = Logger.getLogger("Minecraft");
+     }
+-    
++
+     public NetworkListenThread(final MinecraftServer minecraftServer, final InetAddress address, final int port) throws IOException {
+         this.isListening = false;
+@@ -33,9 +32,9 @@
+         (this.listenThread = new NetworkAcceptThread(this, "Listen thread", minecraftServer)).start();
+     }
+-    
++
+     public void addPlayer(final NetServerHandler netServerHandler) {
+         this.playerList.add(netServerHandler);
+     }
+-    
++
+     private void addPendingConnection(final NetLoginHandler netLoginHandler) {
+         if (netLoginHandler == null) {
+@@ -44,5 +43,5 @@
+         this.pendingConnections.add(netLoginHandler);
+     }
+-    
++
+     public void handleNetworkListenThread() {
+         for (int i1 = 0; i1 < this.pendingConnections.size(); ++i1) {
+@@ -73,13 +72,13 @@
+         }
+     }
+-    
++
+     static ServerSocket getServerSocket(final NetworkListenThread listenThread) {
+         return listenThread.serverSocket;
+     }
+-    
++
+     static int incrementConnections(final NetworkListenThread listenThread) {
+         return listenThread.connectionNumber++;
+     }
+-    
++
+     static void addPendingConnection(final NetworkListenThread listenThread, final NetLoginHandler netLoginHandler) {
+         listenThread.addPendingConnection(netLoginHandler);

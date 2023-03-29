@@ -1,0 +1,18 @@
+--- ItemAxe.java
++++ ItemAxe.java
+@@ -1,11 +1,11 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class ItemAxe extends ItemTool {
+     private static Block[] blocksEffectiveAgainst;
+-    
++
+     static {
+-        ItemAxe.blocksEffectiveAgainst = new Block[] { Block.planks, Block.bookshelf, Block.wood, Block.chest };
++        ItemAxe.blocksEffectiveAgainst = new Block[] { Block.PLANKS, Block.BOOKSHELF, Block.WOOD, Block.CHEST};
+     }
+-    
++
+     public ItemAxe(final int itemID, final int material) {
+         super(itemID, 3, material, ItemAxe.blocksEffectiveAgainst);

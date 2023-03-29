@@ -1,0 +1,55 @@
+--- EntityCow.java
++++ EntityCow.java
+@@ -1,7 +1,7 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class EntityCow extends EntityAnimal {
+     public boolean unusedBool2;
+-    
++
+     public EntityCow(final World world) {
+         super(world);
+@@ -10,35 +10,35 @@
+         this.setSize(0.9f, 1.3f);
+     }
+-    
++
+     @Override
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         super.writeEntityToNBT(nbttagcompound);
+     }
+-    
++
+     @Override
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+         super.readEntityFromNBT(nbttagcompound);
+     }
+-    
++
+     @Override
+     protected String getLivingSound() {
+         return "mob.cow";
+     }
+-    
++
+     @Override
+     protected String getHurtSound() {
+         return "mob.cowhurt";
+     }
+-    
++
+     @Override
+     protected String getDeathSound() {
+         return "mob.cowhurt";
+     }
+-    
++
+     @Override
+     protected float getSoundVolume() {
+         return 0.4f;
+     }
+-    
++
+     @Override
+     protected int getDropItemId() {

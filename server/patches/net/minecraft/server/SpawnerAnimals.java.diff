@@ -1,0 +1,39 @@
+--- SpawnerAnimals.java
++++ SpawnerAnimals.java
+@@ -1,5 +1,4 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+-import java.util.Iterator;
+ import java.util.HashSet;
+ import java.util.Set;
+@@ -9,6 +8,6 @@
+     private Class entityType;
+     private Class[] entities;
+-    private Set eligibleChunksForSpawning;
+-    
++private Set<ChunkCoordIntPair> eligibleChunksForSpawning;
++
+     public SpawnerAnimals(final int i1, final Class class2, final Class[] class3) {
+         this.eligibleChunksForSpawning = (Set)new HashSet();
+@@ -17,5 +16,5 @@
+         this.entities = class3;
+     }
+-    
++
+     public void onUpdate(final World world1) {
+         final int i2 = world1.countEntities(this.entityType);
+@@ -26,5 +25,5 @@
+         }
+     }
+-    
++
+     protected ChunkPosition getRandomSpawningPointInChunk(final World world1, final int i2, final int i3) {
+         final int i4 = i2 + world1.rand.nextInt(16);
+@@ -33,5 +32,5 @@
+         return new ChunkPosition(i4, i5, i6);
+     }
+-    
++
+     private int performSpawning(final World world1, final int i2, final IProgressUpdate iProgressUpdate3) {
+         this.eligibleChunksForSpawning.clear();

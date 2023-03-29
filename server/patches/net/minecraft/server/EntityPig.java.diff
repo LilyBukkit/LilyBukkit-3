@@ -1,0 +1,51 @@
+--- EntityPig.java
++++ EntityPig.java
+@@ -1,7 +1,7 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class EntityPig extends EntityAnimal {
+     public boolean saddled;
+-    
++
+     public EntityPig(final World world) {
+         super(world);
+@@ -11,5 +11,5 @@
+         this.saddled = false;
+     }
+-    
++
+     @Override
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+@@ -17,5 +17,5 @@
+         nbttagcompound.setBoolean("Saddle", this.saddled);
+     }
+-    
++
+     @Override
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+@@ -23,20 +23,20 @@
+         this.saddled = nbttagcompound.getBoolean("Saddle");
+     }
+-    
++
+     @Override
+     protected String getLivingSound() {
+         return "mob.pig";
+     }
+-    
++
+     @Override
+     protected String getHurtSound() {
+         return "mob.pig";
+     }
+-    
++
+     @Override
+     protected String getDeathSound() {
+         return "mob.pigdeath";
+     }
+-    
++
+     @Override
+     protected int getDropItemId() {

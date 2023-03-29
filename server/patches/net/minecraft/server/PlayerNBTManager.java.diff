@@ -1,0 +1,31 @@
+--- PlayerNBTManager.java
++++ PlayerNBTManager.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.InputStream;
+@@ -11,13 +11,13 @@
+     public static Logger logger;
+     private File playerNBT;
+-    
++
+     static {
+         PlayerNBTManager.logger = Logger.getLogger("Minecraft");
+     }
+-    
++
+     public PlayerNBTManager(final File playerNBT) {
+         (this.playerNBT = playerNBT).mkdir();
+     }
+-    
++
+     public void writePlayerNBT(final EntityPlayerMP entityPlayerMP) {
+         try {
+@@ -36,5 +36,5 @@
+         }
+     }
+-    
++
+     public void readPlayerNBT(final EntityPlayerMP entityPlayerMP) {
+         try {

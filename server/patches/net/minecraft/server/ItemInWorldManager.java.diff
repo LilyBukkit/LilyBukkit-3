@@ -1,0 +1,55 @@
+--- ItemInWorldManager.java
++++ ItemInWorldManager.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class ItemInWorldManager {
+@@ -11,5 +11,5 @@
+     private int posY;
+     private int posZ;
+-    
++
+     public ItemInWorldManager(final World world) {
+         this.removeProgress = 0.0f;
+@@ -18,5 +18,5 @@
+         this.worldObj = world;
+     }
+-    
++
+     public void onBlockClicked(final int i1, final int i2, final int i3) {
+         final int i4 = this.worldObj.getBlockId(i1, i2, i3);
+@@ -28,10 +28,10 @@
+         }
+     }
+-    
++
+     public void blockRemoving() {
+         this.removeProgress = 0.0f;
+         this.curBlockDurability = 0;
+     }
+-    
++
+     public void updateBlockRemoving(final int i1, final int i2, final int i3, final int i4) {
+         if (this.curBlockDurability > 0) {
+@@ -63,5 +63,5 @@
+         }
+     }
+-    
++
+     public boolean removeBlock(final int i1, final int i2, final int i3) {
+         final Block block4 = Block.blocksList[this.worldObj.getBlockId(i1, i2, i3)];
+@@ -73,5 +73,5 @@
+         return z6;
+     }
+-    
++
+     public boolean tryHarvestBlock(final int i1, final int i2, final int i3) {
+         final int i4 = this.worldObj.getBlockId(i1, i2, i3);
+@@ -91,5 +91,5 @@
+         return z6;
+     }
+-    
++
+     public boolean activeBlockOrUseItem(final EntityPlayer entityPlayer1, final World world2, final ItemStack itemStack3, final int i4, final int i5, final int i6, final int i7) {
+         final int i8 = world2.getBlockId(i4, i5, i6);

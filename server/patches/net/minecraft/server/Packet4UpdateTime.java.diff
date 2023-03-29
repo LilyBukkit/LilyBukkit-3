@@ -1,0 +1,41 @@
+--- Packet4UpdateTime.java
++++ Packet4UpdateTime.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -7,27 +7,27 @@
+ public class Packet4UpdateTime extends Packet {
+     public long time;
+-    
++
+     public Packet4UpdateTime() {
+     }
+-    
++
+     public Packet4UpdateTime(final long time) {
+         this.time = time;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+         this.time = dataInputStream.readLong();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+         dataOutputStream.writeLong(this.time);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleUpdateTime(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

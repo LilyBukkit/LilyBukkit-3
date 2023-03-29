@@ -1,0 +1,90 @@
+--- ChunkProviderServer.java
++++ ChunkProviderServer.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.IOException;
+@@ -17,5 +17,5 @@
+     private List loadedChunks;
+     private WorldServer worldObj;
+-    
++
+     public ChunkProviderServer(final WorldServer worldServer, final IChunkLoader chunkLoader, final IChunkProvider chunkProvider) {
+         this.droppedChunksSet = (Set)new HashSet();
+@@ -29,10 +29,10 @@
+         this.serverChunkProvider = chunkProvider;
+     }
+-    
++
+     public boolean chunkExists(final int x, final int z) {
+         final ChunkCoordinates chunkCoordinates3 = new ChunkCoordinates(x, z);
+         return this.id2ChunkMap.containsKey(chunkCoordinates3);
+     }
+-    
++
+     public void dropChunk(final int i1, final int i2) {
+         final int i3 = i1 * 16 + 8 - this.worldObj.spawnX;
+@@ -43,5 +43,5 @@
+         }
+     }
+-    
++
+     public Chunk loadChunk(final int x, final int z) {
+         final ChunkCoordinates chunkCoordinates3 = new ChunkCoordinates(x, z);
+@@ -78,5 +78,5 @@
+         return chunk4;
+     }
+-    
++
+     public Chunk provideChunk(final int x, final int z) {
+         final ChunkCoordinates chunkCoordinates3 = new ChunkCoordinates(x, z);
+@@ -84,5 +84,5 @@
+         return (chunk4 == null) ? (this.worldObj.worldChunkLoadOverride ? this.loadChunk(x, z) : this.chunk) : chunk4;
+     }
+-    
++
+     private Chunk loadAndSaveChunk(final int x, final int z) {
+         if (this.serverChunkLoader == null) {
+@@ -101,5 +101,5 @@
+         }
+     }
+-    
++
+     private void saveExtraChunkData(final Chunk chunk) {
+         if (this.serverChunkLoader != null) {
+@@ -112,5 +112,5 @@
+         }
+     }
+-    
++
+     private void saveChunk(final Chunk chunk) {
+         if (this.serverChunkLoader != null) {
+@@ -124,5 +124,5 @@
+         }
+     }
+-    
++
+     public void populate(final IChunkProvider chunkProvider, final int x, final int z) {
+         final Chunk chunk4 = this.provideChunk(x, z);
+@@ -135,5 +135,5 @@
+         }
+     }
+-    
++
+     public boolean saveChunks(final boolean flag, final IProgressUpdate progressUpdate) {
+         int i3 = 0;
+@@ -159,5 +159,5 @@
+         return true;
+     }
+-    
++
+     public boolean unload100OldestChunks() {
+         if (!this.worldObj.levelSaving) {
+@@ -180,5 +180,5 @@
+         return this.serverChunkProvider.unload100OldestChunks();
+     }
+-    
++
+     public boolean canSave() {
+         return !this.worldObj.levelSaving;

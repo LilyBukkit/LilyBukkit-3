@@ -1,0 +1,51 @@
+--- EntityTNTPrimed.java
++++ EntityTNTPrimed.java
+@@ -1,7 +1,7 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class EntityTNTPrimed extends Entity {
+     public int fuse;
+-    
++
+     public EntityTNTPrimed(final World world) {
+         super(world);
+@@ -11,5 +11,5 @@
+         this.yOffset = this.height / 2.0f;
+     }
+-    
++
+     public EntityTNTPrimed(final World world, final float x, final float y, final float z) {
+         this(world);
+@@ -25,10 +25,10 @@
+         this.prevPosZ = z;
+     }
+-    
++
+     @Override
+     public boolean canBeCollidedWith() {
+         return !this.isDead;
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+@@ -54,15 +54,15 @@
+         }
+     }
+-    
++
+     private void explode() {
+         final float f1 = 4.0f;
+         this.worldObj.createExplosion(null, this.posX, this.posY, this.posZ, f1);
+     }
+-    
++
+     @Override
+     protected void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         nbttagcompound.setByte("Fuse", (byte)this.fuse);
+     }
+-    
++
+     @Override
+     protected void readEntityFromNBT(final NBTTagCompound nbttagcompound) {

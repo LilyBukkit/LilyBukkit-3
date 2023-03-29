@@ -1,0 +1,154 @@
+--- BlockPressurePlate.java
++++ BlockPressurePlate.java
+@@ -1,10 +1,17 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.List;
+ import java.util.Random;
+ 
++//LilyBukkit start
++import org.bukkit.craftbukkit.event.CraftEventFactory;
++import org.bukkit.event.block.*;
++import org.bukkit.event.block.BlockRedstoneEvent;
++import org.bukkit.event.entity.EntityInteractEvent;
++//LilyBukkit end
++
+ public class BlockPressurePlate extends Block {
+     private EnumMobType triggerMobType;
+-    
++
+     protected BlockPressurePlate(final int id, final int blockIndex, final EnumMobType triggerMobType) {
+         super(id, blockIndex, Material.rock);
+@@ -14,29 +21,29 @@
+         this.setBlockBounds(f4, 0.0f, f4, 1.0f - f4, 0.03125f, 1.0f - f4);
+     }
+-    
++
+     @Override
+     public int tickRate() {
+         return 20;
+     }
+-    
++
+     @Override
+     public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+         return null;
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
+         return world.isBlockNormalCube(x, y - 1, z);
+     }
+-    
++
+     @Override
+     public void onBlockAdded(final World world, final int x, final int y, final int z) {
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+@@ -50,5 +57,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
+@@ -57,5 +64,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void onEntityCollidedWithBlock(final World world, final int x, final int y, final int z, final Entity entity) {
+@@ -64,5 +71,5 @@
+         }
+     }
+-    
++
+     private void setStateIfMobInteractsWithPlate(final World world, final int x, final int y, final int z) {
+         final boolean z2 = world.getBlockMetadata(x, y, z) == 1;
+@@ -82,4 +89,35 @@
+             z3 = true;
+         }
++        //LilyBukkit start - Interact Pressure Plate
++        org.bukkit.World bworld = world.getWorld();
++        org.bukkit.plugin.PluginManager manager = world.getServer().getPluginManager();
++
++        if (z2 != z3) {
++            if (z3) {
++                for (Object object : list8) {
++                    if (object != null) {
++                        org.bukkit.event.Cancellable cancellable;
++
++                        if (object instanceof EntityPlayer) {
++                            cancellable = CraftEventFactory.callPlayerInteractEvent(object, Action.PHYSICAL, x, y, z, -1, null);
++                        } else if (object instanceof Entity) {
++                            cancellable = new EntityInteractEvent(object.getBukkitEntity(), bworld.getBlockAt(x, y, z));
++                            manager.callEvent(cancellable);
++                        } else {
++                            continue;
++                        }
++                        if (cancellable.isCancelled()) {
++                            return;
++                        }
++                    }
++                }
++            }
++
++            BlockRedstoneEvent eventRedstone = new BlockRedstoneEvent(bworld.getBlockAt(x, y, z), z2 ? 1 : 0, z3 ? 1 : 0);
++            manager.callEvent(eventRedstone);
++
++            z3 = eventRedstone.getNewCurrent() > 0;
++        }
++        //LilyBukkit end
+         if (z3 && !z2) {
+             world.setBlockMetadataWithNotify(x, y, z, 1);
+@@ -100,5 +138,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void onBlockRemoval(final World world, final int x, final int y, final int z) {
+@@ -110,5 +148,5 @@
+         super.onBlockRemoval(world, x, y, z);
+     }
+-    
++
+     @Override
+     public void setBlockBoundsBasedOnState(final IBlockAccess blockAccess, final int x, final int y, final int z) {
+@@ -117,20 +155,19 @@
+         if (z2) {
+             this.setBlockBounds(f6, 0.0f, f6, 1.0f - f6, 0.03125f, 1.0f - f6);
+-        }
+-        else {
++        } else {
+             this.setBlockBounds(f6, 0.0f, f6, 1.0f - f6, 0.0625f, 1.0f - f6);
+         }
+     }
+-    
++
+     @Override
+     public boolean isPoweringTo(final IBlockAccess blockAccess, final int x, final int y, final int z, final int unused) {
+         return blockAccess.getBlockMetadata(x, y, z) > 0;
+     }
+-    
++
+     @Override
+     public boolean isIndirectlyPoweringTo(final World world, final int x, final int y, final int z, final int flag) {
+         return world.getBlockMetadata(x, y, z) != 0 && flag == 1;
+     }
+-    
++
+     @Override
+     public boolean canProvidePower() {

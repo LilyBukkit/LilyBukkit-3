@@ -1,0 +1,46 @@
+--- Packet53BlockChange.java
++++ Packet53BlockChange.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -11,9 +11,9 @@
+     public int type;
+     public int metadata;
+-    
++
+     public Packet53BlockChange() {
+         this.isChunkDataPacket = true;
+     }
+-    
++
+     public Packet53BlockChange(final int xPosition, final int yPosition, final int zPosition, final World world) {
+         this.isChunkDataPacket = true;
+@@ -24,5 +24,5 @@
+         this.metadata = world.getBlockMetadata(xPosition, yPosition, zPosition);
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -33,5 +33,5 @@
+         this.metadata = dataInputStream.read();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -42,10 +42,10 @@
+         dataOutputStream.write(this.metadata);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleBlockChange(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

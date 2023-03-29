@@ -1,0 +1,40 @@
+--- BlockTNT.java
++++ BlockTNT.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -7,10 +7,10 @@
+         super(id, blockIndex, Material.tnt);
+     }
+-    
++
+     @Override
+     public int getBlockTextureFromSide(final int side) {
+         return (side == 0) ? (this.blockIndexInTexture + 2) : ((side == 1) ? (this.blockIndexInTexture + 1) : this.blockIndexInTexture);
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+@@ -20,10 +20,10 @@
+         }
+     }
+-    
++
+     @Override
+     public int quantityDropped(final Random random) {
+         return 0;
+     }
+-    
++
+     @Override
+     public void onBlockDestroyedByExplosion(final World world, final int x, final int y, final int z) {
+@@ -32,5 +32,5 @@
+         world.spawnEntityInWorld(entityTNTPrimed5);
+     }
+-    
++
+     @Override
+     public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int flag) {

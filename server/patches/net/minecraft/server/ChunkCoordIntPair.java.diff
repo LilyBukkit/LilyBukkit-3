@@ -1,0 +1,30 @@
+--- ChunkCoordIntPair.java
++++ ChunkCoordIntPair.java
+@@ -1,22 +1,22 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class ChunkCoordIntPair {
+     public int chunkXPos;
+     public int chunkZPos;
+-    
++
+     public ChunkCoordIntPair(final int chunkXPos, final int chunkZPos) {
+         this.chunkXPos = chunkXPos;
+         this.chunkZPos = chunkZPos;
+     }
+-    
++
+     public int hashCode() {
+         return this.chunkXPos << 8 | this.chunkZPos;
+     }
+-    
++
+     public boolean equals(final Object object1) {
+         final ChunkCoordIntPair chunkCoordIntPair2 = (ChunkCoordIntPair)object1;
+         return chunkCoordIntPair2.chunkXPos == this.chunkXPos && chunkCoordIntPair2.chunkZPos == this.chunkZPos;
+     }
+-    
++
+     public double a(final Entity entity) {
+         final double d2 = this.chunkXPos * 16 + 8;

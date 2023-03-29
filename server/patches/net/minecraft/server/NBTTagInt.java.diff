@@ -1,0 +1,41 @@
+--- NBTTagInt.java
++++ NBTTagInt.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataInput;
+@@ -7,27 +7,27 @@
+ public class NBTTagInt extends NBTBase {
+     public int intValue;
+-    
++
+     public NBTTagInt() {
+     }
+-    
++
+     public NBTTagInt(final int intValue) {
+         this.intValue = intValue;
+     }
+-    
++
+     @Override
+     void writeTagContents(final DataOutput dataOutput) throws IOException {
+         dataOutput.writeInt(this.intValue);
+     }
+-    
++
+     @Override
+     void readTagContents(final DataInput dataInput) throws IOException {
+         this.intValue = dataInput.readInt();
+     }
+-    
++
+     @Override
+     public byte getType() {
+         return 3;
+     }
+-    
++
+     public String toString() {
+         return new StringBuilder().append(this.intValue).toString();

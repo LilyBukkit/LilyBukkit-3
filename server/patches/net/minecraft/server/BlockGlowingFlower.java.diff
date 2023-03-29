@@ -1,0 +1,41 @@
+--- BlockGlowingFlower.java
++++ BlockGlowingFlower.java
+@@ -1,32 +1,27 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+-import net.minecraft.src.ItemStack;
+-import net.minecraft.src.EntityPlayer;
+-import net.minecraft.src.AxisAlignedBB;
+-import net.minecraft.src.World;
+-
+ public class BlockGlowingFlower extends BlockGlowing {
+     int renderMode;
+-    
++
+     protected BlockGlowingFlower(final int n, final int n2, final int n3) {
+         super(n, n2, n3);
+         this.renderMode = 1;
+     }
+-    
++
+     @Override
+     public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+         return null;
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
+         return true;
+     }
+-    
++
+     @Override
+     public boolean blockActivated(final World world, final int x, final int y, final int z, final EntityPlayer entityPlayer) {

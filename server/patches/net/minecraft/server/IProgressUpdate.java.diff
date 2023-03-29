@@ -1,0 +1,15 @@
+--- IProgressUpdate.java
++++ IProgressUpdate.java
+@@ -1,9 +1,9 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public interface IProgressUpdate {
+     void displayProgressMessage(final String message);
+-    
++
+     void displayLoadingString(final String message);
+-    
++
+     void setLoadingProgress(final int progress);
+ }

@@ -1,0 +1,18 @@
+--- BlockStone.java
++++ BlockStone.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -7,8 +7,8 @@
+         super(id, blockIndex, Material.rock);
+     }
+-    
++
+     @Override
+     public int idDropped(final int count, final Random random) {
+-        return Block.cobblestone.blockID;
++        return Block.COBBLESTONE.blockID;
+     }
+ }

@@ -1,0 +1,19 @@
+--- ThreadCommandReader.java
++++ ThreadCommandReader.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.IOException;
+@@ -9,9 +9,9 @@
+ public class ThreadCommandReader extends Thread {
+     final MinecraftServer mcServer;
+-    
++
+     public ThreadCommandReader(final MinecraftServer minecraftServer1) {
+         this.mcServer = minecraftServer1;
+     }
+-    
++
+     public void run() {
+         final BufferedReader bufferedReader1 = new BufferedReader((Reader)new InputStreamReader(System.in));

@@ -1,0 +1,17 @@
+--- ThreadMonitorConnection.java
++++ ThreadMonitorConnection.java
+@@ -1,11 +1,11 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ class ThreadMonitorConnection extends Thread {
+     final NetworkManager netManager;
+-    
++
+     ThreadMonitorConnection(final NetworkManager networkManager1) {
+         this.netManager = networkManager1;
+     }
+-    
++
+     public void run() {
+         try {

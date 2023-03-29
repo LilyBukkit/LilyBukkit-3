@@ -1,0 +1,20 @@
+--- ServerGuiCommandListener.java
++++ ServerGuiCommandListener.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.awt.event.ActionEvent;
+@@ -8,10 +8,10 @@
+     final JTextField textField;
+     final ServerGUI mcServerGui;
+-    
++
+     ServerGuiCommandListener(final ServerGUI serverGUI1, final JTextField jTextField2) {
+         this.mcServerGui = serverGUI1;
+         this.textField = jTextField2;
+     }
+-    
++
+     public void actionPerformed(final ActionEvent actionEvent1) {
+         final String string2 = this.textField.getText().trim();

@@ -1,0 +1,89 @@
+--- MinecartTrackLogic.java
++++ MinecartTrackLogic.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.ArrayList;
+@@ -12,5 +12,5 @@
+     private List connectedTracks;
+     final BlockMinecartTrack minecartTrack;
+-    
++
+     public MinecartTrackLogic(final BlockMinecartTrack minecartTrack, final World world, final int trackX, final int trackY, final int trackZ) {
+         this.minecartTrack = minecartTrack;
+@@ -23,5 +23,5 @@
+         this.calculateConnectedTracks();
+     }
+-    
++
+     private void calculateConnectedTracks() {
+         this.connectedTracks.clear();
+@@ -67,5 +67,5 @@
+         }
+     }
+-    
++
+     private void refreshConnectedTracks() {
+         for (int i = 0; i < this.connectedTracks.size(); ++i) {
+@@ -79,9 +79,9 @@
+         }
+     }
+-    
++
+     private boolean isMinecartTrack(final int x, final int y, final int z) {
+         return this.world.getBlockId(x, y, z) == this.minecartTrack.blockID || this.world.getBlockId(x, y + 1, z) == this.minecartTrack.blockID || this.world.getBlockId(x, y - 1, z) == this.minecartTrack.blockID;
+     }
+-    
++
+     private MinecartTrackLogic getMinecartTrackLogic(final ChunkPosition chunkPos) {
+         if (this.world.getBlockId(chunkPos.x, chunkPos.y, chunkPos.z) == this.minecartTrack.blockID) {
+@@ -96,5 +96,5 @@
+         return null;
+     }
+-    
++
+     private boolean isConnectedTo(final MinecartTrackLogic trackLogic) {
+         for (int i = 0; i < this.connectedTracks.size(); ++i) {
+@@ -106,5 +106,5 @@
+         return false;
+     }
+-    
++
+     private boolean isInTrack(final int x, final int y, final int z) {
+         for (int i = 0; i < this.connectedTracks.size(); ++i) {
+@@ -116,5 +116,5 @@
+         return false;
+     }
+-    
++
+     public int getNAdjacentTracks() {
+         int n = 0;
+@@ -133,5 +133,5 @@
+         return n;
+     }
+-    
++
+     private boolean canConnectTo(final MinecartTrackLogic trackLogic) {
+         if (this.isConnectedTo(trackLogic)) {
+@@ -150,5 +150,5 @@
+         return true;
+     }
+-    
++
+     private void connectToNeighbor(final MinecartTrackLogic trackLogic) {
+         this.connectedTracks.add(new ChunkPosition(trackLogic.trackX, trackLogic.trackY, trackLogic.trackZ));
+@@ -197,5 +197,5 @@
+         this.world.setBlockMetadataWithNotify(this.trackX, this.trackY, this.trackZ, n);
+     }
+-    
++
+     private boolean canConnectFrom(final int x, final int y, final int z) {
+         final MinecartTrackLogic minecartTrackLogic = this.getMinecartTrackLogic(new ChunkPosition(x, y, z));
+@@ -206,5 +206,5 @@
+         return minecartTrackLogic.canConnectTo(this);
+     }
+-    
++
+     public void place(final boolean flag) {
+         final boolean bl2 = this.canConnectFrom(this.trackX, this.trackY, this.trackZ - 1);

@@ -1,0 +1,19 @@
+--- GuiLogFormatter.java
++++ GuiLogFormatter.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.Writer;
+@@ -10,9 +10,9 @@
+ class GuiLogFormatter extends Formatter {
+     final GuiLogOutputHandler handler;
+-    
++
+     GuiLogFormatter(final GuiLogOutputHandler handler) {
+         this.handler = handler;
+     }
+-    
++
+     public String format(final LogRecord logRecord) {
+         final StringBuilder stringBuilder2 = new StringBuilder();

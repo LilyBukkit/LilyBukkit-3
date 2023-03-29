@@ -1,0 +1,45 @@
+--- Packet24MobSpawn.java
++++ Packet24MobSpawn.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -13,8 +13,8 @@
+     public byte yaw;
+     public byte pitch;
+-    
++
+     public Packet24MobSpawn() {
+     }
+-    
++
+     public Packet24MobSpawn(final EntityLiving entityLiving) {
+         this.entityId = entityLiving.entityID;
+@@ -26,5 +26,5 @@
+         this.pitch = (byte)(entityLiving.rotationPitch * 256.0f / 360.0f);
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -37,5 +37,5 @@
+         this.pitch = dataInputStream.readByte();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -48,10 +48,10 @@
+         dataOutputStream.writeByte((int)this.pitch);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleMobSpawn(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

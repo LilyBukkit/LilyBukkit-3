@@ -1,0 +1,152 @@
+--- EntityPlayer.java
++++ EntityPlayer.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.List;
+@@ -15,5 +15,5 @@
+     private int damageRemainder;
+     public Random playerRand;
+-    
++
+     public EntityPlayer(final World world) {
+         super(world);
+@@ -33,5 +33,5 @@
+         this.playerRand = new Random();
+     }
+-    
++
+     @Override
+     public void updateRidden() {
+@@ -40,5 +40,5 @@
+         this.cameraYaw = 0.0f;
+     }
+-    
++
+     @Override
+     protected void updateEntityActionState() {
+@@ -55,5 +55,5 @@
+         this.swingProgress = this.swingProgressInt / 8.0f;
+     }
+-    
++
+     @Override
+     public void onLivingUpdate() {
+@@ -108,9 +108,9 @@
+         }
+     }
+-    
++
+     private void collideWithPlayer(final Entity entity) {
+         entity.onCollideWithPlayer(this);
+     }
+-    
++
+     @Override
+     public void onDeath(final Entity entity) {
+@@ -133,14 +133,14 @@
+         this.yOffset = 0.1f;
+     }
+-    
++
+     @Override
+     public void addToPlayerScore(final Entity entity, final int score) {
+         this.score += score;
+     }
+-    
++
+     public void dropPlayerItem(final ItemStack stack) {
+         this.dropPlayerItemWithRandomChoice(stack, false);
+     }
+-    
++
+     public void dropPlayerItemWithRandomChoice(final ItemStack stack, final boolean z2) {
+         if (stack != null) {
+@@ -173,9 +173,9 @@
+         }
+     }
+-    
++
+     protected void joinEntityItemWithWorld(final EntityItem entityItem) {
+         this.worldObj.spawnEntityInWorld(entityItem);
+     }
+-    
++
+     public float getCurrentPlayerStrVsBlock(final Block block) {
+         float f2 = this.inventory.getStrVsBlock(block);
+@@ -188,9 +188,9 @@
+         return f2;
+     }
+-    
++
+     public boolean canHarvestBlock(final Block block) {
+         return this.inventory.canHarvestBlock(block);
+     }
+-    
++
+     @Override
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+@@ -199,5 +199,5 @@
+         this.inventory.readFromNBT(nBTTagList2);
+     }
+-    
++
+     @Override
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+@@ -205,19 +205,19 @@
+         nbttagcompound.setTag("Inventory", (NBTBase)this.inventory.writeToNBT(new NBTTagList()));
+     }
+-    
++
+     public void displayGUIChest(final IInventory inventory) {
+     }
+-    
++
+     public void displayWorkbenchGUI() {
+     }
+-    
++
+     public void onItemPickup(final Entity entity, final int i2) {
+     }
+-    
++
+     @Override
+     protected float getEyeHeight() {
+         return 0.12f;
+     }
+-    
++
+     @Override
+     public boolean attackEntityFrom(final Entity entity, int damage) {
+@@ -247,24 +247,24 @@
+         return damage != 0 && super.attackEntityFrom(entity, damage);
+     }
+-    
++
+     public void displayGUIFurnace(final TileEntityFurnace tileEntityFurnace) {
+     }
+-    
++
+     public void displayGUIEditSign(final TileEntitySign tileEntitySign) {
+     }
+-    
++
+     public ItemStack getCurrentEquippedItem() {
+         return this.inventory.getCurrentItem();
+     }
+-    
++
+     public void destroyCurrentEquippedItem() {
+         this.inventory.setInventorySlotContents(this.inventory.currentItem, null);
+     }
+-    
++
+     @Override
+     public double getYOffset() {
+         return this.yOffset - 0.5f;
+     }
+-    
++
+     public void swingItem() {
+         this.swingProgressInt = -1;

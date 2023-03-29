@@ -1,0 +1,60 @@
+--- NBTBase.java
++++ NBTBase.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataInput;
+@@ -7,24 +7,24 @@
+ public abstract class NBTBase {
+     private String key;
+-    
++
+     public NBTBase() {
+         this.key = null;
+     }
+-    
++
+     abstract void writeTagContents(final DataOutput dataOutput) throws IOException;
+-    
++
+     abstract void readTagContents(final DataInput dataInput) throws IOException;
+-    
++
+     public abstract byte getType();
+-    
++
+     public String getKey() {
+         return (this.key == null) ? "" : this.key;
+     }
+-    
++
+     public NBTBase setKey(final String key) {
+         this.key = key;
+         return this;
+     }
+-    
++
+     public static NBTBase readNamedTag(final DataInput dataInput) throws IOException {
+         final byte b1 = dataInput.readByte();
+@@ -37,5 +37,5 @@
+         return nBTBase2;
+     }
+-    
++
+     public static void writeNamedTag(final NBTBase nbtbase, final DataOutput dataOutput) throws IOException {
+         dataOutput.writeByte((int)nbtbase.getType());
+@@ -45,5 +45,5 @@
+         }
+     }
+-    
++
+     public static NBTBase createTagOfType(final byte type) {
+         switch (type) {
+@@ -86,5 +86,5 @@
+         }
+     }
+-    
++
+     public static String getTagName(final byte type) {
+         switch (type) {

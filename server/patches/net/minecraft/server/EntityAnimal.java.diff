@@ -1,0 +1,43 @@
+--- EntityAnimal.java
++++ EntityAnimal.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public abstract class EntityAnimal extends EntityCreature implements IAnimals {
+@@ -5,20 +5,20 @@
+         super(world);
+     }
+-    
++
+     @Override
+     protected float getBlockPathWeight(final int x, final int y, final int z) {
+-        return (this.worldObj.getBlockId(x, y - 1, z) == Block.grass.blockID) ? 10.0f : (this.worldObj.getBrightness(x, y, z) - 0.5f);
++        return (this.worldObj.getBlockId(x, y - 1, z) == Block.GRASS.blockID) ? 10.0f : (this.worldObj.getBrightness(x, y, z) - 0.5f);
+     }
+-    
++
+     @Override
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         super.writeEntityToNBT(nbttagcompound);
+     }
+-    
++
+     @Override
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+         super.readEntityFromNBT(nbttagcompound);
+     }
+-    
++
+     @Override
+     public boolean getCanSpawnHere() {
+@@ -26,7 +26,7 @@
+         final int i2 = MathHelper.floor_double(this.boundingBox.minY);
+         final int i3 = MathHelper.floor_double(this.posZ);
+-        return this.worldObj.getBlockId(i1, i2 - 1, i3) == Block.grass.blockID && this.worldObj.getBlockLightValue(i1, i2, i3) > 8 && super.getCanSpawnHere();
++        return this.worldObj.getBlockId(i1, i2 - 1, i3) == Block.GRASS.blockID && this.worldObj.getBlockLightValue(i1, i2, i3) > 8 && super.getCanSpawnHere();
+     }
+-    
++
+     @Override
+     public int getTalkInterval() {

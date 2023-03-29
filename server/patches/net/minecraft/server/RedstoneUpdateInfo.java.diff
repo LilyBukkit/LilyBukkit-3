@@ -1,0 +1,14 @@
+--- RedstoneUpdateInfo.java
++++ RedstoneUpdateInfo.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ class RedstoneUpdateInfo {
+@@ -6,5 +6,5 @@
+     int z;
+     long updateTime;
+-    
++
+     public RedstoneUpdateInfo(final int x, final int y, final int z, final long updateTime) {
+         this.x = x;

@@ -1,0 +1,42 @@
+--- EntitySnowball.java
++++ EntitySnowball.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.List;
+@@ -13,5 +13,5 @@
+     private int ticksInGround;
+     private int ticksInAir;
+-    
++
+     public EntitySnowball(final World world) {
+         super(world);
+@@ -25,5 +25,5 @@
+         this.setSize(0.25f, 0.25f);
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+@@ -122,5 +122,5 @@
+         this.setPosition(this.posX, this.posY, this.posZ);
+     }
+-    
++
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         nbttagcompound.setShort("xTile", (short)this.xTile);
+@@ -131,5 +131,5 @@
+         nbttagcompound.setByte("inGround", (byte)(byte)(this.inGround ? 1 : 0));
+     }
+-    
++
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+         this.xTile = nbttagcompound.getShort("xTile");
+@@ -140,5 +140,5 @@
+         this.inGround = (nbttagcompound.getByte("inGround") == 1);
+     }
+-    
++
+     @Override
+     public void onCollideWithPlayer(final EntityPlayer entityPlayer) {

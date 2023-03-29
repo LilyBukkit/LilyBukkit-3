@@ -1,0 +1,19 @@
+--- ServerWindowAdapter.java
++++ ServerWindowAdapter.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.awt.event.WindowEvent;
+@@ -7,9 +7,9 @@
+ final class ServerWindowAdapter extends WindowAdapter {
+     final MinecraftServer mcServer;
+-    
++
+     ServerWindowAdapter(final MinecraftServer minecraftServer1) {
+         this.mcServer = minecraftServer1;
+     }
+-    
++
+     public void windowClosing(final WindowEvent windowEvent1) {
+         this.mcServer.stopRunning();

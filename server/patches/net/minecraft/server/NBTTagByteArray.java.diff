@@ -1,0 +1,43 @@
+--- NBTTagByteArray.java
++++ NBTTagByteArray.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataInput;
+@@ -7,12 +7,12 @@
+ public class NBTTagByteArray extends NBTBase {
+     public byte[] byteArray;
+-    
++
+     public NBTTagByteArray() {
+     }
+-    
++
+     public NBTTagByteArray(final byte[] byteArray) {
+         this.byteArray = byteArray;
+     }
+-    
++
+     @Override
+     void writeTagContents(final DataOutput dataOutput) throws IOException {
+@@ -20,5 +20,5 @@
+         dataOutput.write(this.byteArray);
+     }
+-    
++
+     @Override
+     void readTagContents(final DataInput dataInput) throws IOException {
+@@ -26,10 +26,10 @@
+         dataInput.readFully(this.byteArray = new byte[i2]);
+     }
+-    
++
+     @Override
+     public byte getType() {
+         return 7;
+     }
+-    
++
+     public String toString() {
+         return new StringBuilder("[").append(this.byteArray.length).append(" bytes]").toString();

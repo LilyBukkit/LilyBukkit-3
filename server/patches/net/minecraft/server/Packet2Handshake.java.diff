@@ -1,0 +1,41 @@
+--- Packet2Handshake.java
++++ Packet2Handshake.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -7,27 +7,27 @@
+ public class Packet2Handshake extends Packet {
+     public String username;
+-    
++
+     public Packet2Handshake() {
+     }
+-    
++
+     public Packet2Handshake(final String username) {
+         this.username = username;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+         this.username = dataInputStream.readUTF();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+         dataOutputStream.writeUTF(this.username);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleHandshake(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

@@ -1,0 +1,66 @@
+--- BlockReed.java
++++ BlockReed.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -11,5 +11,5 @@
+         this.setTickOnLoad(true);
+     }
+-    
++
+     @Override
+     public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
+@@ -29,16 +29,16 @@
+         }
+     }
+-    
++
+     @Override
+     public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
+         final int i5 = world.getBlockId(x, y - 1, z);
+-        return i5 == this.blockID || ((i5 == Block.grass.blockID || i5 == Block.dirt.blockID) && (world.getBlockMaterial(x - 1, y - 1, z) == Material.water || world.getBlockMaterial(x + 1, y - 1, z) == Material.water || world.getBlockMaterial(x, y - 1, z - 1) == Material.water || world.getBlockMaterial(x, y - 1, z + 1) == Material.water));
++        return i5 == this.blockID || ((i5 == Block.GRASS.blockID || i5 == Block.DIRT.blockID) && (world.getBlockMaterial(x - 1, y - 1, z) == Material.water || world.getBlockMaterial(x + 1, y - 1, z) == Material.water || world.getBlockMaterial(x, y - 1, z - 1) == Material.water || world.getBlockMaterial(x, y - 1, z + 1) == Material.water));
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+         this.checkBlockCoordValid(world, x, y, z);
+     }
+-    
++
+     protected final void checkBlockCoordValid(final World world, final int x, final int y, final int z) {
+         if (!this.canBlockStay(world, x, y, z)) {
+@@ -47,25 +47,25 @@
+         }
+     }
+-    
++
+     @Override
+     public boolean canBlockStay(final World world, final int x, final int y, final int z) {
+         return this.canPlaceBlockAt(world, x, y, z);
+     }
+-    
++
+     @Override
+     public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+         return null;
+     }
+-    
++
+     @Override
+     public int idDropped(final int count, final Random random) {
+         return Item.reed.shiftedIndex;
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public int getRenderType() {

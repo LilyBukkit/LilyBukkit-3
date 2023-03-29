@@ -1,0 +1,30 @@
+--- BlockSponge.java
++++ BlockSponge.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class BlockSponge extends Block {
+@@ -6,5 +6,5 @@
+         this.blockIndexInTexture = 48;
+     }
+-    
++
+     @Override
+     public void onBlockAdded(final World world, final int x, final int y, final int z) {
+@@ -13,10 +13,13 @@
+             for (int i7 = y - b5; i7 <= y + b5; ++i7) {
+                 for (int i8 = z - b5; i8 <= z + b5; ++i8) {
+-                    if (world.getBlockMaterial(i6, i7, i8) == Material.water) {}
++if (world.getBlockMaterial(i6, i7, i8) == Material.water) {
++world.setBlock(i6, i7, i8, 0);
++world.notifyBlocksOfNeighborChange(i6, i7, i8, 0);
++}
+                 }
+             }
+         }
+     }
+-    
++
+     @Override
+     public void onBlockRemoval(final World world, final int x, final int y, final int z) {

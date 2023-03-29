@@ -1,0 +1,47 @@
+--- EntityList.java
++++ EntityList.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.HashMap;
+@@ -9,5 +9,5 @@
+     private static Map IDtoClassMapping;
+     private static Map classToIDMapping;
+-    
++
+     static {
+         EntityList.stringToClassMapping = (Map)new HashMap();
+@@ -36,5 +36,5 @@
+         addMapping((Class)EntityBoat.class, "Boat", 41);
+     }
+-    
++
+     private static void addMapping(final Class clazz, final String entityName, final int entityID) {
+         EntityList.stringToClassMapping.put(entityName, clazz);
+@@ -43,5 +43,5 @@
+         EntityList.classToIDMapping.put(clazz, entityID);
+     }
+-    
++
+     public static Entity createEntityByName(final String entityName, final World world) {
+         Entity entity2 = null;
+@@ -57,5 +57,5 @@
+         return entity2;
+     }
+-    
++
+     public static Entity createEntityFromNBT(final NBTTagCompound nbttagcompound, final World world) {
+         Entity entity2 = null;
+@@ -77,9 +77,9 @@
+         return entity2;
+     }
+-    
++
+     public static int getEntityID(final Entity entity) {
+         return (int)EntityList.classToIDMapping.get(entity.getClass());
+     }
+-    
++
+     public static String getEntityString(final Entity entity) {
+         return (String)EntityList.classToStringMapping.get(entity.getClass());

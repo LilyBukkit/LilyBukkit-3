@@ -1,0 +1,42 @@
+--- CompressedStreamTools.java
++++ CompressedStreamTools.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.ByteArrayOutputStream;
+@@ -26,5 +26,5 @@
+         return nBTTagCompound2;
+     }
+-    
++
+     public static void writeCompressed(final NBTTagCompound nbttagcompound, final OutputStream outputStream) throws IOException {
+         final DataOutputStream dataOutputStream2 = new DataOutputStream((OutputStream)new GZIPOutputStream(outputStream));
+@@ -37,5 +37,5 @@
+         dataOutputStream2.close();
+     }
+-    
++
+     public static NBTTagCompound decompress(final byte[] data) throws IOException {
+         final DataInputStream dataInputStream1 = new DataInputStream((InputStream)new GZIPInputStream((InputStream)new ByteArrayInputStream(data)));
+@@ -50,5 +50,5 @@
+         return nBTTagCompound2;
+     }
+-    
++
+     public static byte[] compress(final NBTTagCompound nbttagcompound) throws IOException {
+         final ByteArrayOutputStream byteArrayOutputStream1 = new ByteArrayOutputStream();
+@@ -63,5 +63,5 @@
+         return byteArrayOutputStream1.toByteArray();
+     }
+-    
++
+     public static NBTTagCompound read(final DataInput dataInput) throws IOException {
+         final NBTBase nBTBase1 = NBTBase.readNamedTag(dataInput);
+@@ -71,5 +71,5 @@
+         throw new IOException("Root tag must be a named compound tag");
+     }
+-    
++
+     public static void write(final NBTTagCompound nbttagcompound, final DataOutput dataOutput) throws IOException {
+         NBTBase.writeNamedTag(nbttagcompound, dataOutput);

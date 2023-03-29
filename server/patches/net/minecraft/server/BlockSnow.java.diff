@@ -1,0 +1,85 @@
+--- BlockSnow.java
++++ BlockSnow.java
+@@ -1,6 +1,10 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+ 
++//LilyBukkit start
++import org.bukkit.event.block.BlockFadeEvent;
++//LilyBukkit end
++
+ public class BlockSnow extends Block {
+     protected BlockSnow(final int id, final int blockIndex) {
+@@ -9,15 +13,15 @@
+         this.setTickOnLoad(true);
+     }
+-    
++
+     @Override
+     public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+         return null;
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
+@@ -25,10 +29,10 @@
+         return i5 != 0 && Block.blocksList[i5].isOpaqueCube() && world.getBlockMaterial(x, y - 1, z).getIsSolid();
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+         this.canSnowStay(world, x, y, z);
+     }
+-    
++
+     private boolean canSnowStay(final World world, final int x, final int y, final int z) {
+         if (!this.canPlaceBlockAt(world, x, y, z)) {
+@@ -39,23 +43,34 @@
+         return true;
+     }
+-    
++
+     @Override
+     public int idDropped(final int count, final Random random) {
+         return Item.snowball.shiftedIndex;
+     }
+-    
++
+     @Override
+     public int quantityDropped(final Random random) {
+         return 0;
+     }
+-    
++
+     @Override
+     public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
+         if (world.getSavedLightValue(EnumSkyBlock.Block, x, y, z) > 11) {
++            //LilyBukkit start
++            org.bukkit.block.BlockState blockState = world.getWorld().getBlockAt(x, y, z).getState();
++            blockState.setTypeId(this.blockID);
++
++            BlockFadeEvent event = new BlockFadeEvent(blockState.getBlock(), blockState);
++            world.getServer().getPluginManager().callEvent(event);
++
++            if (event.isCancelled()) {
++                return;
++            }
++            //LilyBukkit end
+             this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z));
+             world.setBlockWithNotify(x, y, z, 0);
+         }
+     }
+-    
++
+     @Override
+     public boolean shouldSideBeRendered(final IBlockAccess blockAccess, final int x, final int y, final int z, final int side) {

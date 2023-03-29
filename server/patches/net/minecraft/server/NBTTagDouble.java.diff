@@ -1,0 +1,41 @@
+--- NBTTagDouble.java
++++ NBTTagDouble.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataInput;
+@@ -7,27 +7,27 @@
+ public class NBTTagDouble extends NBTBase {
+     public double doubleValue;
+-    
++
+     public NBTTagDouble() {
+     }
+-    
++
+     public NBTTagDouble(final double doubleValue) {
+         this.doubleValue = doubleValue;
+     }
+-    
++
+     @Override
+     void writeTagContents(final DataOutput dataOutput) throws IOException {
+         dataOutput.writeDouble(this.doubleValue);
+     }
+-    
++
+     @Override
+     void readTagContents(final DataInput dataInput) throws IOException {
+         this.doubleValue = dataInput.readDouble();
+     }
+-    
++
+     @Override
+     public byte getType() {
+         return 6;
+     }
+-    
++
+     public String toString() {
+         return new StringBuilder().append(this.doubleValue).toString();

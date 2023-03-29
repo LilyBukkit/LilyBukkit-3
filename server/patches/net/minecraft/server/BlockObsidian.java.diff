@@ -1,0 +1,24 @@
+--- BlockObsidian.java
++++ BlockObsidian.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -7,13 +7,13 @@
+         super(id, blockIndex);
+     }
+-    
++
+     @Override
+     public int quantityDropped(final Random random) {
+         return 1;
+     }
+-    
++
+     @Override
+     public int idDropped(final int count, final Random random) {
+-        return Block.obsidian.blockID;
++        return Block.OBSIDIAN.blockID;
+     }
+ }

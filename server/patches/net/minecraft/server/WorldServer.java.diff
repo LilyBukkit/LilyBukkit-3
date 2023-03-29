@@ -1,0 +1,34 @@
+--- WorldServer.java
++++ WorldServer.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.ArrayList;
+@@ -12,5 +12,5 @@
+     private SpawnerAnimals monsterSpawner;
+     private SpawnerAnimals animalSpawner;
+-    
++
+     public WorldServer(final File file1, final String string2, final boolean z3) {
+         super(file1, string2);
+@@ -20,5 +20,5 @@
+         this.monsters = z3;
+     }
+-    
++
+     @Override
+     public void tick() {
+@@ -29,10 +29,10 @@
+         this.animalSpawner.onUpdate(this);
+     }
+-    
++
+     @Override
+     protected IChunkProvider getChunkProvider(final File saveDir) {
+         return this.chunkProviderServer = new ChunkProviderServer(this, new ChunkLoader(saveDir, true), new ChunkProviderGenerate(this, this.randomSeed));
+     }
+-    
++
+     public List getTileEntityList(final int i1, final int i2, final int i3, final int i4, final int i5, final int i6) {
+         final ArrayList arrayList7 = new ArrayList();

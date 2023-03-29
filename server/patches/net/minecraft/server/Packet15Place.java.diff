@@ -1,0 +1,34 @@
+--- Packet15Place.java
++++ Packet15Place.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -11,5 +11,5 @@
+     public int zPosition;
+     public int direction;
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -20,5 +20,5 @@
+         this.direction = dataInputStream.read();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -29,10 +29,10 @@
+         dataOutputStream.write(this.direction);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handlePlace(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

@@ -1,0 +1,32 @@
+--- ThreadSleepForeverServer.java
++++ ThreadSleepForeverServer.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import net.minecraft.server.MinecraftServer;
+@@ -5,5 +5,5 @@
+ public class ThreadSleepForeverServer extends Thread {
+     final MinecraftServer mcServer;
+-    
++
+     public ThreadSleepForeverServer(final MinecraftServer minecraftServer) {
+         this.mcServer = minecraftServer;
+@@ -11,16 +11,12 @@
+         this.start();
+     }
+-    
++
+     public void run() {
+         while (true) {
+             try {
+-                while (true) {
+                     Thread.sleep(2147483647L);
+-                }
+             }
+             catch (InterruptedException ex) {
+-                continue;
+             }
+-            break;
+         }
+     }

@@ -1,0 +1,70 @@
+--- ServerGUI.java
++++ ServerGUI.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.awt.event.FocusListener;
+@@ -18,5 +18,4 @@
+ import javax.swing.JFrame;
+ import javax.swing.UIManager;
+-import net.minecraft.server.MinecraftServer;
+ import java.util.logging.Logger;
+ import javax.swing.JComponent;
+@@ -25,9 +24,9 @@
+     public static Logger logger;
+     private MinecraftServer mcServer;
+-    
++
+     static {
+         ServerGUI.logger = Logger.getLogger("Minecraft");
+     }
+-    
++
+     public static void initGui(final MinecraftServer minecraftServer) {
+         try {
+@@ -43,5 +42,5 @@
+         jFrame2.addWindowListener((WindowListener)new ServerWindowAdapter(minecraftServer));
+     }
+-    
++
+     public ServerGUI(final MinecraftServer minecraftServer) {
+         this.mcServer = minecraftServer;
+@@ -56,5 +55,5 @@
+         }
+     }
+-    
++
+     private JComponent getStatsComponent() {
+         final JPanel jPanel1 = new JPanel((LayoutManager)new BorderLayout());
+@@ -64,5 +63,5 @@
+         return (JComponent)jPanel1;
+     }
+-    
++
+     private JComponent getPlayerListComponent() {
+         final PlayerListBox playerListBox1 = new PlayerListBox(this.mcServer);
+@@ -71,5 +70,5 @@
+         return (JComponent)jScrollPane2;
+     }
+-    
++
+     private JComponent getLogComponent() {
+         final JPanel jPanel1 = new JPanel((LayoutManager)new BorderLayout());
+@@ -86,13 +85,13 @@
+         return (JComponent)jPanel1;
+     }
+-    
++
+     public void addHelpCommandMessage(final String helpCommandMessage) {
+         ServerGUI.logger.info(helpCommandMessage);
+     }
+-    
++
+     public String getUsername() {
+         return "CONSOLE";
+     }
+-    
++
+     static MinecraftServer getMinecraftServer(final ServerGUI gui) {
+         return gui.mcServer;

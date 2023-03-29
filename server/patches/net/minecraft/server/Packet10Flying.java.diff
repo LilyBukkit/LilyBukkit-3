@@ -1,0 +1,32 @@
+--- Packet10Flying.java
++++ Packet10Flying.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -15,20 +15,20 @@
+     public boolean moving;
+     public boolean rotating;
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleFlying(this);
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+         this.onGround = (dataInputStream.read() != 0);
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+         dataOutputStream.write((int)(this.onGround ? 1 : 0));
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

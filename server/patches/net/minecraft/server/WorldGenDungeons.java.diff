@@ -1,0 +1,45 @@
+--- WorldGenDungeons.java
++++ WorldGenDungeons.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -38,8 +38,8 @@
+                         else if (world.getBlockMaterial(i10, i11, i12).isSolid()) {
+                             if (i11 == y - 1 && rand.nextInt(4) != 0) {
+-                                world.setBlockWithNotify(i10, i11, i12, Block.cobblestoneMossy.blockID);
++                                world.setBlockWithNotify(i10, i11, i12, Block.COBBLESTONE_MOSSY.blockID);
+                             }
+                             else {
+-                                world.setBlockWithNotify(i10, i11, i12, Block.cobblestone.blockID);
++                                world.setBlockWithNotify(i10, i11, i12, Block.COBBLESTONE.blockID);
+                             }
+                         }
+@@ -66,5 +66,5 @@
+                         }
+                         if (i14 == 1) {
+-                            world.setBlockWithNotify(i12, y, i13, Block.chest.blockID);
++                            world.setBlockWithNotify(i12, y, i13, Block.CHEST.blockID);
+                             final TileEntityChest tileEntityChest16 = (TileEntityChest)world.getBlockTileEntity(i12, y, i13);
+                             for (int i15 = 0; i15 < 8; ++i15) {
+@@ -79,5 +79,5 @@
+                 }
+             }
+-            world.setBlockWithNotify(x, y, z, Block.mobSpawner.blockID);
++            world.setBlockWithNotify(x, y, z, Block.MOB_SPAWNER.blockID);
+             final TileEntityMobSpawner tileEntityMobSpawner19 = (TileEntityMobSpawner)world.getBlockTileEntity(x, y, z);
+             tileEntityMobSpawner19.mobID = this.pickMobSpawner(rand);
+@@ -86,10 +86,10 @@
+         return false;
+     }
+-    
++
+     private ItemStack pickCheckLootItem(final Random random) {
+         final int i2 = random.nextInt(11);
+         return (i2 == 0) ? new ItemStack(Item.saddle) : ((i2 == 1) ? new ItemStack(Item.ingotIron, random.nextInt(4) + 1) : ((i2 == 2) ? new ItemStack(Item.bread) : ((i2 == 3) ? new ItemStack(Item.wheat, random.nextInt(4) + 1) : ((i2 == 4) ? new ItemStack(Item.gunpowder, random.nextInt(4) + 1) : ((i2 == 5) ? new ItemStack(Item.silk, random.nextInt(4) + 1) : ((i2 == 6) ? new ItemStack(Item.bucketEmpty) : ((i2 == 7 && random.nextInt(100) == 0) ? new ItemStack(Item.appleGold) : ((i2 == 8 && random.nextInt(2) == 0) ? new ItemStack(Item.redstone, random.nextInt(4) + 1) : ((i2 == 9 && random.nextInt(10) == 0) ? new ItemStack(Item.itemsList[Item.record13.shiftedIndex + random.nextInt(2)]) : null)))))))));
+     }
+-    
++
+     private String pickMobSpawner(final Random random) {
+         final int i2 = random.nextInt(4);

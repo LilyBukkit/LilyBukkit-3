@@ -1,0 +1,45 @@
+--- Packet20NamedEntitySpawn.java
++++ Packet20NamedEntitySpawn.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -14,8 +14,8 @@
+     public byte pitch;
+     public int currentItem;
+-    
++
+     public Packet20NamedEntitySpawn() {
+     }
+-    
++
+     public Packet20NamedEntitySpawn(final EntityPlayer entityPlayer) {
+         this.entityId = entityPlayer.entityID;
+@@ -29,5 +29,5 @@
+         this.currentItem = ((itemStack2 == null) ? 0 : itemStack2.itemID);
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -41,5 +41,5 @@
+         this.currentItem = dataInputStream.readShort();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -53,10 +53,10 @@
+         dataOutputStream.writeShort(this.currentItem);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleNamedEntitySpawn(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

@@ -1,0 +1,43 @@
+--- Namegen.java
++++ Namegen.java
+@@ -1,5 +1,4 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+-import net.minecraft.server.MinecraftServer;
+ import java.util.Random;
+ 
+@@ -22,10 +21,10 @@
+     public long areaTimer;
+     private static final String[] syllab;
+-    
++
+     static {
+         Namegen.uqKey = "";
+         syllab = new String[] { "SIE", "LOH", "KII", "HUR", "MIS", "RUU", "VY", "KA", "TAV", "OLE", "PAH", "MUI", "MAT", "JA", "SAU", "NIN", "UD", "MU", "NGI", "BAR", "LUG", "MAH", "GIR", "AK", "USU", "ESE", "IRU", "UUN", "AMTU", "AGAS", "HI", "TOOI", "YORU", "NEN", "PON", "ONNA", "TSU", "YA", "AO", "ONI", "AN", "KO", "SHI", "YUME", "YARI", "TEST" };
+     }
+-    
++
+     public Namegen() {
+         this.rand = new Random();
+@@ -40,5 +39,5 @@
+         this.areaTimer = 0L;
+     }
+-    
++
+     public static String Namegen2(final long l, final int n, final int n2) {
+         final long l2 = n + 392214;
+@@ -64,5 +63,5 @@
+         return string;
+     }
+-    
++
+     public void ResetNamegen() {
+         final float playerPosX = 0.0f;
+@@ -76,5 +75,5 @@
+         this.areaTimer = System.currentTimeMillis();
+     }
+-    
++
+     public boolean NamegenNeedsReset() {
+         final float playerPosX = 0.0f;

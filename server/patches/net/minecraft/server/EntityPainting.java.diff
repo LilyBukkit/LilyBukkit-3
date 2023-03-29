@@ -1,0 +1,74 @@
+--- EntityPainting.java
++++ EntityPainting.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.List;
+@@ -11,5 +11,5 @@
+     private int zPosition;
+     public EnumArt art;
+-    
++
+     public EntityPainting(final World world) {
+         super(world);
+@@ -19,5 +19,5 @@
+         this.setSize(0.5f, 0.5f);
+     }
+-    
++
+     public EntityPainting(final World world, final int xPosition, final int yPosition, final int zPosition, final int direction) {
+         this(world);
+@@ -38,5 +38,5 @@
+         this.setDirection(direction);
+     }
+-    
++
+     public void setDirection(final int direction) {
+         this.direction = direction;
+@@ -89,9 +89,9 @@
+         this.boundingBox.setBounds(f5 - f2 - f9, f6 - f3 - f9, f7 - f4 - f9, f5 + f2 + f9, f6 + f3 + f9, f7 + f4 + f9);
+     }
+-    
++
+     private float getArtSize(final int pixelSize) {
+         return (pixelSize == 32) ? 0.5f : ((pixelSize == 64) ? 0.5f : 0.0f);
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+@@ -102,5 +102,5 @@
+         }
+     }
+-    
++
+     public boolean onValidSurface() {
+         if (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() > 0) {
+@@ -147,10 +147,10 @@
+         return true;
+     }
+-    
++
+     @Override
+     public boolean canBeCollidedWith() {
+         return true;
+     }
+-    
++
+     @Override
+     public boolean attackEntityFrom(final Entity entity, final int damage) {
+@@ -159,5 +159,5 @@
+         return true;
+     }
+-    
++
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         nbttagcompound.setByte("Dir", (byte)this.direction);
+@@ -167,5 +167,5 @@
+         nbttagcompound.setInteger("TileZ", this.zPosition);
+     }
+-    
++
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+         this.direction = nbttagcompound.getByte("Dir");

@@ -1,0 +1,62 @@
+--- BlockSand.java
++++ BlockSand.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -5,28 +5,28 @@
+ public class BlockSand extends Block {
+     public static boolean fallInstantly;
+-    
++
+     static {
+         BlockSand.fallInstantly = false;
+     }
+-    
++
+     public BlockSand(final int id, final int blockIndex) {
+         super(id, blockIndex, Material.sand);
+     }
+-    
++
+     @Override
+     public void onBlockAdded(final World world, final int x, final int y, final int z) {
+         world.scheduleBlockUpdate(x, y, z, this.blockID);
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+         world.scheduleBlockUpdate(x, y, z, this.blockID);
+     }
+-    
++
+     @Override
+     public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
+         this.tryToFall(world, x, y, z);
+     }
+-    
++
+     private void tryToFall(final World world, final int x, final int y, final int z) {
+         if (canFallBelow(world, x, y - 1, z) && y >= 0) {
+@@ -42,10 +42,10 @@
+         }
+     }
+-    
++
+     @Override
+     public int tickRate() {
+         return 3;
+     }
+-    
++
+     public static boolean canFallBelow(final World world, final int x, final int y, final int z) {
+         final int i4 = world.getBlockId(x, y, z);
+@@ -53,5 +53,5 @@
+             return true;
+         }
+-        if (i4 == Block.fire.blockID) {
++        if (i4 == Block.FIRE.blockID) {
+             return true;
+         }

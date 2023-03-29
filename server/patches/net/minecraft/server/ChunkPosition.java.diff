@@ -1,0 +1,28 @@
+--- ChunkPosition.java
++++ ChunkPosition.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class ChunkPosition {
+@@ -5,5 +5,5 @@
+     public final int y;
+     public final int z;
+-    
++
+     public ChunkPosition(final int x, final int y, final int z) {
+         this.x = x;
+@@ -11,5 +11,5 @@
+         this.z = z;
+     }
+-    
++
+     public boolean equals(final Object object) {
+         if (!(object instanceof ChunkPosition)) {
+@@ -19,5 +19,5 @@
+         return chunkPosition2.x == this.x && chunkPosition2.y == this.y && chunkPosition2.z == this.z;
+     }
+-    
++
+     public int hashCode() {
+         return this.x * 8976890 + this.y * 981131 + this.z;

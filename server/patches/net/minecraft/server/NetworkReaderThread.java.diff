@@ -1,0 +1,53 @@
+--- NetworkReaderThread.java
++++ NetworkReaderThread.java
+@@ -1,43 +1,27 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ class NetworkReaderThread extends Thread {
+     final NetworkManager netManager;
+-    
++
+     NetworkReaderThread(final NetworkManager netManager, final String threadName) {
+         super(threadName);
+         this.netManager = netManager;
+     }
+-    
++
+     public void run() {
+-        Object object1 = NetworkManager.threadSyncObject;
+         synchronized (NetworkManager.threadSyncObject) {
+             ++NetworkManager.numReadThreads;
+         }
+-        // monitorexit(NetworkManager.threadSyncObject)
+-        boolean z11 = false;
+         try {
+-            z11 = true;
+-            if (NetworkManager.isRunning(this.netManager)) {
+-                if (!NetworkManager.isServerTerminating(this.netManager)) {
+-                    NetworkManager.readNetworkPacket(this.netManager);
+-                }
+-                z11 = false;
++            while (NetworkManager.isRunning(this.netManager) && !NetworkManager.isServerTerminating(this.netManager)) {
++                NetworkManager.readNetworkPacket(this.netManager);
+             }
+-            z11 = false;
+         }
+-        finally {
+-            if (z11) {
+-                final Object object2 = NetworkManager.threadSyncObject;
+-                synchronized (NetworkManager.threadSyncObject) {
+-                    --NetworkManager.numReadThreads;
+-                }
+-                // monitorexit(NetworkManager.threadSyncObject)
+-            }
++        catch (Exception e) {
++            e.printStackTrace();
+         }
+-        object1 = NetworkManager.threadSyncObject;
+         synchronized (NetworkManager.threadSyncObject) {
+             --NetworkManager.numReadThreads;
+         }
+-        // monitorexit(NetworkManager.threadSyncObject)
+     }
+ }

@@ -1,0 +1,28 @@
+--- MetadataChunkBlock.java
++++ MetadataChunkBlock.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class MetadataChunkBlock {
+@@ -9,5 +9,5 @@
+     public int maxY;
+     public int maxZ;
+-    
++
+     public MetadataChunkBlock(final EnumSkyBlock skyBlock, final int x, final int y, final int z, final int maxX, final int maxY, final int maxZ) {
+         this.skyBlock = skyBlock;
+@@ -19,5 +19,5 @@
+         this.maxZ = maxZ;
+     }
+-    
++
+     public void updateLight(final World world) {
+         final int i2 = this.maxX - this.x;
+@@ -107,5 +107,5 @@
+         }
+     }
+-    
++
+     public boolean getLightUpdated(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+         if (minX >= this.x && minY >= this.y && minZ >= this.z && maxX <= this.maxX && maxY <= this.maxY && maxZ <= this.maxZ) {

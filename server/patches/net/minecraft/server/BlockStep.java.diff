@@ -1,0 +1,67 @@
+--- BlockStep.java
++++ BlockStep.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -5,5 +5,5 @@
+ public class BlockStep extends Block {
+     private boolean blockType;
+-    
++
+     public BlockStep(final int id, final boolean blockType) {
+         super(id, 6, Material.rock);
+@@ -13,40 +13,40 @@
+         this.setLightOpacity(255);
+     }
+-    
++
+     @Override
+     public int getBlockTextureFromSide(final int side) {
+         return (side <= 1) ? 6 : 5;
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return this.blockType;
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+-        if (this == Block.stairSingle) {}
++        if (this == Block.STAIR_SINGLE) {}
+     }
+-    
++
+     @Override
+     public void onBlockAdded(final World world, final int x, final int y, final int z) {
+-        if (this != Block.stairSingle) {
++        if (this != Block.STAIR_SINGLE) {
+             super.onBlockAdded(world, x, y, z);
+         }
+         final int i5 = world.getBlockId(x, y - 1, z);
+-        if (i5 == BlockStep.stairSingle.blockID) {
++        if (i5 == BlockStep.STAIR_SINGLE.blockID) {
+             world.setBlockWithNotify(x, y, z, 0);
+-            world.setBlockWithNotify(x, y - 1, z, Block.stairDouble.blockID);
++            world.setBlockWithNotify(x, y - 1, z, Block.STAIR_DOUBLE.blockID);
+         }
+     }
+-    
++
+     @Override
+     public int idDropped(final int count, final Random random) {
+-        return Block.stairSingle.blockID;
++        return Block.STAIR_SINGLE.blockID;
+     }
+-    
++
+     @Override
+     public boolean shouldSideBeRendered(final IBlockAccess blockAccess, final int x, final int y, final int z, final int side) {
+-        if (this != Block.stairSingle) {
++        if (this != Block.STAIR_SINGLE) {
+             super.shouldSideBeRendered(blockAccess, x, y, z, side);
+         }

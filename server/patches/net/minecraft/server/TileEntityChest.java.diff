@@ -1,0 +1,50 @@
+--- TileEntityChest.java
++++ TileEntityChest.java
+@@ -1,21 +1,21 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class TileEntityChest extends TileEntity implements IInventory {
+     private ItemStack[] chestContents;
+-    
++
+     public TileEntityChest() {
+         this.chestContents = new ItemStack[36];
+     }
+-    
++
+     @Override
+     public int getSizeInventory() {
+         return 27;
+     }
+-    
++
+     @Override
+     public ItemStack getStackInSlot(final int slot) {
+         return this.chestContents[slot];
+     }
+-    
++
+     public void setInventorySlotContents(final int slot, final ItemStack stack) {
+         this.chestContents[slot] = stack;
+@@ -25,5 +25,5 @@
+         this.onInventoryChanged();
+     }
+-    
++
+     @Override
+     public void readFromNBT(final NBTTagCompound nbttagcompound) {
+@@ -39,5 +39,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void writeToNBT(final NBTTagCompound nbttagcompound) {
+@@ -54,5 +54,5 @@
+         nbttagcompound.setTag("Items", (NBTBase)nBTTagList2);
+     }
+-    
++
+     public int getInventoryStackLimit() {
+         return 64;

@@ -1,0 +1,41 @@
+--- Packet29DestroyEntity.java
++++ Packet29DestroyEntity.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -7,27 +7,27 @@
+ public class Packet29DestroyEntity extends Packet {
+     public int entityId;
+-    
++
+     public Packet29DestroyEntity() {
+     }
+-    
++
+     public Packet29DestroyEntity(final int entityID) {
+         this.entityId = entityID;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+         this.entityId = dataInputStream.readInt();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+         dataOutputStream.writeInt(this.entityId);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleDestroyEntity(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

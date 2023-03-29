@@ -1,0 +1,13 @@
+--- ServerCommand.java
++++ ServerCommand.java
+@@ -1,8 +1,8 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class ServerCommand {
+     public final String command;
+     public final ICommandListener commandListener;
+-    
++
+     public ServerCommand(final String command, final ICommandListener commandListener) {
+         this.command = command;

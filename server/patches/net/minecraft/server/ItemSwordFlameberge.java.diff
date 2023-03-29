@@ -1,0 +1,43 @@
+--- ItemSwordFlameberge.java
++++ ItemSwordFlameberge.java
+@@ -1,22 +1,16 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+-import net.minecraft.src.EntityPlayer;
+-import net.minecraft.src.ItemStack;
+-import net.minecraft.src.Block;
+-import net.minecraft.src.World;
+-import net.minecraft.src.ItemSword;
+-
+ public class ItemSwordFlameberge extends ItemSword {
+     int[] v2s;
+-    
++
+     public ItemSwordFlameberge(final int itemID) {
+         super(itemID, 2);
+         this.v2s = new int[] { 3, 0, 3, 1, 2, 2, 1, 3, 0, 3, -1, 3, -2, 2, -3, 1, -3, 0, -3, -1, -2, -2, -1, -3, 0, -3, 1, -3, 2, -2, 3, -1 };
+     }
+-    
++
+     public boolean BlockIDFirable(final int n) {
+         return n == 0 || n == 78;
+     }
+-    
++
+     public void SetBlockFire(final World world, final int n, final int n2, final int n3, final int n4) {
+         if (n4 == 6) {
+@@ -28,5 +22,5 @@
+         if (this.BlockIDFirable(n5)) {
+             if (!this.BlockIDFirable(n7)) {
+-                world.setBlockWithNotify(n, n2, n3, Block.fire.blockID);
++                world.setBlockWithNotify(n, n2, n3, Block.FIRE.blockID);
+             }
+             else {
+@@ -38,5 +32,5 @@
+         }
+     }
+-    
++
+     @Override
+     public ItemStack onItemRightClick(final ItemStack itemStack, final World world, final EntityPlayer entityPlayer) {

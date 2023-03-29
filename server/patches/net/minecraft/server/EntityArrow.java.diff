@@ -1,0 +1,56 @@
+--- EntityArrow.java
++++ EntityArrow.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.List;
+@@ -13,5 +13,5 @@
+     private int ticksInGround;
+     private int ticksInAir;
+-    
++
+     public EntityArrow(final World world) {
+         super(world);
+@@ -25,5 +25,5 @@
+         this.setSize(0.5f, 0.5f);
+     }
+-    
++
+     public EntityArrow(final World world, final EntityLiving entityLiving) {
+         super(world);
+@@ -48,5 +48,5 @@
+         this.setArrowHeading(this.motionX, this.motionY, this.motionZ, 1.5f, 1.0f);
+     }
+-    
++
+     public void setArrowHeading(double motionX, double motionY, double motionZ, final float offsetY, final float offsetX) {
+         final float f9 = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
+@@ -72,5 +72,5 @@
+         this.ticksInGround = 0;
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+@@ -194,5 +194,5 @@
+         this.setPosition(this.posX, this.posY, this.posZ);
+     }
+-    
++
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         nbttagcompound.setShort("xTile", (short)this.xTile);
+@@ -203,5 +203,5 @@
+         nbttagcompound.setByte("inGround", (byte)(byte)(this.inData ? 1 : 0));
+     }
+-    
++
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+         this.xTile = nbttagcompound.getShort("xTile");
+@@ -212,5 +212,5 @@
+         this.inData = (nbttagcompound.getByte("inGround") == 1);
+     }
+-    
++
+     @Override
+     public void onCollideWithPlayer(final EntityPlayer entityPlayer) {

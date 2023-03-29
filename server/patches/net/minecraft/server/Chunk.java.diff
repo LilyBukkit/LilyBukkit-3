@@ -1,0 +1,242 @@
+--- Chunk.java
++++ Chunk.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -19,6 +19,6 @@
+     public final int xPosition;
+     public final int zPosition;
+-    public Map chunkTileEntityMap;
+-    public List[] entities;
++    public Map<ChunkPosition, TileEntity> chunkTileEntityMap;
++    public List<Entity>[] entities;
+     public boolean isTerrainPopulated;
+     public boolean isModified;
+@@ -27,7 +27,7 @@
+     public boolean hasEntities;
+     public long lastSaveTime;
+-    
++
+     public Chunk(final World world, final int xPosition, final int zPosition) {
+-        this.chunkTileEntityMap = (Map)new HashMap();
++        this.chunkTileEntityMap = new HashMap<>();
+         this.entities = new List[8];
+         this.isTerrainPopulated = false;
+@@ -41,8 +41,18 @@
+         this.heightMap = new byte[256];
+         for (int i4 = 0; i4 < this.entities.length; ++i4) {
+-            this.entities[i4] = (List)new ArrayList();
++            this.entities[i4] = new ArrayList<>();
+         }
++
++        //LilyBukkit start
++        org.bukkit.craftbukkit.CraftWorld cworld = this.worldObj.getWorld();
++        this.bukkitChunk = (cworld == null) ? null : cworld.popPreservedChunk(xPosition, zPosition);
++        if (this.bukkitChunk == null) {
++            this.bukkitChunk = new org.bukkit.craftbukkit.CraftChunk(this);
++        }
+     }
+-    
++
++    public org.bukkit.Chunk bukkitChunk;
++    //LilyBukkit end
++
+     public Chunk(final World world, final byte[] blocks, final int xPosition, final int zPositin) {
+         this(world, xPosition, zPositin);
+@@ -52,16 +62,16 @@
+         this.blocklightMap = new NibbleArray(blocks.length);
+     }
+-    
++
+     public boolean isAtLocation(final int xPosition, final int zPosition) {
+         return xPosition == this.xPosition && zPosition == this.zPosition;
+     }
+-    
++
+     public int getHeightValue(final int i1, final int i2) {
+         return this.heightMap[i2 << 4 | i1] & 0xFF;
+     }
+-    
++
+     public void doNothing() {
+     }
+-    
++
+     public void generateSkylightMap() {
+         int i1 = 127;
+@@ -83,5 +93,5 @@
+         this.isModified = true;
+     }
+-    
++
+     private void updateSkylight_do(final int i1, final int i2) {
+         final int i3 = this.getHeightValue(i1, i2);
+@@ -93,5 +103,5 @@
+         this.checkSkylightNeighborUpdate(i4, i5 + 1, i3);
+     }
+-    
++
+     private void checkSkylightNeighborUpdate(final int i1, final int i2, final int i3) {
+         final int i4 = this.worldObj.getHeightValue(i1, i2);
+@@ -104,5 +114,5 @@
+         this.isModified = true;
+     }
+-    
++
+     private void relightBlock(final int i1, final int i2, final int i3) {
+         int i5;
+@@ -168,9 +178,9 @@
+         }
+     }
+-    
++
+     public int getBlockID(final int i1, final int i2, final int i3) {
+         return this.blocks[i1 << 11 | i3 << 7 | i2];
+     }
+-    
++
+     public boolean setBlockIDWithMetadata(final int i1, final int i2, final int i3, final int i4, final int i5) {
+         final byte b6 = (byte)i4;
+@@ -203,5 +213,5 @@
+         return this.isModified = true;
+     }
+-    
++
+     public boolean setBlockID(final int x, final int y, final int z, final int id) {
+         final byte b5 = (byte)id;
+@@ -234,18 +244,18 @@
+         return this.isModified = true;
+     }
+-    
++
+     public int getBlockMetadata(final int x, final int y, final int z) {
+         return this.data.get(x, y, z);
+     }
+-    
++
+     public void setBlockMetadata(final int x, final int y, final int z, final int metadata) {
+         this.isModified = true;
+         this.data.set(x, y, z, metadata);
+     }
+-    
++
+     public int getSavedLightValue(final EnumSkyBlock enumSkyBlock1, final int x, final int y, final int z) {
+         return (enumSkyBlock1 == EnumSkyBlock.Sky) ? this.skylightMap.get(x, y, z) : ((enumSkyBlock1 == EnumSkyBlock.Block) ? this.blocklightMap.get(x, y, z) : 0);
+     }
+-    
++
+     public void setLightValue(final EnumSkyBlock block, final int x, final int y, final int z, final int lightValue) {
+         this.isModified = true;
+@@ -260,5 +270,5 @@
+         }
+     }
+-    
++
+     public int getBlockLightValue(final int x, final int y, final int z, final int i4) {
+         int i5 = this.skylightMap.get(x, y, z);
+@@ -273,5 +283,5 @@
+         return i5;
+     }
+-    
++
+     public void addEntity(final Entity entity) {
+         if (!this.isChunkRendered) {
+@@ -296,9 +306,9 @@
+         }
+     }
+-    
++
+     public void removeEntity(final Entity entity) {
+         this.removeEntityAtIndex(entity, entity.chunkCoordY);
+     }
+-    
++
+     public void removeEntityAtIndex(final Entity entity, int index) {
+         if (index < 0) {
+@@ -310,9 +320,9 @@
+         this.entities[index].remove(entity);
+     }
+-    
++
+     public boolean canBlockSeeTheSky(final int x, final int y, final int z) {
+         return y >= (this.heightMap[z << 4 | x] & 0xFF);
+     }
+-    
++
+     public TileEntity getChunkBlockTileEntity(final int x, final int y, final int z) {
+         final ChunkPosition chunkPosition4 = new ChunkPosition(x, y, z);
+@@ -329,5 +339,5 @@
+         return tileEntity5;
+     }
+-    
++
+     public void addTileEntity(final TileEntity tileEntity) {
+         final int i2 = tileEntity.xCoord - this.xPosition * 16;
+@@ -336,5 +346,5 @@
+         this.setChunkBlockTileEntity(i2, i3, i4, tileEntity);
+     }
+-    
++
+     public void setChunkBlockTileEntity(final int x, final int y, final int z, final TileEntity tileEntity) {
+         final ChunkPosition chunkPosition5 = new ChunkPosition(x, y, z);
+@@ -356,5 +366,5 @@
+         }
+     }
+-    
++
+     public void removeChunkBlockTileEntity(final int x, final int y, final int z) {
+         final ChunkPosition chunkPosition4 = new ChunkPosition(x, y, z);
+@@ -363,5 +373,5 @@
+         }
+     }
+-    
++
+     public void onChunkLoad() {
+         this.isChunkLoaded = true;
+@@ -371,5 +381,5 @@
+         }
+     }
+-    
++
+     public void onChunkUnload() {
+         this.isChunkLoaded = false;
+@@ -379,9 +389,9 @@
+         }
+     }
+-    
++
+     public void setChunkModified() {
+         this.isModified = true;
+     }
+-    
++
+     public void getEntitiesWithinAABBForEntity(final Entity entity, final AxisAlignedBB aabb, final List list) {
+         int i4 = MathHelper.floor_double((aabb.minY - 2.0) / 16.0);
+@@ -403,5 +413,5 @@
+         }
+     }
+-    
++
+     public void getEntitiesOfTypeWithinAAAB(final Class clazz, final AxisAlignedBB aabb, final List list) {
+         int i4 = MathHelper.floor_double((aabb.minY - 2.0) / 16.0);
+@@ -423,9 +433,9 @@
+         }
+     }
+-    
++
+     public boolean needsSaving(final boolean unused) {
+         return !this.neverSave && ((this.hasEntities && this.worldObj.worldTime != this.lastSaveTime) || this.isModified);
+     }
+-    
++
+     public int getChunkData(final byte[] b1, final int i2, final int i3, final int i4, final int i5, final int i6, final int i7, int i8) {
+         for (int i9 = i2; i9 < i5; ++i9) {
+@@ -463,5 +473,5 @@
+         return i8;
+     }
+-    
++
+     public Random getRandomWithSeed(final long j1) {
+         return new Random(this.worldObj.randomSeed + this.xPosition * this.xPosition * 4987142 + this.xPosition * 5947611 + this.zPosition * this.zPosition * 4392871L + this.zPosition * 389711 ^ j1);

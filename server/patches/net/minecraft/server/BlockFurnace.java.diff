@@ -1,0 +1,78 @@
+--- BlockFurnace.java
++++ BlockFurnace.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -5,5 +5,5 @@
+ public class BlockFurnace extends BlockContainer {
+     private final boolean isActive;
+-    
++
+     protected BlockFurnace(final int id, final boolean isActive) {
+         super(id, Material.rock);
+@@ -11,10 +11,10 @@
+         this.blockIndexInTexture = 45;
+     }
+-    
++
+     @Override
+     public int idDropped(final int count, final Random random) {
+-        return Block.stoneOvenIdle.blockID;
++        return Block.STONE_OVEN_IDLE.blockID;
+     }
+-    
++
+     @Override
+     public void onBlockAdded(final World world, final int x, final int y, final int z) {
+@@ -22,5 +22,5 @@
+         this.setDefaultDirection(world, x, y, z);
+     }
+-    
++
+     private void setDefaultDirection(final World world, final int x, final int y, final int z) {
+         final int i5 = world.getBlockId(x, y, z - 1);
+@@ -43,30 +43,30 @@
+         world.setBlockMetadataWithNotify(x, y, z, b9);
+     }
+-    
++
+     @Override
+     public int getBlockTextureFromSide(final int side) {
+-        return (side == 1) ? Block.stone.blockID : ((side == 0) ? Block.stone.blockID : ((side == 3) ? (this.blockIndexInTexture - 1) : this.blockIndexInTexture));
++        return (side == 1) ? Block.STONE.blockID : ((side == 0) ? Block.STONE.blockID : ((side == 3) ? (this.blockIndexInTexture - 1) : this.blockIndexInTexture));
+     }
+-    
++
+     @Override
+     public boolean blockActivated(final World world, final int x, final int y, final int z, final EntityPlayer entityPlayer) {
+-        final TileEntityFurnace tileEntityFurnace6 = (TileEntityFurnace)world.getBlockTileEntity(x, y, z);
++        final TileEntityFurnace tileEntityFurnace6 = (TileEntityFurnace) world.getBlockTileEntity(x, y, z);
+         entityPlayer.displayGUIFurnace(tileEntityFurnace6);
+         return true;
+     }
+-    
++
+     public static void updateFurnaceBlockState(final boolean isActive, final World world, final int x, final int y, final int z) {
+         final int i5 = world.getBlockMetadata(x, y, z);
+-        final TileEntity tileEntity6 = world.getBlockTileEntity(x, y, z);
++        final TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
++        if (tileEntity == null) return; //LilyBukkit
+         if (isActive) {
+-            world.setBlockWithNotify(x, y, z, Block.stoneOvenActive.blockID);
++            world.setBlockWithNotify(x, y, z, Block.STONE_OVEN_ACTIVE.blockID);
++        } else {
++            world.setBlockWithNotify(x, y, z, Block.STONE_OVEN_IDLE.blockID);
+         }
+-        else {
+-            world.setBlockWithNotify(x, y, z, Block.stoneOvenIdle.blockID);
+-        }
+         world.setBlockMetadataWithNotify(x, y, z, i5);
+-        world.setBlockTileEntity(x, y, z, tileEntity6);
++        world.setBlockTileEntity(x, y, z, tileEntity);
+     }
+-    
++
+     @Override
+     protected TileEntity getBlockEntity() {

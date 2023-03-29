@@ -1,0 +1,246 @@
+--- EntityLiving.java
++++ EntityLiving.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.List;
+@@ -57,5 +57,5 @@
+     private Entity currentTarget;
+     private int numTicksToChaseTarget;
+-    
++
+     public EntityLiving(final World world) {
+         super(world);
+@@ -93,28 +93,28 @@
+         this.stepHeight = 0.5f;
+     }
+-    
++
+     protected boolean canEntityBeSeen(final Entity entity) {
+         return this.worldObj.rayTraceBlocks(Vec3D.createVector(this.posX, this.posY + this.getEyeHeight(), this.posZ), Vec3D.createVector(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ)) == null;
+     }
+-    
++
+     @Override
+     public boolean canBeCollidedWith() {
+         return !this.isDead;
+     }
+-    
++
+     @Override
+     public boolean canBePushed() {
+         return !this.isDead;
+     }
+-    
++
+     @Override
+     protected float getEyeHeight() {
+         return this.height * 0.85f;
+     }
+-    
++
+     public int getTalkInterval() {
+         return 80;
+     }
+-    
++
+     @Override
+     public void onEntityUpdate() {
+@@ -176,5 +176,5 @@
+         this.prevRotationPitch = this.rotationPitch;
+     }
+-    
++
+     public void spawnExplosionParticle() {
+         for (int i1 = 0; i1 < 20; ++i1) {
+@@ -186,5 +186,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void updateRidden() {
+@@ -193,5 +193,5 @@
+         this.prevRidingRotUnused = 0.0f;
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+@@ -262,10 +262,10 @@
+         this.rotationUnused += f7;
+     }
+-    
++
+     @Override
+     protected void setSize(final float width, final float height) {
+         super.setSize(width, height);
+     }
+-    
++
+     public void heal(final int health) {
+         if (this.health > 0) {
+@@ -277,10 +277,7 @@
+         }
+     }
+-    
++
+     @Override
+     public boolean attackEntityFrom(final Entity entity, int damage) {
+-        if (this.worldObj.multiplayerWorld) {
+-            damage = 0;
+-        }
+         this.entityAge = 0;
+         if (this.health <= 0) {
+@@ -322,21 +319,21 @@
+         return true;
+     }
+-    
++
+     protected float getSoundVolume() {
+         return 1.0f;
+     }
+-    
++
+     protected String getLivingSound() {
+         return null;
+     }
+-    
++
+     protected String getHurtSound() {
+         return "random.hurt";
+     }
+-    
++
+     protected String getDeathSound() {
+         return "random.hurt";
+     }
+-    
++
+     public void knockBack(final Entity entity, final int x, final double y, final double z) {
+         final float f7 = MathHelper.sqrt_double(y * y + z * z);
+@@ -352,5 +349,5 @@
+         }
+     }
+-    
++
+     public void onDeath(final Entity entity) {
+         if (this.scoreValue > 0 && entity != null) {
+@@ -365,9 +362,9 @@
+         }
+     }
+-    
++
+     protected int getDropItemId() {
+         return 0;
+     }
+-    
++
+     @Override
+     protected void fall(final float f1) {
+@@ -382,5 +379,5 @@
+         }
+     }
+-    
++
+     public void moveEntityWithHeading(final float f1, final float f2) {
+         if (this.handleWaterMovement()) {
+@@ -452,12 +449,12 @@
+         this.limbSwing += this.limbYaw;
+     }
+-    
++
+     public boolean isOnLadder() {
+         final int i1 = MathHelper.floor_double(this.posX);
+         final int i2 = MathHelper.floor_double(this.boundingBox.minY);
+         final int i3 = MathHelper.floor_double(this.posZ);
+-        return this.worldObj.getBlockId(i1, i2, i3) == Block.ladder.blockID || this.worldObj.getBlockId(i1, i2 + 1, i3) == Block.ladder.blockID;
++        return this.worldObj.getBlockId(i1, i2, i3) == Block.LADDER.blockID || this.worldObj.getBlockId(i1, i2 + 1, i3) == Block.LADDER.blockID;
+     }
+-    
++
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         nbttagcompound.setShort("Health", (short)this.health);
+@@ -466,5 +463,5 @@
+         nbttagcompound.setShort("AttackTime", (short)this.attackTime);
+     }
+-    
++
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+         this.health = nbttagcompound.getShort("Health");
+@@ -476,10 +473,10 @@
+         this.attackTime = nbttagcompound.getShort("AttackTime");
+     }
+-    
++
+     @Override
+     public boolean isEntityAlive() {
+         return !this.isDead && this.health > 0;
+     }
+-    
++
+     public void onLivingUpdate() {
+         if (this.newPosRotationIncrements > 0) {
+@@ -534,9 +531,9 @@
+         }
+     }
+-    
++
+     protected void jump() {
+         this.motionY = 0.41999998688697815;
+     }
+-    
++
+     protected void updateEntityActionState() {
+         ++this.entityAge;
+@@ -591,5 +588,5 @@
+         }
+     }
+-    
++
+     public void faceEntity(final Entity entity, final float f2) {
+         final double d3 = entity.posX - this.posX;
+@@ -609,5 +606,5 @@
+         this.rotationYaw = this.updateRotation(this.rotationYaw, f3, f2);
+     }
+-    
++
+     private float updateRotation(final float f1, final float f2, final float f3) {
+         float f4;
+@@ -624,17 +621,17 @@
+         return f1 + f4;
+     }
+-    
++
+     public void onEntityDeath() {
+     }
+-    
++
+     public boolean getCanSpawnHere() {
+         return this.worldObj.checkIfAABBIsClear(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.getIsAnyLiquid(this.boundingBox);
+     }
+-    
++
+     @Override
+     protected void kill() {
+         this.attackEntityFrom(null, 4);
+     }
+-    
++
+     public Vec3D getPosition(final float f1) {
+         if (f1 == 1.0f) {
+@@ -646,5 +643,5 @@
+         return Vec3D.createVector(d2, d3, d4);
+     }
+-    
++
+     public Vec3D getLook(final float f1) {
+         if (f1 == 1.0f) {
+@@ -663,5 +660,5 @@
+         return Vec3D.createVector(f5 * f6, f7, f4 * f6);
+     }
+-    
++
+     public MovingObjectPosition rayTrace(final double d1, final float f3) {
+         final Vec3D vec3D4 = this.getPosition(f3);

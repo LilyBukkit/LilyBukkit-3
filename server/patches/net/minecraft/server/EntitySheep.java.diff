@@ -1,0 +1,59 @@
+--- EntitySheep.java
++++ EntitySheep.java
+@@ -1,7 +1,7 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class EntitySheep extends EntityAnimal {
+     public boolean sheared;
+-    
++
+     public EntitySheep(final World world) {
+         super(world);
+@@ -10,5 +10,5 @@
+         this.setSize(0.9f, 1.3f);
+     }
+-    
++
+     @Override
+     public boolean attackEntityFrom(final Entity entity, final int damage) {
+@@ -17,5 +17,5 @@
+             for (int i3 = 1 + this.rand.nextInt(3), i4 = 0; i4 < i3; ++i4) {
+                 final EntityItem entityDropItem;
+-                final EntityItem entityItem5 = entityDropItem = this.entityDropItem(Block.cloth.blockID, 1, 1.0f);
++                final EntityItem entityItem5 = entityDropItem = this.entityDropItem(Block.CLOTH.blockID, 1, 1.0f);
+                 entityDropItem.motionY += this.rand.nextFloat() * 0.05f;
+                 final EntityItem entityItem6 = entityItem5;
+@@ -27,5 +27,5 @@
+         return super.attackEntityFrom(entity, damage);
+     }
+-    
++
+     @Override
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+@@ -33,5 +33,5 @@
+         nbttagcompound.setBoolean("Sheared", this.sheared);
+     }
+-    
++
+     @Override
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+@@ -39,15 +39,15 @@
+         this.sheared = nbttagcompound.getBoolean("Sheared");
+     }
+-    
++
+     @Override
+     protected String getLivingSound() {
+         return "mob.sheep";
+     }
+-    
++
+     @Override
+     protected String getHurtSound() {
+         return "mob.sheep";
+     }
+-    
++
+     @Override
+     protected String getDeathSound() {

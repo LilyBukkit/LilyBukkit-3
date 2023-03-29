@@ -1,0 +1,46 @@
+--- Packet51MapChunk.java
++++ Packet51MapChunk.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -17,9 +17,9 @@
+     public byte[] chunkData;
+     private int tempLength;
+-    
++
+     public Packet51MapChunk() {
+         this.isChunkDataPacket = true;
+     }
+-    
++
+     public Packet51MapChunk(final int xPosition, final int yPosition, final int zPosition, final int xSize, final int ySize, final int zSize, final World world) {
+         this.isChunkDataPacket = true;
+@@ -43,5 +43,5 @@
+         deflater9.end();
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -69,5 +69,5 @@
+         inflater4.end();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -81,10 +81,10 @@
+         dataOutputStream.write(this.chunkData, 0, this.tempLength);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleMapChunk(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

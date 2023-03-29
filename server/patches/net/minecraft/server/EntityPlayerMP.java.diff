@@ -1,0 +1,76 @@
+--- EntityPlayerMP.java
++++ EntityPlayerMP.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.HashSet;
+@@ -5,5 +5,4 @@
+ import java.util.Set;
+ import java.util.List;
+-import net.minecraft.server.MinecraftServer;
+ 
+ public class EntityPlayerMP extends EntityPlayer {
+@@ -16,5 +15,5 @@
+     public Set loadChunks;
+     public double managedPosY;
+-    
++
+     public EntityPlayerMP(final MinecraftServer minecraftServer, final World world, final String username, final ItemInWorldManager itemManager) {
+         super(world);
+@@ -32,22 +31,22 @@
+         this.yOffset = 0.0f;
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+     }
+-    
++
+     @Override
+     public void onDeath(final Entity entity) {
+     }
+-    
++
+     @Override
+     public boolean attackEntityFrom(final Entity entity, final int damage) {
+         return false;
+     }
+-    
++
+     @Override
+     public void heal(final int health) {
+     }
+-    
++
+     public void onUpdateEntity() {
+         super.onUpdate();
+@@ -81,5 +80,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void onLivingUpdate() {
+@@ -91,5 +90,5 @@
+         super.onLivingUpdate();
+     }
+-    
++
+     @Override
+     public void onItemPickup(final Entity entity, final int i2) {
+@@ -100,5 +99,5 @@
+         super.onItemPickup(entity, i2);
+     }
+-    
++
+     @Override
+     public void swingItem() {
+@@ -109,5 +108,5 @@
+         }
+     }
+-    
++
+     @Override
+     protected float getEyeHeight() {

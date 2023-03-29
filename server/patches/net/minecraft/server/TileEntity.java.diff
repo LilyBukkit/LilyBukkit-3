@@ -1,0 +1,69 @@
+--- TileEntity.java
++++ TileEntity.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.HashMap;
+@@ -5,20 +5,18 @@
+ 
+ public class TileEntity {
+-    private static Map nameToClassMap;
+-    private static Map classToNameMap;
++    private static Map<String, Class<? extends TileEntity>> nameToClassMap = new HashMap<>();
++    private static Map<Class<? extends TileEntity>, String> classToNameMap = new HashMap<>();
+     public World worldObj;
+     public int xCoord;
+     public int yCoord;
+     public int zCoord;
+-    
+-    static {
+-        TileEntity.nameToClassMap = (Map)new HashMap();
+-        TileEntity.classToNameMap = (Map)new HashMap();
+-        addMapping((Class)TileEntityFurnace.class, "Furnace");
+-        addMapping((Class)TileEntityChest.class, "Chest");
+-        addMapping((Class)TileEntitySign.class, "Sign");
+-        addMapping((Class)TileEntityMobSpawner.class, "MobSpawner");
++
++    public static void initAll() {
++        addMapping(TileEntityFurnace.class, "Furnace");
++        addMapping(TileEntityChest.class, "Chest");
++        addMapping(TileEntitySign.class, "Sign");
++        addMapping(TileEntityMobSpawner.class, "MobSpawner");
+     }
+-    
++
+     private static void addMapping(final Class clazz, final String tileEntityName) {
+         if (TileEntity.classToNameMap.containsKey(tileEntityName)) {
+@@ -28,5 +26,5 @@
+         TileEntity.classToNameMap.put(clazz, tileEntityName);
+     }
+-    
++
+     public void readFromNBT(final NBTTagCompound nbttagcompound) {
+         this.xCoord = nbttagcompound.getInteger("x");
+@@ -34,5 +32,5 @@
+         this.zCoord = nbttagcompound.getInteger("z");
+     }
+-    
++
+     public void writeToNBT(final NBTTagCompound nbttagcompound) {
+         final String string2 = (String)TileEntity.classToNameMap.get(this.getClass());
+@@ -45,8 +43,8 @@
+         nbttagcompound.setInteger("z", this.zCoord);
+     }
+-    
++
+     public void updateEntity() {
+     }
+-    
++
+     public static TileEntity createAndLoadEntity(final NBTTagCompound nbttagcompound) {
+         TileEntity tileEntity1 = null;
+@@ -68,5 +66,5 @@
+         return tileEntity1;
+     }
+-    
++
+     public void onInventoryChanged() {
+         this.worldObj.updateTileEntityChunkAndDoNothing(this.xCoord, this.yCoord, this.zCoord, this);

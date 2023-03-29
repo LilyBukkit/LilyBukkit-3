@@ -1,0 +1,55 @@
+--- NBTTagList.java
++++ NBTTagList.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataInput;
+@@ -10,9 +10,9 @@
+     private List tagList;
+     private byte tagType;
+-    
++
+     public NBTTagList() {
+         this.tagList = (List)new ArrayList();
+     }
+-    
++
+     @Override
+     void writeTagContents(final DataOutput dataOutput) throws IOException {
+@@ -29,5 +29,5 @@
+         }
+     }
+-    
++
+     @Override
+     void readTagContents(final DataInput dataInput) throws IOException {
+@@ -41,23 +41,23 @@
+         }
+     }
+-    
++
+     @Override
+     public byte getType() {
+         return 9;
+     }
+-    
++
+     public String toString() {
+         return new StringBuilder().append(this.tagList.size()).append(" entries of type ").append(NBTBase.getTagName(this.tagType)).toString();
+     }
+-    
++
+     public void setTag(final NBTBase nbtbase) {
+         this.tagType = nbtbase.getType();
+         this.tagList.add(nbtbase);
+     }
+-    
++
+     public NBTBase tagAt(final int index) {
+         return (NBTBase)this.tagList.get(index);
+     }
+-    
++
+     public int tagCount() {
+         return this.tagList.size();

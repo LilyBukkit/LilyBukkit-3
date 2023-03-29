@@ -1,0 +1,26 @@
+--- TileEntitySign.java
++++ TileEntitySign.java
+@@ -1,13 +1,13 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class TileEntitySign extends TileEntity {
+     public String[] signText;
+     public int lineBeingEdited;
+-    
++
+     public TileEntitySign() {
+         this.signText = new String[] { "", "", "", "" };
+         this.lineBeingEdited = -1;
+     }
+-    
++
+     @Override
+     public void writeToNBT(final NBTTagCompound nbttagcompound) {
+@@ -18,5 +18,5 @@
+         nbttagcompound.setString("Text4", this.signText[3]);
+     }
+-    
++
+     @Override
+     public void readFromNBT(final NBTTagCompound nbttagcompound) {

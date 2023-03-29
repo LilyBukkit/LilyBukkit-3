@@ -1,0 +1,28 @@
+--- NoiseGeneratorOctaves.java
++++ NoiseGeneratorOctaves.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+@@ -6,5 +6,5 @@
+     private NoiseGeneratorPerlin[] generatorCollection;
+     private int octaves;
+-    
++
+     public NoiseGeneratorOctaves(final Random random, final int octaves) {
+         this.octaves = octaves;
+@@ -14,5 +14,5 @@
+         }
+     }
+-    
++
+     public double generateNoiseOctaves(final double x, final double z) {
+         double d5 = 0.0;
+@@ -24,5 +24,5 @@
+         return d5;
+     }
+-    
++
+     public double[] generateNoiseOctaves(double[] data, final double d2, final double d4, final double d6, final int x, final int y, final int z, final double d11, final double d13, final double d15) {
+         if (data == null) {

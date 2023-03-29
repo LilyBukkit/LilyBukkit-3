@@ -1,0 +1,93 @@
+--- BlockCactus.java
++++ BlockCactus.java
+@@ -1,6 +1,11 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+ 
++//LilyBukkit start
++import org.bukkit.event.entity.EntityDamageByBlockEvent;
++import org.bukkit.event.entity.EntityDamageEvent;
++//LilyBukkit end
++
+ public class BlockCactus extends Block {
+     protected BlockCactus(final int id, final int blockIndex) {
+@@ -8,5 +13,5 @@
+         this.setTickOnLoad(true);
+     }
+-    
++
+     @Override
+     public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
+@@ -26,5 +31,5 @@
+         }
+     }
+-    
++
+     @Override
+     public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+@@ -32,25 +37,25 @@
+         return AxisAlignedBB.getBoundingBoxFromPool(x + f5, y, z + f5, x + 1 - f5, y + 1 - f5, z + 1 - f5);
+     }
+-    
++
+     @Override
+     public int getBlockTextureFromSide(final int side) {
+         return (side == 1) ? (this.blockIndexInTexture - 1) : ((side == 0) ? (this.blockIndexInTexture + 1) : this.blockIndexInTexture);
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public int getRenderType() {
+         return 13;
+     }
+-    
++
+     @Override
+     public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
+         return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z);
+     }
+-    
++
+     @Override
+     public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
+@@ -60,5 +65,5 @@
+         }
+     }
+-    
++
+     @Override
+     public boolean canBlockStay(final World world, final int x, final int y, final int z) {
+@@ -76,9 +81,23 @@
+         }
+         final int i5 = world.getBlockId(x, y - 1, z);
+-        return i5 == Block.cactus.blockID || i5 == Block.sand.blockID;
++        return i5 == Block.CACTUS.blockID || i5 == Block.SAND.blockID;
+     }
+-    
++
+     @Override
+     public void onEntityCollidedWithBlock(final World world, final int x, final int y, final int z, final Entity entity) {
++        //LilyBukkit start - ENTITY_DAMAGEBY_BLOCK event
++        if (entity instanceof EntityLiving) {
++            org.bukkit.block.Block damager = world.getWorld().getBlockAt(x, y, z);
++            org.bukkit.entity.Entity damagee = (entity == null) ? null : entity.getBukkitEntity();
++
++            EntityDamageByBlockEvent event = new EntityDamageByBlockEvent(damager, damagee, EntityDamageEvent.DamageCause.CONTACT, 1);
++            world.getServer().getPluginManager().callEvent(event);
++
++            if (!event.isCancelled()){
++                entity.attackEntityFrom(null, event.getDamage());
++            }
++            return;
++        }
++        //LilyBukkit end
+         entity.attackEntityFrom(null, 1);
+     }

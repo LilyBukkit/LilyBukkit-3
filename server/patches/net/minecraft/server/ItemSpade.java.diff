@@ -1,0 +1,27 @@
+--- ItemSpade.java
++++ ItemSpade.java
+@@ -1,18 +1,18 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class ItemSpade extends ItemTool {
+     private static Block[] blocksEffectiveAgainst;
+-    
++
+     static {
+-        ItemSpade.blocksEffectiveAgainst = new Block[] { Block.grass, Block.dirt, Block.sand, Block.gravel, Block.snow, Block.blockSnow, Block.blockClay };
++        ItemSpade.blocksEffectiveAgainst = new Block[] { Block.GRASS, Block.DIRT, Block.SAND, Block.GRAVEL, Block.SNOW, Block.BLOCK_SNOW, Block.BLOCK_CLAY};
+     }
+-    
++
+     public ItemSpade(final int itemID, final int material) {
+         super(itemID, 1, material, ItemSpade.blocksEffectiveAgainst);
+     }
+-    
++
+     @Override
+     public boolean canHarvestBlock(final Block block) {
+-        return block == Block.snow || block == Block.blockSnow;
++        return block == Block.SNOW || block == Block.BLOCK_SNOW;
+     }
+ }

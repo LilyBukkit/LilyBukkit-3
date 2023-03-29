@@ -1,0 +1,45 @@
+--- Packet5PlayerInventory.java
++++ Packet5PlayerInventory.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -8,8 +8,8 @@
+     public int inventoryType;
+     public ItemStack[] inventory;
+-    
++
+     public Packet5PlayerInventory() {
+     }
+-    
++
+     public Packet5PlayerInventory(final int inventoryType, final ItemStack[] stacks) {
+         this.inventoryType = inventoryType;
+@@ -19,5 +19,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -34,5 +34,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -50,10 +50,10 @@
+         }
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handlePlayerInventory(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

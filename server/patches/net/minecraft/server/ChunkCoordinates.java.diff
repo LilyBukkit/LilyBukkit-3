@@ -1,0 +1,26 @@
+--- ChunkCoordinates.java
++++ ChunkCoordinates.java
+@@ -1,13 +1,13 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ final class ChunkCoordinates {
+     public final int posX;
+     public final int posZ;
+-    
++
+     public ChunkCoordinates(final int posX, final int posZ) {
+         this.posX = posX;
+         this.posZ = posZ;
+     }
+-    
++
+     public boolean equals(final Object object) {
+         if (!(object instanceof ChunkCoordinates)) {
+@@ -17,5 +17,5 @@
+         return this.posX == chunkCoordinates2.posX && this.posZ == chunkCoordinates2.posZ;
+     }
+-    
++
+     public int hashCode() {
+         return this.posX << 16 ^ this.posZ;

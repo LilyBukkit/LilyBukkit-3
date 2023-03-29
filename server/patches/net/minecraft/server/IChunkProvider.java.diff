@@ -1,0 +1,24 @@
+--- IChunkProvider.java
++++ IChunkProvider.java
+@@ -1,15 +1,15 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public interface IChunkProvider {
+     boolean chunkExists(final int x, final int z);
+-    
++
+     Chunk provideChunk(final int x, final int z);
+-    
++
+     void populate(final IChunkProvider chunkProvider, final int x, final int z);
+-    
++
+     boolean saveChunks(final boolean flag, final IProgressUpdate progressUpdate);
+-    
++
+     boolean unload100OldestChunks();
+-    
++
+     boolean canSave();
+ }

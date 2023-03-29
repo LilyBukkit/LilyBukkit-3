@@ -1,0 +1,35 @@
+--- Packet13PlayerLookMove.java
++++ Packet13PlayerLookMove.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -10,5 +10,5 @@
+         this.moving = true;
+     }
+-    
++
+     public Packet13PlayerLookMove(final double xPosition, final double yPosition, final double stance, final double zPosition, final float yaw, final float pitch, final boolean onGround) {
+         this.xPosition = xPosition;
+@@ -22,5 +22,5 @@
+         this.moving = true;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -33,5 +33,5 @@
+         super.readPacketData(dataInputStream);
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -44,5 +44,5 @@
+         super.writePacket(dataOutputStream);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

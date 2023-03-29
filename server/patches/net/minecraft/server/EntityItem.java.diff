@@ -1,0 +1,75 @@
+--- EntityItem.java
++++ EntityItem.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class EntityItem extends Entity {
+@@ -8,5 +8,5 @@
+     private int health;
+     public float hoverStart;
+-    
++
+     public EntityItem(final World world, final double x, final double y, final double z, final ItemStack item) {
+         super(world);
+@@ -24,5 +24,5 @@
+         this.canTriggerWalking = false;
+     }
+-    
++
+     public EntityItem(final World world) {
+         super(world);
+@@ -33,5 +33,5 @@
+         this.yOffset = this.height / 2.0f;
+     }
+-    
++
+     @Override
+     public void onUpdate() {
+@@ -73,10 +73,10 @@
+         }
+     }
+-    
++
+     @Override
+     public boolean handleWaterMovement() {
+         return this.worldObj.handleMaterialAcceleration(this.boundingBox, Material.water, this);
+     }
+-    
++
+     private boolean pushOutOfBlocks(final double x, final double y, final double z) {
+         final int i7 = MathHelper.floor_double(x);
+@@ -141,10 +141,10 @@
+         return false;
+     }
+-    
++
+     @Override
+     protected void dealFireDamage(final int fireDamage) {
+         this.attackEntityFrom(null, fireDamage);
+     }
+-    
++
+     @Override
+     public boolean attackEntityFrom(final Entity entity, final int damage) {
+@@ -155,5 +155,5 @@
+         return false;
+     }
+-    
++
+     public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+         nbttagcompound.setShort("Health", (short)(byte)this.health);
+@@ -161,5 +161,5 @@
+         nbttagcompound.setCompoundTag("Item", this.item.writeToNBT(new NBTTagCompound()));
+     }
+-    
++
+     public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+         this.health = (nbttagcompound.getShort("Health") & 0xFF);
+@@ -168,5 +168,5 @@
+         this.item = new ItemStack(nBTTagCompound2);
+     }
+-    
++
+     @Override
+     public void onCollideWithPlayer(final EntityPlayer entityPlayer) {

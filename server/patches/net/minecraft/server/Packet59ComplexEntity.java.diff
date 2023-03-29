@@ -1,0 +1,46 @@
+--- Packet59ComplexEntity.java
++++ Packet59ComplexEntity.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -11,9 +11,9 @@
+     public byte[] compressedNBT;
+     public NBTTagCompound tileEntityNBT;
+-    
++
+     public Packet59ComplexEntity() {
+         this.isChunkDataPacket = true;
+     }
+-    
++
+     public Packet59ComplexEntity(final int xCoord, final int yCoord, final int zCoord, final TileEntity tileEntity) {
+         this.isChunkDataPacket = true;
+@@ -29,5 +29,5 @@
+         }
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -39,5 +39,5 @@
+         this.tileEntityNBT = CompressedStreamTools.decompress(this.compressedNBT);
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -48,10 +48,10 @@
+         dataOutputStream.write(this.compressedNBT);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleComplexEntity(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

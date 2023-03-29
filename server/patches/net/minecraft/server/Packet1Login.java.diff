@@ -1,0 +1,45 @@
+--- Packet1Login.java
++++ Packet1Login.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.io.DataOutputStream;
+@@ -9,8 +9,8 @@
+     public String username;
+     public String password;
+-    
++
+     public Packet1Login() {
+     }
+-    
++
+     public Packet1Login(final String username, final String password, final int protocolVersion) {
+         this.username = username;
+@@ -18,5 +18,5 @@
+         this.protocolVersion = protocolVersion;
+     }
+-    
++
+     @Override
+     public void readPacketData(final DataInputStream dataInputStream) throws IOException {
+@@ -25,5 +25,5 @@
+         this.password = dataInputStream.readUTF();
+     }
+-    
++
+     @Override
+     public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
+@@ -32,10 +32,10 @@
+         dataOutputStream.writeUTF(this.password);
+     }
+-    
++
+     @Override
+     public void processPacket(final NetHandler netHandler) {
+         netHandler.handleLogin(this);
+     }
+-    
++
+     @Override
+     public int getPacketSize() {

@@ -1,0 +1,30 @@
+--- ItemSign.java
++++ ItemSign.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class ItemSign extends Item {
+@@ -7,5 +7,5 @@
+         this.maxStackSize = 1;
+     }
+-    
++
+     @Override
+     public boolean onItemUse(final ItemStack stack, final EntityPlayer entityPlayer, final World world, int x, int y, int z, final int i7) {
+@@ -31,12 +31,12 @@
+             ++x;
+         }
+-        if (!Block.signStanding.canPlaceBlockAt(world, x, y, z)) {
++        if (!Block.SIGN_STANDING.canPlaceBlockAt(world, x, y, z)) {
+             return false;
+         }
+         if (i7 == 1) {
+-            world.setBlockAndMetadataWithNotify(x, y, z, Block.signStanding.blockID, MathHelper.floor_double((entityPlayer.rotationYaw + 180.0f) * 16.0f / 360.0f + 0.5) & 0xF);
++            world.setBlockAndMetadataWithNotify(x, y, z, Block.SIGN_STANDING.blockID, MathHelper.floor_double((entityPlayer.rotationYaw + 180.0f) * 16.0f / 360.0f + 0.5) & 0xF);
+         }
+         else {
+-            world.setBlockAndMetadataWithNotify(x, y, z, Block.signWall.blockID, i7);
++            world.setBlockAndMetadataWithNotify(x, y, z, Block.SIGN_WALL.blockID, i7);
+         }
+         --stack.stackSize;

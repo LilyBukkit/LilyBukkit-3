@@ -1,0 +1,17 @@
+--- NetworkMasterThread.java
++++ NetworkMasterThread.java
+@@ -1,11 +1,11 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ class NetworkMasterThread extends Thread {
+     final NetworkManager netManager;
+-    
++
+     NetworkMasterThread(final NetworkManager netManager) {
+         this.netManager = netManager;
+     }
+-    
++
+     public void run() {
+         try {

@@ -1,0 +1,33 @@
+--- BlockContainer.java
++++ BlockContainer.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public abstract class BlockContainer extends Block {
+@@ -6,9 +6,9 @@
+         BlockContainer.isBlockContainer[id] = true;
+     }
+-    
++
+     protected BlockContainer(final int id, final int blockIndex, final Material material) {
+         super(id, blockIndex, material);
+     }
+-    
++
+     @Override
+     public void onBlockAdded(final World world, final int x, final int y, final int z) {
+@@ -16,5 +16,5 @@
+         world.setBlockTileEntity(x, y, z, this.getBlockEntity());
+     }
+-    
++
+     @Override
+     public void onBlockRemoval(final World world, final int x, final int y, final int z) {
+@@ -22,5 +22,5 @@
+         world.removeBlockTileEntity(x, y, z);
+     }
+-    
++
+     protected abstract TileEntity getBlockEntity();
+ }

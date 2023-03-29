@@ -1,0 +1,23 @@
+--- BlockGlowingFlowerInfused.java
++++ BlockGlowingFlowerInfused.java
+@@ -1,11 +1,7 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+-import net.minecraft.src.EntityMob;
+-import net.minecraft.src.Entity;
+-import net.minecraft.src.World;
+-
+ public class BlockGlowingFlowerInfused extends BlockGlowing {
+     public int power;
+-    
++
+     protected BlockGlowingFlowerInfused(final int n, final int n2, final int n3, final int n4) {
+         super(n, n2, n3);
+@@ -13,5 +9,5 @@
+         this.power = n4;
+     }
+-    
++
+     @Override
+     public void onEntityCollidedWithBlock(final World world, final int x, final int y, final int z, final Entity entity) {

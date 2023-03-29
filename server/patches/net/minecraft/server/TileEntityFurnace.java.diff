@@ -1,0 +1,137 @@
+--- TileEntityFurnace.java
++++ TileEntityFurnace.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class TileEntityFurnace extends TileEntity implements IInventory {
+@@ -6,5 +6,5 @@
+     private int currentItemBurnTime;
+     private int furnaceCookTime;
+-    
++
+     public TileEntityFurnace() {
+         this.furnaceItemStacks = new ItemStack[3];
+@@ -13,15 +13,15 @@
+         this.furnaceCookTime = 0;
+     }
+-    
++
+     @Override
+     public int getSizeInventory() {
+         return this.furnaceItemStacks.length;
+     }
+-    
++
+     @Override
+     public ItemStack getStackInSlot(final int slot) {
+         return this.furnaceItemStacks[slot];
+     }
+-    
++
+     @Override
+     public void readFromNBT(final NBTTagCompound nbttagcompound) {
+@@ -42,5 +42,5 @@
+         this.currentItemBurnTime = this.getItemBurnTime(this.furnaceItemStacks[1]);
+     }
+-    
++
+     @Override
+     public void writeToNBT(final NBTTagCompound nbttagcompound) {
+@@ -59,9 +59,9 @@
+         nbttagcompound.setTag("Items", (NBTBase)nBTTagList);
+     }
+-    
++
+     public int getCookProgressScaled(final int n) {
+         return this.furnaceCookTime * n / 200;
+     }
+-    
++
+     public int getBurnTimeRemainingScaled(final int n) {
+         if (this.currentItemBurnTime == 0) {
+@@ -70,9 +70,9 @@
+         return this.furnaceBurnTime * n / this.currentItemBurnTime;
+     }
+-    
++
+     public boolean isBurning() {
+         return this.furnaceBurnTime > 0;
+     }
+-    
++
+     @Override
+     public void updateEntity() {
+@@ -116,5 +116,5 @@
+         }
+     }
+-    
++
+     private boolean canSmelt() {
+         if (this.furnaceItemStacks[0] == null) {
+@@ -124,5 +124,5 @@
+         return n >= 0 && (this.furnaceItemStacks[2] == null || (this.furnaceItemStacks[2].itemID == n && (this.furnaceItemStacks[2].stackSize < this.furnaceItemStacks[2].getMaxStackSize() || this.furnaceItemStacks[2].stackSize < Item.itemsList[n].getItemStackLimit())));
+     }
+-    
++
+     public void smeltItem() {
+         if (!this.canSmelt()) {
+@@ -145,28 +145,28 @@
+         }
+     }
+-    
++
+     private int getCookedItem(final int blockID) {
+-        if (blockID == Block.oreIron.blockID) {
++        if (blockID == Block.ORE_IRON.blockID) {
+             return Item.ingotIron.shiftedIndex;
+         }
+-        if (blockID == Block.oreGold.blockID) {
++        if (blockID == Block.ORE_GOLD.blockID) {
+             return Item.ingotGold.shiftedIndex;
+         }
+-        if (blockID == Block.oreDiamond.blockID) {
++        if (blockID == Block.ORE_DIAMOND.blockID) {
+             return Item.diamond.shiftedIndex;
+         }
+-        if (blockID == Block.sand.blockID) {
+-            return Block.glass.blockID;
++        if (blockID == Block.SAND.blockID) {
++            return Block.GLASS.blockID;
+         }
+         if (blockID == Item.porkRaw.shiftedIndex) {
+             return Item.porkCooked.shiftedIndex;
+         }
+-        if (blockID == Block.cobblestone.blockID) {
+-            return Block.stone.blockID;
++        if (blockID == Block.COBBLESTONE.blockID) {
++            return Block.STONE.blockID;
+         }
+         if (blockID == Item.clay.shiftedIndex) {
+             return Item.brick.shiftedIndex;
+         }
+-        if (blockID == Block.obsidian.blockID) {
++        if (blockID == Block.OBSIDIAN.blockID) {
+             return Item.obsidianIngot.shiftedIndex;
+         }
+@@ -177,16 +177,16 @@
+             return Item.greenDye.shiftedIndex;
+         }
+-        if (blockID == Block.plantYellow.blockID) {
++        if (blockID == Block.PLANT_YELLOW.blockID) {
+             return Item.blueDye.shiftedIndex;
+         }
+-        if (blockID == Block.mushroomBrown.blockID) {
++        if (blockID == Block.MUSHROOM_BROWN.blockID) {
+             return Item.pinkDye.shiftedIndex;
+         }
+-        if (blockID == Block.mushroomRed.blockID) {
++        if (blockID == Block.MUSHROOM_RED.blockID) {
+             return Item.fryshroom.shiftedIndex;
+         }
+         return -1;
+     }
+-    
++
+     private int getItemBurnTime(final ItemStack stack) {
+         if (stack == null) {

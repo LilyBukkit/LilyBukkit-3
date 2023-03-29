@@ -1,0 +1,19 @@
+--- ServerGuiFocusadapter.java
++++ ServerGuiFocusadapter.java
+@@ -1,3 +1,3 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.awt.event.FocusEvent;
+@@ -6,9 +6,9 @@
+ class ServerGuiFocusadapter extends FocusAdapter {
+     final ServerGUI mcServerGui;
+-    
++
+     ServerGuiFocusadapter(final ServerGUI serverGUI1) {
+         this.mcServerGui = serverGUI1;
+     }
+-    
++
+     public void focusGained(final FocusEvent focusEvent1) {
+     }

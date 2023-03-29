@@ -1,0 +1,90 @@
+--- EntityTrackerEntry.java
++++ EntityTrackerEntry.java
+@@ -1,5 +1,4 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+-import java.util.Iterator;
+ import java.util.List;
+ import java.util.HashSet;
+@@ -21,6 +20,6 @@
+     private boolean firstUpdateDone;
+     public boolean playerEntitiesUpdated;
+-    public Set trackedPlayers;
+-    
++    public Set<EntityPlayerMP> trackedPlayers;
++
+     public EntityTrackerEntry(final Entity entity1, final int i2, final int i3) {
+         this.updateCounter = 0;
+@@ -37,13 +36,13 @@
+         this.encodedRotationPitch = MathHelper.floor_float(entity1.rotationPitch * 256.0f / 360.0f);
+     }
+-    
++
+     public boolean equals(final Object object1) {
+         return object1 instanceof EntityTrackerEntry && ((EntityTrackerEntry)object1).trackedEntity.entityID == this.trackedEntity.entityID;
+     }
+-    
++
+     public int hashCode() {
+         return this.trackedEntity.entityID;
+     }
+-    
++
+     public void updatePlayerList(final List list1) {
+         this.playerEntitiesUpdated = false;
+@@ -67,5 +66,5 @@
+             final int i8 = i3 - this.encodedPosY;
+             final int i9 = i4 - this.encodedPosZ;
+-            Object object12 = null;
++            Packet object12 = null;
+             if (i7 >= -128 && i7 < 128 && i8 >= -128 && i8 < 128 && i9 >= -128 && i9 < 128) {
+                 if (z7 && z8) {
+@@ -78,7 +77,4 @@
+                     object12 = new Packet32EntityLook(this.trackedEntity.entityID, (byte)i5, (byte)i6);
+                 }
+-                else {
+-                    object12 = new Packet30Entity(this.trackedEntity.entityID);
+-                }
+             }
+             else {
+@@ -86,5 +82,5 @@
+             }
+             if (object12 != null) {
+-                this.sendPacketToTrackedPlayers((Packet)object12);
++                this.sendPacketToTrackedPlayers(object12);
+             }
+             this.encodedPosX = i2;
+@@ -95,5 +91,5 @@
+         }
+     }
+-    
++
+     public void sendPacketToTrackedPlayers(final Packet packet1) {
+         for (final EntityPlayerMP entityPlayerMP3 : this.trackedPlayers) {
+@@ -101,9 +97,9 @@
+         }
+     }
+-    
++
+     public void removeFromTrackedPlayers() {
+         this.sendPacketToTrackedPlayers(new Packet29DestroyEntity(this.trackedEntity.entityID));
+     }
+-    
++
+     public void updatePlayerEntity(final EntityPlayerMP entityPlayerMP1) {
+         if (entityPlayerMP1 != this.trackedEntity) {
+@@ -122,5 +118,5 @@
+         }
+     }
+-    
++
+     public void updatePlayerEntities(final List list1) {
+         for (int i2 = 0; i2 < list1.size(); ++i2) {
+@@ -128,5 +124,5 @@
+         }
+     }
+-    
++
+     private Packet getSpawnPacket() {
+         if (this.trackedEntity instanceof EntityItem) {

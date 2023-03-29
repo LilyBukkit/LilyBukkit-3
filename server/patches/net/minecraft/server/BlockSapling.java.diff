@@ -1,0 +1,70 @@
+--- BlockSapling.java
++++ BlockSapling.java
+@@ -1,6 +1,10 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ import java.util.Random;
+ 
++//LilyBukkit start
++import org.bukkit.BlockChangeDelegate;
++//LilyBukkit end
++
+ public class BlockSapling extends BlockFlower {
+     protected BlockSapling(final int id, final int blockIndex) {
+@@ -9,5 +13,5 @@
+         this.setBlockBounds(0.5f - f3, 0.0f, 0.5f - f3, 0.5f + f3, f3 * 2.0f, 0.5f + f3);
+     }
+-    
++
+     @Override
+     public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
+@@ -17,16 +21,43 @@
+             if (i6 < 15) {
+                 world.setBlockMetadataWithNotify(x, y, z, i6 + 1);
+-            }
+-            else {
++            } else {
+                 world.setBlock(x, y, z, 0);
+-                Object object7 = new WorldGenTrees();
++                //LilyBukkit - fixes client updates on recently grown trees
++                boolean grownTree;
++                BlockChangeWithNotify delegate = new BlockChangeWithNotify(world);
++
+                 if (random.nextInt(10) == 0) {
+-                    object7 = new WorldGenBigTree();
++                    grownTree = new WorldGenBigTree().generate(delegate, random, x, y, z);
++                } else {
++                    grownTree = new WorldGenTrees().generate(delegate, random, x, y, z);
+                 }
+-                if (!((WorldGenerator)object7).generate(world, random, x, y, z)) {
++                if (!grownTree) {
+                     world.setBlock(x, y, z, this.blockID);
+                 }
++                //LilyBukkit end
+             }
+         }
+     }
++
++    //LilyBukkit start
++    private class BlockChangeWithNotify implements BlockChangeDelegate {
++        World world;
++
++        BlockChangeWithNotify(World world) {
++            this.world = world;
++        }
++
++        public boolean setRawTypeId(int x, int y, int z, int type) {
++            return this.world.setBlockWithNotify(x, y, z, type);
++        }
++
++        public boolean setRawTypeIdAndData(int x, int y, int z, int type, int data) {
++            return this.world.setBlockAndMetadataWithNotify(x, y, z, type, data);
++        }
++
++        public int getTypeId(int x, int y, int z) {
++            return this.world.getBlockId(x, y, z);
++        }
++    }
++    //LilyBukkit end
+ }

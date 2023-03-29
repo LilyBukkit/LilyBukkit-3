@@ -1,0 +1,12 @@
+--- ItemBucket.java
++++ ItemBucket.java
+@@ -1,7 +1,7 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class ItemBucket extends Item {
+     private int isFull;
+-    
++
+     public ItemBucket(final int itemID, final int isFull) {
+         super(itemID);

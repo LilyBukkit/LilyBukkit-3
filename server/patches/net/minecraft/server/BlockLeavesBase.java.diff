@@ -1,0 +1,24 @@
+--- BlockLeavesBase.java
++++ BlockLeavesBase.java
+@@ -1,17 +1,17 @@
+-package net.minecraft.src;
++package net.minecraft.server;
+ 
+ public class BlockLeavesBase extends Block {
+     protected boolean graphicsLevel;
+-    
++
+     protected BlockLeavesBase(final int id, final int blockIndex, final Material material, final boolean graphicsLevel) {
+         super(id, blockIndex, material);
+         this.graphicsLevel = graphicsLevel;
+     }
+-    
++
+     @Override
+     public boolean isOpaqueCube() {
+         return false;
+     }
+-    
++
+     @Override
+     public boolean shouldSideBeRendered(final IBlockAccess blockAccess, final int x, final int y, final int z, final int side) {
