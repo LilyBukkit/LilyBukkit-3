@@ -54,13 +54,41 @@
 +
      public void populate(final IChunkProvider chunkProvider, final int x, final int z) {
          final Chunk chunk4 = this.provideChunk(x, z);
-@@ -130,5 +130,5 @@
+@@ -130,11 +130,11 @@
          }
      }
 -    
 +
      public boolean saveChunks(final boolean flag, final IProgressUpdate progressUpdate) {
          int i3 = 0;
+         int i4 = 0;
+         if (progressUpdate != null) {
+-            for (int i5 = 0; i5 < this.chunks.length; ++i5) {
+-                if (this.chunks[i5] != null && this.chunks[i5].needsSaving(flag)) {
++            for (Chunk chunk : this.chunks) {
++                if (chunk != null && chunk.needsSaving(flag)) {
+                     ++i4;
+                 }
+@@ -142,12 +142,12 @@
+         }
+         int i5 = 0;
+-        for (int i6 = 0; i6 < this.chunks.length; ++i6) {
+-            if (this.chunks[i6] != null) {
+-                if (flag && !this.chunks[i6].neverSave) {
+-                    this.saveExtraChunkData(this.chunks[i6]);
++        for (Chunk chunk : this.chunks) {
++            if (chunk != null) {
++                if (flag && !chunk.neverSave) {
++                    this.saveExtraChunkData(chunk);
+                 }
+-                if (this.chunks[i6].needsSaving(flag)) {
+-                    this.saveChunk(this.chunks[i6]);
+-                    this.chunks[i6].isModified = false;
++                if (chunk.needsSaving(flag)) {
++                    this.saveChunk(chunk);
++                    chunk.isModified = false;
+                     if (++i3 == 2 && !flag) {
+                         return false;
 @@ -167,5 +167,5 @@
          return true;
      }

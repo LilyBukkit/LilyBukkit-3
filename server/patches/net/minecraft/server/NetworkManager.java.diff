@@ -84,6 +84,27 @@
 +
      private void sendPacket() {
          try {
+@@ -87,5 +85,5 @@
+                 final Packet packet2;
+                 synchronized (this.sendQueueLock) {
+-                    packet2 = (Packet)this.dataPackets.remove(0);
++                    packet2 = this.dataPackets.remove(0);
+                     this.sendQueueByteLength -= packet2.getPacketSize() + 1;
+                 }
+@@ -98,5 +96,5 @@
+                 final Packet packet2;
+                 synchronized (this.sendQueueLock) {
+-                    packet2 = (Packet)this.chunkDataPackets.remove(0);
++                    packet2 = this.chunkDataPackets.remove(0);
+                     this.sendQueueByteLength -= packet2.getPacketSize() + 1;
+                 }
+@@ -109,5 +107,5 @@
+             }
+         }
+-        catch (InterruptedException ex) {}
++        catch (InterruptedException ignored) {}
+         catch (Exception exception9) {
+             if (!this.isTerminating) {
 @@ -116,5 +114,5 @@
          }
      }
@@ -98,19 +119,41 @@
 +
      private void onNetworkError(final Exception exception) {
          exception.printStackTrace();
-         this.networkShutdown(new StringBuilder("Internal exception: ").append(exception.toString()).toString());
+-        this.networkShutdown(new StringBuilder("Internal exception: ").append(exception.toString()).toString());
++        this.networkShutdown("Internal exception: " + exception);
      }
 -    
 +
      public void networkShutdown(final String terminationReason) {
          if (this.isRunning) {
-@@ -159,5 +157,5 @@
+@@ -148,16 +146,16 @@
+                 this.socketInputStream.close();
+             }
+-            catch (Throwable t) {}
++            catch (Throwable ignored) {}
+             try {
+                 this.socketOutputStream.close();
+             }
+-            catch (Throwable t2) {}
++            catch (Throwable ignored) {}
+             try {
+                 this.networkSocket.close();
+             }
+-            catch (Throwable t3) {}
++            catch (Throwable ignored) {}
          }
      }
 -    
 +
      public void processReadPackets() {
          if (this.sendQueueByteLength > 1048576) {
+@@ -174,5 +172,5 @@
+         int i1 = 100;
+         while (!this.readPackets.isEmpty() && i1-- >= 0) {
+-            final Packet packet2 = (Packet)this.readPackets.remove(0);
++            final Packet packet2 = this.readPackets.remove(0);
+             packet2.processPacket(this.netHandler);
+         }
 @@ -181,9 +179,9 @@
          }
      }

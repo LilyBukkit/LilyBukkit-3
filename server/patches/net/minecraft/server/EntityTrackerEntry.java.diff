@@ -74,17 +74,26 @@
 +
      public void updatePlayerEntity(final EntityPlayerMP entityPlayerMP1) {
          if (entityPlayerMP1 != this.trackedEntity) {
-@@ -122,5 +118,5 @@
+@@ -122,11 +118,11 @@
          }
      }
 -    
 +
      public void updatePlayerEntities(final List list1) {
-         for (int i2 = 0; i2 < list1.size(); ++i2) {
-@@ -128,5 +124,5 @@
+-        for (int i2 = 0; i2 < list1.size(); ++i2) {
+-            this.updatePlayerEntity((EntityPlayerMP)list1.get(i2));
++        for (Object o : list1) {
++            this.updatePlayerEntity((EntityPlayerMP) o);
          }
      }
 -    
 +
      private Packet getSpawnPacket() {
          if (this.trackedEntity instanceof EntityItem) {
+@@ -162,5 +158,5 @@
+             return new Packet24MobSpawn((EntityLiving)this.trackedEntity);
+         }
+-        throw new IllegalArgumentException(new StringBuilder("Don't know how to add ").append(this.trackedEntity.getClass()).append("!").toString());
++        throw new IllegalArgumentException("Don't know how to add " + this.trackedEntity.getClass() + "!");
+     }
+ }

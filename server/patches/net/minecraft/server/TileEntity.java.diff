@@ -5,7 +5,7 @@
 +package net.minecraft.server;
  
  import java.util.HashMap;
-@@ -5,20 +5,18 @@
+@@ -5,28 +5,26 @@
  
  public class TileEntity {
 -    private static Map nameToClassMap;
@@ -32,24 +32,35 @@
 +        addMapping(TileEntityMobSpawner.class, "MobSpawner");
      }
 -    
+-    private static void addMapping(final Class clazz, final String tileEntityName) {
+-        if (TileEntity.classToNameMap.containsKey(tileEntityName)) {
+-            throw new IllegalArgumentException(new StringBuilder("Duplicate id: ").append(tileEntityName).toString());
 +
-     private static void addMapping(final Class clazz, final String tileEntityName) {
-         if (TileEntity.classToNameMap.containsKey(tileEntityName)) {
-@@ -28,5 +26,5 @@
++    private static void addMapping(final Class<TileEntity> clazz, final String tileEntityName) {
++        if (TileEntity.nameToClassMap.containsKey(tileEntityName) || TileEntity.classToNameMap.containsValue(tileEntityName)) {
++            throw new IllegalArgumentException("Duplicate id: " + tileEntityName);
+         }
+         TileEntity.nameToClassMap.put(tileEntityName, clazz);
          TileEntity.classToNameMap.put(clazz, tileEntityName);
      }
 -    
 +
      public void readFromNBT(final NBTTagCompound nbttagcompound) {
          this.xCoord = nbttagcompound.getInteger("x");
-@@ -34,5 +32,5 @@
+@@ -34,9 +32,9 @@
          this.zCoord = nbttagcompound.getInteger("z");
      }
 -    
 +
      public void writeToNBT(final NBTTagCompound nbttagcompound) {
-         final String string2 = (String)TileEntity.classToNameMap.get(this.getClass());
-@@ -45,8 +43,8 @@
+-        final String string2 = (String)TileEntity.classToNameMap.get(this.getClass());
++        final String string2 = TileEntity.classToNameMap.get(this.getClass());
+         if (string2 == null) {
+-            throw new RuntimeException(new StringBuilder().append(this.getClass()).append(" is missing a mapping! This is a bug!").toString());
++            throw new RuntimeException(this.getClass() + " is missing a mapping! This is a bug!");
+         }
+         nbttagcompound.setString("id", string2);
+@@ -45,14 +43,14 @@
          nbttagcompound.setInteger("z", this.zCoord);
      }
 -    
@@ -60,7 +71,20 @@
 +
      public static TileEntity createAndLoadEntity(final NBTTagCompound nbttagcompound) {
          TileEntity tileEntity1 = null;
-@@ -68,5 +66,5 @@
+         try {
+-            final Class class2 = (Class)TileEntity.nameToClassMap.get(nbttagcompound.getString("id"));
++            final Class<? extends TileEntity> class2 = TileEntity.nameToClassMap.get(nbttagcompound.getString("id"));
+             if (class2 != null) {
+-                tileEntity1 = (TileEntity)class2.newInstance();
++                tileEntity1 = class2.newInstance();
+             }
+         }
+@@ -64,9 +62,9 @@
+         }
+         else {
+-            System.out.println(new StringBuilder("Skipping TileEntity with id ").append(nbttagcompound.getString("id")).toString());
++            System.out.println("Skipping TileEntity with id " + nbttagcompound.getString("id"));
+         }
          return tileEntity1;
      }
 -    

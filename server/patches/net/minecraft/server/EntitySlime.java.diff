@@ -40,6 +40,13 @@
 +
      @Override
      public void onUpdate() {
+@@ -51,5 +51,5 @@
+             }
+             if (this.size > 2) {
+-                this.worldObj.playSoundAtEntity((Entity)this, "mob.slime", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f) / 0.8f);
++                this.worldObj.playSoundAtEntity(this, "mob.slime", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f) / 0.8f);
+             }
+             this.squishFactor = -0.5f;
 @@ -57,5 +57,5 @@
          this.squishFactor *= 0.6f;
      }
@@ -47,6 +54,13 @@
 +
      @Override
      protected void updateEntityActionState() {
+@@ -71,5 +71,5 @@
+             this.isJumping = true;
+             if (this.size > 1) {
+-                this.worldObj.playSoundAtEntity((Entity)this, "mob.slime", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f) * 0.8f);
++                this.worldObj.playSoundAtEntity(this, "mob.slime", this.getSoundVolume(), ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f) * 0.8f);
+             }
+             this.squishFactor = 1.0f;
 @@ -86,5 +86,5 @@
          }
      }
@@ -54,14 +68,16 @@
 +
      @Override
      public void setEntityDead() {
-@@ -101,5 +101,5 @@
+@@ -101,27 +101,27 @@
          super.setEntityDead();
      }
 -    
 +
      @Override
      public void onCollideWithPlayer(final EntityPlayer entityPlayer) {
-@@ -108,20 +108,20 @@
+         if (this.size > 1 && this.canEntityBeSeen(entityPlayer) && this.getDistanceToEntity(entityPlayer) < 0.6 * this.size && entityPlayer.attackEntityFrom(this, this.size)) {
+-            this.worldObj.playSoundAtEntity((Entity)this, "mob.slimeattack", 1.0f, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
++            this.worldObj.playSoundAtEntity(this, "mob.slimeattack", 1.0f, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
          }
      }
 -    

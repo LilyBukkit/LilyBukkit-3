@@ -47,7 +47,7 @@
      }
 +
 +    //LilyBukkit start
-+    private class BlockChangeWithNotify implements BlockChangeDelegate {
++    private static class BlockChangeWithNotify implements BlockChangeDelegate {
 +        World world;
 +
 +        BlockChangeWithNotify(World world) {

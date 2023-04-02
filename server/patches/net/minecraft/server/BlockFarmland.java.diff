@@ -12,7 +12,8 @@
 +
      @Override
      public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
-         return AxisAlignedBB.getBoundingBoxFromPool(x + 0, y + 0, z + 0, x + 1, y + 1, z + 1);
+-        return AxisAlignedBB.getBoundingBoxFromPool(x + 0, y + 0, z + 0, x + 1, y + 1, z + 1);
++        return AxisAlignedBB.getBoundingBoxFromPool(x, y, z, x + 1, y + 1, z + 1);
      }
 -    
 +

@@ -14,16 +14,18 @@
 +    public List<Entity>[] entities;
      public boolean isTerrainPopulated;
      public boolean isModified;
-@@ -27,7 +27,7 @@
+@@ -27,8 +27,8 @@
      public boolean hasEntities;
      public long lastSaveTime;
 -    
 +
      public Chunk(final World world, final int xPosition, final int zPosition) {
 -        this.chunkTileEntityMap = (Map)new HashMap();
+-        this.entities = new List[8];
 +        this.chunkTileEntityMap = new HashMap<>();
-         this.entities = new List[8];
++        this.entities = new List<Entity>[8];
          this.isTerrainPopulated = false;
+         this.isModified = false;
 @@ -41,8 +41,18 @@
          this.heightMap = new byte[256];
          for (int i4 = 0; i4 < this.entities.length; ++i4) {
@@ -143,6 +145,13 @@
 +
      public void addEntity(final Entity entity) {
          if (!this.isChunkRendered) {
+@@ -280,5 +290,5 @@
+             final int i3 = MathHelper.floor_double(entity.posZ / 16.0);
+             if (i2 != this.xPosition || i3 != this.zPosition) {
+-                System.out.println(new StringBuilder("Wrong location! ").append(entity).toString());
++                System.out.println("Wrong location! " + entity);
+             }
+             int i4 = MathHelper.floor_double(entity.posY / 16.0);
 @@ -296,9 +306,9 @@
          }
      }
@@ -155,7 +164,7 @@
 +
      public void removeEntityAtIndex(final Entity entity, int index) {
          if (index < 0) {
-@@ -310,9 +320,9 @@
+@@ -310,12 +320,12 @@
          this.entities[index].remove(entity);
      }
 -    
@@ -167,7 +176,16 @@
 +
      public TileEntity getChunkBlockTileEntity(final int x, final int y, final int z) {
          final ChunkPosition chunkPosition4 = new ChunkPosition(x, y, z);
-@@ -329,5 +339,5 @@
+-        TileEntity tileEntity5 = (TileEntity)this.chunkTileEntityMap.get(chunkPosition4);
++        TileEntity tileEntity5 = this.chunkTileEntityMap.get(chunkPosition4);
+         if (tileEntity5 == null) {
+             final int i6 = this.getBlockID(x, y, z);
+@@ -325,9 +335,9 @@
+             final BlockContainer blockContainer7 = (BlockContainer)Block.blocksList[i6];
+             blockContainer7.onBlockAdded(this.worldObj, this.xPosition * 16 + x, y, this.zPosition * 16 + z);
+-            tileEntity5 = (TileEntity)this.chunkTileEntityMap.get(chunkPosition4);
++            tileEntity5 = this.chunkTileEntityMap.get(chunkPosition4);
+         }
          return tileEntity5;
      }
 -    
@@ -188,21 +206,29 @@
 +
      public void removeChunkBlockTileEntity(final int x, final int y, final int z) {
          final ChunkPosition chunkPosition4 = new ChunkPosition(x, y, z);
-@@ -363,5 +373,5 @@
+@@ -363,26 +373,26 @@
          }
      }
 -    
 +
      public void onChunkLoad() {
          this.isChunkLoaded = true;
-@@ -371,5 +381,5 @@
+         this.worldObj.loadedTileEntityList.addAll(this.chunkTileEntityMap.values());
+-        for (int i1 = 0; i1 < this.entities.length; ++i1) {
+-            this.worldObj.addLoadedEntities(this.entities[i1]);
++        for (List<Entity> entity : this.entities) {
++            this.worldObj.addLoadedEntities(entity);
          }
      }
 -    
 +
      public void onChunkUnload() {
          this.isChunkLoaded = false;
-@@ -379,9 +389,9 @@
+         this.worldObj.loadedTileEntityList.removeAll(this.chunkTileEntityMap.values());
+-        for (int i1 = 0; i1 < this.entities.length; ++i1) {
+-            this.worldObj.unloadEntities(this.entities[i1]);
++        for (List<Entity> entity : this.entities) {
++            this.worldObj.unloadEntities(entity);
          }
      }
 -    
@@ -211,17 +237,44 @@
          this.isModified = true;
      }
 -    
+-    public void getEntitiesWithinAABBForEntity(final Entity entity, final AxisAlignedBB aabb, final List list) {
 +
-     public void getEntitiesWithinAABBForEntity(final Entity entity, final AxisAlignedBB aabb, final List list) {
++    public void getEntitiesWithinAABBForEntity(final Entity entity, final AxisAlignedBB aabb, final List<Entity> list) {
          int i4 = MathHelper.floor_double((aabb.minY - 2.0) / 16.0);
-@@ -403,5 +413,5 @@
+         int i5 = MathHelper.floor_double((aabb.maxY + 2.0) / 16.0);
+@@ -394,7 +404,6 @@
+         }
+         for (int i6 = i4; i6 <= i5; ++i6) {
+-            final List list2 = this.entities[i6];
+-            for (int i7 = 0; i7 < list2.size(); ++i7) {
+-                final Entity entity2 = (Entity)list2.get(i7);
++            final List<Entity> list2 = this.entities[i6];
++            for (final Entity entity2 : list2) {
+                 if (entity2 != entity && entity2.boundingBox.intersectsWith(aabb)) {
+                     list.add(entity2);
+@@ -403,6 +412,6 @@
          }
      }
 -    
+-    public void getEntitiesOfTypeWithinAAAB(final Class clazz, final AxisAlignedBB aabb, final List list) {
 +
-     public void getEntitiesOfTypeWithinAAAB(final Class clazz, final AxisAlignedBB aabb, final List list) {
++    public void getEntitiesOfTypeWithinAAAB(final Class<? extends Entity> clazz, final AxisAlignedBB aabb, final List<Entity> list) {
          int i4 = MathHelper.floor_double((aabb.minY - 2.0) / 16.0);
-@@ -423,9 +433,9 @@
+         int i5 = MathHelper.floor_double((aabb.maxY + 2.0) / 16.0);
+@@ -414,18 +423,17 @@
+         }
+         for (int i6 = i4; i6 <= i5; ++i6) {
+-            final List list2 = this.entities[i6];
+-            for (int i7 = 0; i7 < list2.size(); ++i7) {
+-                final Entity entity9 = (Entity)list2.get(i7);
+-                if (clazz.isAssignableFrom(entity9.getClass()) && entity9.boundingBox.intersectsWith(aabb)) {
+-                    list.add(entity9);
++            final List<Entity> list2 = this.entities[i6];
++            for (Entity entity : list2) {
++                if (clazz.isAssignableFrom(entity.getClass()) && entity.boundingBox.intersectsWith(aabb)) {
++                    list.add(entity);
+                 }
+             }
          }
      }
 -    
@@ -233,7 +286,7 @@
 +
      public int getChunkData(final byte[] b1, final int i2, final int i3, final int i4, final int i5, final int i6, final int i7, int i8) {
          for (int i9 = i2; i9 < i5; ++i9) {
-@@ -463,5 +473,5 @@
+@@ -463,5 +471,5 @@
          return i8;
      }
 -    

@@ -70,13 +70,19 @@
 +
      @Override
      public void onEntityCollidedWithBlock(final World world, final int x, final int y, final int z, final Entity entity) {
-@@ -64,5 +71,5 @@
+@@ -64,10 +71,10 @@
          }
      }
 -    
 +
      private void setStateIfMobInteractsWithPlate(final World world, final int x, final int y, final int z) {
          final boolean z2 = world.getBlockMetadata(x, y, z) == 1;
+         boolean z3 = false;
+         final float f7 = 0.125f;
+-        List list8 = null;
++        List<Entity> list8 = null;
+         if (this.triggerMobType == EnumMobType.everything) {
+             list8 = world.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBoxFromPool(x + f7, y, z + f7, x + 1 - f7, y + 0.25, z + 1 - f7));
 @@ -82,4 +89,35 @@
              z3 = true;
          }

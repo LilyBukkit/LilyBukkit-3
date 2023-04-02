@@ -24,14 +24,22 @@
 +
      @Override
      public void readPacketData(final DataInputStream dataInputStream) throws IOException {
-@@ -50,5 +50,5 @@
+@@ -50,22 +50,22 @@
          dataInputStream.readFully(this.metadataArray);
      }
 -    
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-@@ -62,10 +62,10 @@
+         dataOutputStream.writeInt(this.xPosition);
+         dataOutputStream.writeInt(this.zPosition);
+-        dataOutputStream.writeShort((int)(short)this.size);
++        dataOutputStream.writeShort((short)this.size);
+         for (int i2 = 0; i2 < this.size; ++i2) {
+-            dataOutputStream.writeShort((int)this.coordinateArray[i2]);
++            dataOutputStream.writeShort(this.coordinateArray[i2]);
+         }
+         dataOutputStream.write(this.typeArray);
          dataOutputStream.write(this.metadataArray);
      }
 -    

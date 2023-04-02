@@ -7,7 +7,8 @@
  public enum EnumMobType {
 -    everything, 
 -    mobs, 
+-    players;
 +    everything,
 +    mobs,
-     players;
++    players
  }

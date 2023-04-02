@@ -23,15 +23,23 @@
 +
      @Override
      public void readPacketData(final DataInputStream dataInputStream) throws IOException {
-@@ -37,5 +37,5 @@
+@@ -37,21 +37,21 @@
          this.pitch = dataInputStream.readByte();
      }
 -    
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-@@ -48,10 +48,10 @@
-         dataOutputStream.writeByte((int)this.pitch);
+         dataOutputStream.writeInt(this.entityId);
+-        dataOutputStream.writeByte((int)this.type);
++        dataOutputStream.writeByte(this.type);
+         dataOutputStream.writeInt(this.xPosition);
+         dataOutputStream.writeInt(this.yPosition);
+         dataOutputStream.writeInt(this.zPosition);
+-        dataOutputStream.writeByte((int)this.yaw);
+-        dataOutputStream.writeByte((int)this.pitch);
++        dataOutputStream.writeByte(this.yaw);
++        dataOutputStream.writeByte(this.pitch);
      }
 -    
 +

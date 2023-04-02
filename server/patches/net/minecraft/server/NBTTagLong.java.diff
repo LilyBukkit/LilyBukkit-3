@@ -5,7 +5,7 @@
 +package net.minecraft.server;
  
  import java.io.DataInput;
-@@ -7,27 +7,27 @@
+@@ -7,29 +7,29 @@
  public class NBTTagLong extends NBTBase {
      public long longValue;
 -    
@@ -38,4 +38,7 @@
 -    
 +
      public String toString() {
-         return new StringBuilder().append(this.longValue).toString();
+-        return new StringBuilder().append(this.longValue).toString();
++        return String.valueOf(this.longValue);
+     }
+ }

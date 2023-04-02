@@ -23,14 +23,30 @@
 +
      @Override
      public void readPacketData(final DataInputStream dataInputStream) throws IOException {
-@@ -34,5 +34,5 @@
+@@ -34,26 +34,25 @@
          }
      }
 -    
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-@@ -50,10 +50,10 @@
+         dataOutputStream.writeInt(this.inventoryType);
+         dataOutputStream.writeShort(this.inventory.length);
+-        for (int i2 = 0; i2 < this.inventory.length; ++i2) {
+-            if (this.inventory[i2] == null) {
++        for (ItemStack itemStack : this.inventory) {
++            if (itemStack == null) {
+                 dataOutputStream.writeShort(-1);
++            } else {
++                dataOutputStream.writeShort((short) itemStack.itemID);
++                dataOutputStream.writeByte((byte) itemStack.stackSize);
++                dataOutputStream.writeShort((short) itemStack.itemDmg);
+             }
+-            else {
+-                dataOutputStream.writeShort((int)(short)this.inventory[i2].itemID);
+-                dataOutputStream.writeByte((int)(byte)this.inventory[i2].stackSize);
+-                dataOutputStream.writeShort((int)(short)this.inventory[i2].itemDmg);
+-            }
          }
      }
 -    

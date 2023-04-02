@@ -131,7 +131,7 @@
 +
      @Override
      public void onBlockRemoval(final World world, final int x, final int y, final int z) {
-@@ -178,29 +183,26 @@
+@@ -178,36 +183,33 @@
          if (world.isBlockNormalCube(x - 1, y, z)) {
              this.notifyWireNeighborsOfNeighborChange(world, x - 1, y + 1, z);
 -        }
@@ -168,8 +168,10 @@
 +    public int getMaxCurrentStrength(final World world, final int x, final int y, final int z, final int i5) {
          if (world.getBlockId(x, y, z) != this.blockID) {
              return i5;
-@@ -209,5 +211,5 @@
-         return (i6 > i5) ? i6 : i5;
+         }
+         final int i6 = world.getBlockMetadata(x, y, z);
+-        return (i6 > i5) ? i6 : i5;
++        return Math.max(i6, i5);
      }
 -    
 +

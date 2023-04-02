@@ -23,15 +23,17 @@
 +
      @Override
      public void readPacketData(final DataInputStream dataInputStream) throws IOException {
-@@ -26,5 +26,5 @@
+@@ -26,17 +26,17 @@
          this.mode = (dataInputStream.read() != 0);
      }
 -    
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-@@ -33,10 +33,10 @@
-         dataOutputStream.write((int)(this.mode ? 1 : 0));
+         dataOutputStream.writeInt(this.xPosition);
+         dataOutputStream.writeInt(this.yPosition);
+-        dataOutputStream.write((int)(this.mode ? 1 : 0));
++        dataOutputStream.write(this.mode ? 1 : 0);
      }
 -    
 +

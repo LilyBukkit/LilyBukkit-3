@@ -19,15 +19,18 @@
 +
      @Override
      public void readPacketData(final DataInputStream dataInputStream) throws IOException {
-@@ -23,5 +23,5 @@
+@@ -23,12 +23,12 @@
          this.pitch = dataInputStream.readByte();
      }
 -    
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-@@ -30,5 +30,5 @@
-         dataOutputStream.writeByte((int)this.pitch);
+         super.writePacket(dataOutputStream);
+-        dataOutputStream.writeByte((int)this.yaw);
+-        dataOutputStream.writeByte((int)this.pitch);
++        dataOutputStream.writeByte(this.yaw);
++        dataOutputStream.writeByte(this.pitch);
      }
 -    
 +

@@ -5,43 +5,132 @@
 +package net.minecraft.server;
  
  import java.util.HashMap;
-@@ -9,5 +9,5 @@
-     private static Map IDtoClassMapping;
-     private static Map classToIDMapping;
+@@ -5,37 +5,37 @@
+ 
+ public class EntityList {
+-    private static Map stringToClassMapping;
+-    private static Map classToStringMapping;
+-    private static Map IDtoClassMapping;
+-    private static Map classToIDMapping;
 -    
++    private static Map<String, Class<? extends Entity>> stringToClassMapping;
++    private static Map<Class<? extends Entity>, String> classToStringMapping;
++    private static Map<Integer, Class<? extends Entity>> IDtoClassMapping;
++    private static Map<Class<? extends Entity>, Integer> classToIDMapping;
 +
      static {
-         EntityList.stringToClassMapping = (Map)new HashMap();
-@@ -36,5 +36,5 @@
-         addMapping((Class)EntityBoat.class, "Boat", 41);
+-        EntityList.stringToClassMapping = (Map)new HashMap();
+-        EntityList.classToStringMapping = (Map)new HashMap();
+-        EntityList.IDtoClassMapping = (Map)new HashMap();
+-        EntityList.classToIDMapping = (Map)new HashMap();
+-        addMapping((Class)EntityArrow.class, "Arrow", 10);
+-        addMapping((Class)EntitySnowball.class, "Snowball", 11);
+-        addMapping((Class)EntityItem.class, "Item", 1);
+-        addMapping((Class)EntityPainting.class, "Painting", 9);
+-        addMapping((Class)EntityLiving.class, "Mob", 48);
+-        addMapping((Class)EntityMob.class, "Monster", 49);
+-        addMapping((Class)EntityCreeper.class, "Creeper", 50);
+-        addMapping((Class)EntitySkeleton.class, "Skeleton", 51);
+-        addMapping((Class)EntitySpider.class, "Spider", 52);
+-        addMapping((Class)EntityGiantZombie.class, "Giant", 53);
+-        addMapping((Class)EntityZombie.class, "Zombie", 54);
+-        addMapping((Class)EntitySlime.class, "Slime", 55);
+-        addMapping((Class)EntityPig.class, "Pig", 90);
+-        addMapping((Class)EntitySheep.class, "Sheep", 91);
+-        addMapping((Class)EntityCow.class, "Cow", 91);
+-        addMapping((Class)EntityChicken.class, "Chicken", 91);
+-        addMapping((Class)EntityTNTPrimed.class, "PrimedTnt", 20);
+-        addMapping((Class)EntityFallingSand.class, "FallingSand", 21);
+-        addMapping((Class)EntityMinecart.class, "Minecart", 40);
+-        addMapping((Class)EntityBoat.class, "Boat", 41);
++        EntityList.stringToClassMapping = new HashMap<>();
++        EntityList.classToStringMapping = new HashMap<>();
++        EntityList.IDtoClassMapping = new HashMap<>();
++        EntityList.classToIDMapping = new HashMap<>();
++        addMapping(EntityArrow.class, "Arrow", 10);
++        addMapping(EntitySnowball.class, "Snowball", 11);
++        addMapping(EntityItem.class, "Item", 1);
++        addMapping(EntityPainting.class, "Painting", 9);
++        addMapping(EntityLiving.class, "Mob", 48);
++        addMapping(EntityMob.class, "Monster", 49);
++        addMapping(EntityCreeper.class, "Creeper", 50);
++        addMapping(EntitySkeleton.class, "Skeleton", 51);
++        addMapping(EntitySpider.class, "Spider", 52);
++        addMapping(EntityGiantZombie.class, "Giant", 53);
++        addMapping(EntityZombie.class, "Zombie", 54);
++        addMapping(EntitySlime.class, "Slime", 55);
++        addMapping(EntityPig.class, "Pig", 90);
++        addMapping(EntitySheep.class, "Sheep", 91);
++        addMapping(EntityCow.class, "Cow", 91);
++        addMapping(EntityChicken.class, "Chicken", 91);
++        addMapping(EntityTNTPrimed.class, "PrimedTnt", 20);
++        addMapping(EntityFallingSand.class, "FallingSand", 21);
++        addMapping(EntityMinecart.class, "Minecart", 40);
++        addMapping(EntityBoat.class, "Boat", 41);
      }
 -    
+-    private static void addMapping(final Class clazz, final String entityName, final int entityID) {
 +
-     private static void addMapping(final Class clazz, final String entityName, final int entityID) {
++    private static void addMapping(final Class<? extends Entity> clazz, final String entityName, final int entityID) {
          EntityList.stringToClassMapping.put(entityName, clazz);
-@@ -43,5 +43,5 @@
+         EntityList.classToStringMapping.put(clazz, entityName);
+@@ -43,45 +43,42 @@
          EntityList.classToIDMapping.put(clazz, entityID);
      }
 -    
 +
      public static Entity createEntityByName(final String entityName, final World world) {
          Entity entity2 = null;
-@@ -57,5 +57,5 @@
+         try {
+-            final Class class3 = (Class)EntityList.stringToClassMapping.get(entityName);
++            final Class<? extends Entity> class3 = EntityList.stringToClassMapping.get(entityName);
+             if (class3 != null) {
+-                entity2 = (Entity)class3.getConstructor(new Class[] { World.class }).newInstance(new Object[] { world });
++                entity2 = class3.getConstructor(new Class[]{World.class}).newInstance(new Object[]{world});
+             }
+-        }
+-        catch (Exception exception4) {
++        } catch (Exception exception4) {
+             exception4.printStackTrace();
+         }
          return entity2;
      }
 -    
 +
      public static Entity createEntityFromNBT(final NBTTagCompound nbttagcompound, final World world) {
          Entity entity2 = null;
-@@ -77,9 +77,9 @@
+         try {
+-            final Class class3 = (Class)EntityList.stringToClassMapping.get(nbttagcompound.getString("id"));
++            final Class<? extends Entity> class3 = EntityList.stringToClassMapping.get(nbttagcompound.getString("id"));
+             if (class3 != null) {
+-                entity2 = (Entity)class3.getConstructor(new Class[] { World.class }).newInstance(new Object[] { world });
++                entity2 = class3.getConstructor(new Class[]{World.class}).newInstance(new Object[]{world});
+             }
+-        }
+-        catch (Exception exception4) {
++        } catch (Exception exception4) {
+             exception4.printStackTrace();
+         }
+         if (entity2 != null) {
+             entity2.readFromNBT(nbttagcompound);
++        } else {
++            System.out.println("Skipping Entity with id " + nbttagcompound.getString("id"));
+         }
+-        else {
+-            System.out.println(new StringBuilder("Skipping Entity with id ").append(nbttagcompound.getString("id")).toString());
+-        }
          return entity2;
      }
 -    
 +
      public static int getEntityID(final Entity entity) {
-         return (int)EntityList.classToIDMapping.get(entity.getClass());
+-        return (int)EntityList.classToIDMapping.get(entity.getClass());
++        return EntityList.classToIDMapping.get(entity.getClass());
      }
 -    
 +
      public static String getEntityString(final Entity entity) {
-         return (String)EntityList.classToStringMapping.get(entity.getClass());
+-        return (String)EntityList.classToStringMapping.get(entity.getClass());
++        return EntityList.classToStringMapping.get(entity.getClass());
+     }
+ }

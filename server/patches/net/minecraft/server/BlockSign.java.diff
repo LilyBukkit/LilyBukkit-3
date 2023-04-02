@@ -1,6 +1,6 @@
 --- BlockSign.java
 +++ BlockSign.java
-@@ -1,10 +1,14 @@
+@@ -1,11 +1,15 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
@@ -11,12 +11,15 @@
 +//LilyBukkit end
 +
  public class BlockSign extends BlockContainer {
-     private Class signEntityClass;
+-    private Class signEntityClass;
++    private Class<TileEntitySign> signEntityClass;
      private boolean isFreestanding;
 -    
+-    protected BlockSign(final int id, final Class signEntityClass, final boolean isFreestanding) {
 +
-     protected BlockSign(final int id, final Class signEntityClass, final boolean isFreestanding) {
++    protected BlockSign(final int id, final Class<TileEntitySign> signEntityClass, final boolean isFreestanding) {
          super(id, Material.wood);
+         this.isFreestanding = isFreestanding;
 @@ -16,10 +20,10 @@
          this.setBlockBounds(0.5f - f4, 0.0f, 0.5f - f4, 0.5f + f4, f5, 0.5f + f4);
      }
@@ -51,9 +54,9 @@
      protected TileEntity getBlockEntity() {
          try {
 -            return (TileEntity)this.signEntityClass.newInstance();
-+            return (TileEntity) this.signEntityClass.newInstance();
++            return this.signEntityClass.newInstance();
 +        } catch (Exception exception2) {
-+            throw new RuntimeException((Throwable) exception2);
++            throw new RuntimeException(exception2);
          }
 -        catch (Exception exception2) {
 -            throw new RuntimeException((Throwable)exception2);

@@ -28,7 +28,7 @@
 +
      @Override
      void readTagContents(final DataInput dataInput) throws IOException {
-@@ -26,10 +26,10 @@
+@@ -26,12 +26,12 @@
          dataInput.readFully(this.byteArray = new byte[i2]);
      }
 -    
@@ -40,4 +40,7 @@
 -    
 +
      public String toString() {
-         return new StringBuilder("[").append(this.byteArray.length).append(" bytes]").toString();
+-        return new StringBuilder("[").append(this.byteArray.length).append(" bytes]").toString();
++        return "[" + this.byteArray.length + " bytes]";
+     }
+ }

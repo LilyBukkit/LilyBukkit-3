@@ -37,6 +37,13 @@
 +
      @Override
      protected void attackEntity(final Entity entity, final float damage) {
+@@ -44,5 +44,5 @@
+                 final double d5 = entity.posY - 0.20000000298023224 - entityArrow7.posY;
+                 final float f10 = MathHelper.sqrt_double(d3 * d3 + d4 * d4) * 0.2f;
+-                this.worldObj.playSoundAtEntity((Entity)this, "random.bow", 1.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.8f));
++                this.worldObj.playSoundAtEntity(this, "random.bow", 1.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.8f));
+                 this.worldObj.spawnEntityInWorld(entityArrow7);
+                 entityArrow7.setArrowHeading(d3, d5 + f10, d4, 0.6f, 12.0f);
 @@ -53,15 +53,15 @@
          }
      }

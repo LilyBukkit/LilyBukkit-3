@@ -1,17 +1,32 @@
 --- ServerGUI.java
 +++ ServerGUI.java
-@@ -1,3 +1,3 @@
+@@ -1,14 +1,11 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
  import java.awt.event.FocusListener;
-@@ -18,5 +18,4 @@
- import javax.swing.JFrame;
- import javax.swing.UIManager;
+ import java.awt.event.ActionListener;
+-import javax.swing.JTextField;
++import javax.swing.*;
+ import java.util.logging.Handler;
+-import javax.swing.JTextArea;
+-import javax.swing.JScrollPane;
+ import javax.swing.border.Border;
+ import javax.swing.border.TitledBorder;
+ import javax.swing.border.EtchedBorder;
+-import javax.swing.JPanel;
+ import java.awt.LayoutManager;
+ import java.awt.BorderLayout;
+@@ -16,39 +13,35 @@
+ import java.awt.event.WindowListener;
+ import java.awt.Component;
+-import javax.swing.JFrame;
+-import javax.swing.UIManager;
 -import net.minecraft.server.MinecraftServer;
  import java.util.logging.Logger;
- import javax.swing.JComponent;
-@@ -25,9 +24,9 @@
+-import javax.swing.JComponent;
+ 
+ public class ServerGUI extends JComponent implements ICommandListener {
      public static Logger logger;
      private MinecraftServer mcServer;
 -    
@@ -23,36 +38,87 @@
 +
      public static void initGui(final MinecraftServer minecraftServer) {
          try {
-@@ -43,5 +42,5 @@
-         jFrame2.addWindowListener((WindowListener)new ServerWindowAdapter(minecraftServer));
+             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+         }
+-        catch (Exception ex) {}
++        catch (Exception ignored) {}
+         final ServerGUI serverGUI1 = new ServerGUI(minecraftServer);
+         final JFrame jFrame2 = new JFrame("Minecraft server");
+-        jFrame2.add((Component)serverGUI1);
++        jFrame2.add(serverGUI1);
+         jFrame2.pack();
+-        jFrame2.setLocationRelativeTo((Component)null);
++        jFrame2.setLocationRelativeTo(null);
+         jFrame2.setVisible(true);
+-        jFrame2.addWindowListener((WindowListener)new ServerWindowAdapter(minecraftServer));
++        jFrame2.addWindowListener(new ServerWindowAdapter(minecraftServer));
      }
 -    
 +
      public ServerGUI(final MinecraftServer minecraftServer) {
          this.mcServer = minecraftServer;
-@@ -56,5 +55,5 @@
+         this.setPreferredSize(new Dimension(854, 480));
+-        this.setLayout((LayoutManager)new BorderLayout());
++        this.setLayout(new BorderLayout());
+         try {
+-            this.add((Component)this.getLogComponent(), "Center");
+-            this.add((Component)this.getStatsComponent(), "West");
++            this.add(this.getLogComponent(), "Center");
++            this.add(this.getStatsComponent(), "West");
+         }
+         catch (Exception exception3) {
+@@ -56,43 +49,43 @@
          }
      }
 -    
 +
      private JComponent getStatsComponent() {
-         final JPanel jPanel1 = new JPanel((LayoutManager)new BorderLayout());
-@@ -64,5 +63,5 @@
-         return (JComponent)jPanel1;
+-        final JPanel jPanel1 = new JPanel((LayoutManager)new BorderLayout());
+-        jPanel1.add((Component)new GuiStatsComponent(), "North");
+-        jPanel1.add((Component)this.getPlayerListComponent(), "Center");
+-        jPanel1.setBorder((Border)new TitledBorder((Border)new EtchedBorder(), "Stats"));
+-        return (JComponent)jPanel1;
++        final JPanel jPanel1 = new JPanel(new BorderLayout());
++        jPanel1.add(new GuiStatsComponent(), "North");
++        jPanel1.add(this.getPlayerListComponent(), "Center");
++        jPanel1.setBorder(new TitledBorder(new EtchedBorder(), "Stats"));
++        return jPanel1;
      }
 -    
 +
      private JComponent getPlayerListComponent() {
          final PlayerListBox playerListBox1 = new PlayerListBox(this.mcServer);
-@@ -71,5 +70,5 @@
-         return (JComponent)jScrollPane2;
+-        final JScrollPane jScrollPane2 = new JScrollPane((Component)playerListBox1, 22, 30);
+-        jScrollPane2.setBorder((Border)new TitledBorder((Border)new EtchedBorder(), "Players"));
+-        return (JComponent)jScrollPane2;
++        final JScrollPane jScrollPane2 = new JScrollPane(playerListBox1, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
++        jScrollPane2.setBorder(new TitledBorder(new EtchedBorder(), "Players"));
++        return jScrollPane2;
      }
 -    
 +
      private JComponent getLogComponent() {
-         final JPanel jPanel1 = new JPanel((LayoutManager)new BorderLayout());
-@@ -86,13 +85,13 @@
-         return (JComponent)jPanel1;
+-        final JPanel jPanel1 = new JPanel((LayoutManager)new BorderLayout());
++        final JPanel jPanel1 = new JPanel(new BorderLayout());
+         final JTextArea jTextArea2 = new JTextArea();
+-        ServerGUI.logger.addHandler((Handler)new GuiLogOutputHandler(jTextArea2));
+-        final JScrollPane jScrollPane3 = new JScrollPane((Component)jTextArea2, 22, 30);
++        ServerGUI.logger.addHandler(new GuiLogOutputHandler(jTextArea2));
++        final JScrollPane jScrollPane3 = new JScrollPane(jTextArea2, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+         jTextArea2.setEditable(false);
+         final JTextField jTextField4 = new JTextField();
+-        jTextField4.addActionListener((ActionListener)new ServerGuiCommandListener(this, jTextField4));
+-        jTextArea2.addFocusListener((FocusListener)new ServerGuiFocusadapter(this));
+-        jPanel1.add((Component)jScrollPane3, "Center");
+-        jPanel1.add((Component)jTextField4, "South");
+-        jPanel1.setBorder((Border)new TitledBorder((Border)new EtchedBorder(), "Log and chat"));
+-        return (JComponent)jPanel1;
++        jTextField4.addActionListener(new ServerGuiCommandListener(this, jTextField4));
++        jTextArea2.addFocusListener(new ServerGuiFocusadapter(this));
++        jPanel1.add(jScrollPane3, "Center");
++        jPanel1.add(jTextField4, "South");
++        jPanel1.setBorder(new TitledBorder(new EtchedBorder(), "Log and chat"));
++        return jPanel1;
      }
 -    
 +

@@ -39,3 +39,20 @@
 +
      @Override
      public boolean blockActivated(final World world, final int x, final int y, final int z, final EntityPlayer entityPlayer) {
+@@ -37,13 +32,13 @@
+         if (itemStack.itemID == 116) {
+             world.setBlockWithNotify(x, y, z, 117);
+-            world.playSoundEffect((double)(x + 0.5f), (double)(y + 0.5f), (double)(z + 0.5f), "ext.infuse", 1.0f, 1.0f);
++            world.playSoundEffect(x + 0.5f, y + 0.5f, z + 0.5f, "ext.infuse", 1.0f, 1.0f);
+         }
+         else if (itemStack.itemID == 266) {
+             world.setBlockWithNotify(x, y, z, 118);
+-            world.playSoundEffect((double)(x + 0.5f), (double)(y + 0.5f), (double)(z + 0.5f), "ext.infuse", 1.0f, 0.7f);
++            world.playSoundEffect(x + 0.5f, y + 0.5f, z + 0.5f, "ext.infuse", 1.0f, 0.7f);
+         }
+         else if (itemStack.itemID == 355) {
+             world.setBlockWithNotify(x, y, z, 119);
+-            world.playSoundEffect((double)(x + 0.5f), (double)(y + 0.5f), (double)(z + 0.5f), "ext.infuse", 1.0f, 0.3f);
++            world.playSoundEffect(x + 0.5f, y + 0.5f, z + 0.5f, "ext.infuse", 1.0f, 0.3f);
+         }
+         return true;

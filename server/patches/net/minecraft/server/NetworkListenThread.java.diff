@@ -41,6 +41,20 @@
 +
      public void handleNetworkListenThread() {
          for (int i1 = 0; i1 < this.pendingConnections.size(); ++i1) {
+@@ -53,5 +52,5 @@
+             catch (Exception exception5) {
+                 netLoginHandler2.kickUser("Internal server error");
+-                NetworkListenThread.logger.log(Level.WARNING, new StringBuilder("Failed to handle packet: ").append(exception5).toString(), (Throwable)exception5);
++                NetworkListenThread.logger.log(Level.WARNING, "Failed to handle packet: " + exception5, exception5);
+             }
+             if (netLoginHandler2.finishedProcessing) {
+@@ -66,5 +65,5 @@
+             catch (Exception exception6) {
+                 netServerHandler6.kickPlayer("Internal server error");
+-                NetworkListenThread.logger.log(Level.WARNING, new StringBuilder("Failed to handle packet: ").append(exception6).toString(), (Throwable)exception6);
++                NetworkListenThread.logger.log(Level.WARNING, "Failed to handle packet: " + exception6, exception6);
+             }
+             if (netServerHandler6.connectionClosed) {
 @@ -73,13 +72,13 @@
          }
      }

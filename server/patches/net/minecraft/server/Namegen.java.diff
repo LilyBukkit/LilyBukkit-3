@@ -27,14 +27,43 @@
 +
      public static String Namegen2(final long l, final int n, final int n2) {
          final long l2 = n + 392214;
-@@ -64,5 +63,5 @@
+@@ -46,8 +45,8 @@
+         final long l4 = l3 * 784428L + l2;
+         final long l5 = l + l4;
+-        final int n3 = (int)Math.sqrt((double)(n * n + n2 * n2));
++        final int n3 = (int)Math.sqrt(n * n + n2 * n2);
+         int n4 = 0;
+         int n5 = 3;
+-        for (int n6 = n3; n6 / n5 > 0; n5 *= 4) {
++        for (; n3 / n5 > 0; n5 *= 4) {
+             ++n4;
+         }
+@@ -55,14 +54,14 @@
+         if (n4 > 0) {
+             for (int i = 0; i != n4; ++i) {
+-                string = String.valueOf(string) + Namegen.syllab[(int)((n3 + n4 + n5 + l4 * (2 + i)) % 45L)];
++                string = string + Namegen.syllab[(int)((n3 + n4 + n5 + l4 * (2 + i)) % 45L)];
+             }
+-            string = String.valueOf(string) + "-";
++            string = string + "-";
+         }
+-        string = String.valueOf(string) + Namegen.syllab[(int)((l4 * 2L + n3) % 45L)];
+-        string = String.valueOf(string) + Namegen.syllab[(int)((l4 * 3L + n3) % 45L)];
+-        string = String.valueOf(string) + Namegen.syllab[(int)((l4 * 4L + n3) % 45L)];
++        string = string + Namegen.syllab[(int)((l4 * 2L + n3) % 45L)];
++        string = string + Namegen.syllab[(int)((l4 * 3L + n3) % 45L)];
++        string = string + Namegen.syllab[(int)((l4 * 4L + n3) % 45L)];
          return string;
      }
 -    
 +
      public void ResetNamegen() {
          final float playerPosX = 0.0f;
-@@ -76,5 +75,5 @@
+@@ -73,8 +72,8 @@
+         this.initedArea = true;
+         this.currentArea = Namegen2(this.lastSeed, this.lgroupX, this.lgroupY);
+-        System.out.println(new StringBuilder("Name at ").append(playerPosX).append(" ").append(playerPosZ).append(": ").append(this.currentArea).toString());
++        System.out.println("Name at " + playerPosX + " " + playerPosZ + ": " + this.currentArea);
          this.areaTimer = System.currentTimeMillis();
      }
 -    

@@ -5,7 +5,7 @@
 +package net.minecraft.server;
  
  import java.io.Reader;
-@@ -9,10 +9,10 @@
+@@ -9,18 +9,18 @@
      final Packet1Login loginPacket;
      final NetLoginHandler loginHandler;
 -    
@@ -18,3 +18,14 @@
 +
      public void run() {
          try {
+             final String string1 = NetLoginHandler.getServerId(this.loginHandler);
+-            final URL uRL2 = new URL(new StringBuilder("http://www.minecraft.net/game/checkserver.jsp?user=").append(this.loginPacket.username).append("&serverId=").append(string1).toString());
+-            final BufferedReader bufferedReader3 = new BufferedReader((Reader)new InputStreamReader(uRL2.openStream()));
++            final URL uRL2 = new URL("http://www.minecraft.net/game/checkserver.jsp?user=" + this.loginPacket.username + "&serverId=" + string1);
++            final BufferedReader bufferedReader3 = new BufferedReader(new InputStreamReader(uRL2.openStream()));
+             final String string2 = bufferedReader3.readLine();
+             bufferedReader3.close();
+-            System.out.println(new StringBuilder("THE REPLY IS ").append(string2).toString());
++            System.out.println("THE REPLY IS " + string2);
+             if (string2.equals("YES")) {
+                 NetLoginHandler.setLoginPacket(this.loginHandler, this.loginPacket);

@@ -19,7 +19,7 @@
 +
      public float distanceTo(final PathPoint pathPoint) {
          final float f2 = (float)(pathPoint.xCoord - this.xCoord);
-@@ -28,17 +28,17 @@
+@@ -28,19 +28,19 @@
          return MathHelper.sqrt_float(f2 * f2 + f3 * f3 + f4 * f4);
      }
 -    
@@ -40,4 +40,7 @@
 -    
 +
      public String toString() {
-         return String.valueOf(this.xCoord) + ", " + this.yCoord + ", " + this.zCoord;
+-        return String.valueOf(this.xCoord) + ", " + this.yCoord + ", " + this.zCoord;
++        return this.xCoord + ", " + this.yCoord + ", " + this.zCoord;
+     }
+ }

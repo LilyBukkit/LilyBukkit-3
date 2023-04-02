@@ -297,6 +297,122 @@
 +                    iCommandListener3.addHelpCommandMessage("Connected players: " + this.configManager.getPlayerList());
                  }
                  else if (string2.toLowerCase().startsWith("stop")) {
+@@ -304,5 +316,5 @@
+                     final String string4 = string2.substring(string2.indexOf(" ")).trim();
+                     this.configManager.opPlayer(string4);
+-                    this.print(string3, new StringBuilder("Opping ").append(string4).toString());
++                    this.print(string3, "Opping " + string4);
+                     this.configManager.sendChatMessageToPlayer(string4, "§eYou are now op!");
+                 }
+@@ -311,20 +323,20 @@
+                     this.configManager.deopPlayer(string4);
+                     this.configManager.sendChatMessageToPlayer(string4, "§eYou are no longer op!");
+-                    this.print(string3, new StringBuilder("De-opping ").append(string4).toString());
++                    this.print(string3, "De-opping " + string4);
+                 }
+                 else if (string2.toLowerCase().startsWith("ban-ip ")) {
+                     final String string4 = string2.substring(string2.indexOf(" ")).trim();
+                     this.configManager.banIP(string4);
+-                    this.print(string3, new StringBuilder("Banning ip ").append(string4).toString());
++                    this.print(string3, "Banning ip " + string4);
+                 }
+                 else if (string2.toLowerCase().startsWith("pardon-ip ")) {
+                     final String string4 = string2.substring(string2.indexOf(" ")).trim();
+                     this.configManager.pardonIP(string4);
+-                    this.print(string3, new StringBuilder("Pardoning ip ").append(string4).toString());
++                    this.print(string3, "Pardoning ip " + string4);
+                 }
+                 else if (string2.toLowerCase().startsWith("ban ")) {
+                     final String string4 = string2.substring(string2.indexOf(" ")).trim();
+                     this.configManager.banPlayer(string4);
+-                    this.print(string3, new StringBuilder("Banning ").append(string4).toString());
++                    this.print(string3, "Banning " + string4);
+                     final EntityPlayerMP entityPlayerMP12 = this.configManager.getPlayerEntity(string4);
+                     if (entityPlayerMP12 == null) {
+@@ -336,5 +348,5 @@
+                     final String string4 = string2.substring(string2.indexOf(" ")).trim();
+                     this.configManager.pardonPlayer(string4);
+-                    this.print(string3, new StringBuilder("Pardoning ").append(string4).toString());
++                    this.print(string3, "Pardoning " + string4);
+                 }
+                 else if (string2.toLowerCase().startsWith("kick ")) {
+@@ -342,5 +354,5 @@
+                     EntityPlayerMP entityPlayerMP12 = null;
+                     for (int i13 = 0; i13 < this.configManager.playerEntities.size(); ++i13) {
+-                        final EntityPlayerMP entityPlayerMP13 = (EntityPlayerMP)this.configManager.playerEntities.get(i13);
++                        final EntityPlayerMP entityPlayerMP13 = this.configManager.playerEntities.get(i13);
+                         if (entityPlayerMP13.username.equalsIgnoreCase(string4)) {
+                             entityPlayerMP12 = entityPlayerMP13;
+@@ -349,8 +361,8 @@
+                     if (entityPlayerMP12 != null) {
+                         entityPlayerMP12.playerNetServerHandler.kickPlayer("Kicked by admin");
+-                        this.print(string3, new StringBuilder("Kicking ").append(entityPlayerMP12.username).toString());
++                        this.print(string3, "Kicking " + entityPlayerMP12.username);
+                     }
+                     else {
+-                        iCommandListener3.addHelpCommandMessage(new StringBuilder("Can't find user ").append(string4).append(". No kick.").toString());
++                        iCommandListener3.addHelpCommandMessage("Can't find user " + string4 + ". No kick.");
+                     }
+                 }
+@@ -361,12 +373,12 @@
+                         final EntityPlayerMP entityPlayerMP14 = this.configManager.getPlayerEntity(string5[2]);
+                         if (entityPlayerMP12 == null) {
+-                            iCommandListener3.addHelpCommandMessage(new StringBuilder("Can't find user ").append(string5[1]).append(". No tp.").toString());
++                            iCommandListener3.addHelpCommandMessage("Can't find user " + string5[1] + ". No tp.");
+                         }
+                         else if (entityPlayerMP14 == null) {
+-                            iCommandListener3.addHelpCommandMessage(new StringBuilder("Can't find user ").append(string5[2]).append(". No tp.").toString());
++                            iCommandListener3.addHelpCommandMessage("Can't find user " + string5[2] + ". No tp.");
+                         }
+                         else {
+                             entityPlayerMP12.playerNetServerHandler.teleportTo(entityPlayerMP14.posX, entityPlayerMP14.posY, entityPlayerMP14.posZ, entityPlayerMP14.rotationYaw, entityPlayerMP14.rotationPitch);
+-                            this.print(string3, new StringBuilder("Teleporting ").append(string5[1]).append(" to ").append(string5[2]).append(".").toString());
++                            this.print(string3, "Teleporting " + string5[1] + " to " + string5[2] + ".");
+                         }
+                     }
+@@ -386,5 +398,5 @@
+                             final int i14 = Integer.parseInt(string5[2]);
+                             if (Item.itemsList[i14] != null) {
+-                                this.print(string3, new StringBuilder("Giving ").append(entityPlayerMP14.username).append(" some ").append(i14).toString());
++                                this.print(string3, "Giving " + entityPlayerMP14.username + " some " + i14);
+                                 int i15 = 1;
+                                 if (string5.length > 3) {
+@@ -400,19 +412,19 @@
+                             }
+                             else {
+-                                iCommandListener3.addHelpCommandMessage(new StringBuilder("There's no item with id ").append(i14).toString());
++                                iCommandListener3.addHelpCommandMessage("There's no item with id " + i14);
+                             }
+                         }
+                         catch (NumberFormatException numberFormatException10) {
+-                            iCommandListener3.addHelpCommandMessage(new StringBuilder("There's no item with id ").append(string5[2]).toString());
++                            iCommandListener3.addHelpCommandMessage("There's no item with id " + string5[2]);
+                         }
+                     }
+                     else {
+-                        iCommandListener3.addHelpCommandMessage(new StringBuilder("Can't find user ").append(string6).toString());
++                        iCommandListener3.addHelpCommandMessage("Can't find user " + string6);
+                     }
+                 }
+                 else if (string2.toLowerCase().startsWith("say ")) {
+                     string2 = string2.substring(string2.indexOf(" ")).trim();
+-                    MinecraftServer.logger.info(new StringBuilder("[").append(string3).append("] ").append(string2).toString());
+-                    this.configManager.sendPacketToAllPlayers(new Packet3Chat(new StringBuilder("§d[Server] ").append(string2).toString()));
++                    MinecraftServer.logger.info("[" + string3 + "] " + string2);
++                    this.configManager.sendPacketToAllPlayers(new Packet3Chat("§d[Server] " + string2));
+                 }
+                 else if (string2.toLowerCase().startsWith("tell ")) {
+@@ -423,7 +435,7 @@
+                     string2 = string2.substring(string2.indexOf(" ")).trim();
+                     string2 = string2.substring(string2.indexOf(" ")).trim();
+-                    MinecraftServer.logger.info(new StringBuilder("[").append(string3).append("->").append(string5[1]).append("] ").append(string2).toString());
+-                    this.configManager.sendPacketToAllPlayers(new Packet3Chat(new StringBuilder("§d[Server] ").append(string2).toString()));
+-                    string2 = new StringBuilder("§7").append(string3).append(" whispers ").append(string2).toString();
++                    MinecraftServer.logger.info("[" + string3 + "->" + string5[1] + "] " + string2);
++                    this.configManager.sendPacketToAllPlayers(new Packet3Chat("§d[Server] " + string2));
++                    string2 = "§7" + string3 + " whispers " + string2;
+                     MinecraftServer.logger.info(string2);
+                     if (this.configManager.sendPacketToPlayer(string5[1], new Packet3Chat(string2))) {
 @@ -432,4 +444,77 @@
                      iCommandListener3.addHelpCommandMessage("There's no player by that name online.");
                  }
@@ -385,8 +501,9 @@
 -    
 +
      private void print(final String string1, final String string2) {
-         final String string3 = String.valueOf(string1) + ": " + string2;
+-        final String string3 = String.valueOf(string1) + ": " + string2;
 -        this.configManager.sendChatMessageToAllOps(new StringBuilder("§7(").append(string3).append(")").toString());
++        final String string3 = string1 + ": " + string2;
 +        this.configManager.sendChatMessageToAllOps("§7(" + string3 + ")");
          MinecraftServer.logger.info(string3);
      }

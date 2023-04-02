@@ -37,13 +37,16 @@
 +
      public static NBTBase readNamedTag(final DataInput dataInput) throws IOException {
          final byte b1 = dataInput.readByte();
-@@ -37,5 +37,5 @@
+@@ -37,7 +37,7 @@
          return nBTBase2;
      }
 -    
 +
      public static void writeNamedTag(final NBTBase nbtbase, final DataOutput dataOutput) throws IOException {
-         dataOutput.writeByte((int)nbtbase.getType());
+-        dataOutput.writeByte((int)nbtbase.getType());
++        dataOutput.writeByte(nbtbase.getType());
+         if (nbtbase.getType() != 0) {
+             dataOutput.writeUTF(nbtbase.getKey());
 @@ -45,5 +45,5 @@
          }
      }

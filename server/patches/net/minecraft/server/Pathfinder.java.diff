@@ -54,13 +54,15 @@
 +
      private PathPoint getSafePoint(final Entity entity, final int i2, int i3, final int i4, final PathPoint pathPoint, final int i6) {
          PathPoint pathPoint2 = null;
-@@ -124,5 +123,5 @@
+@@ -124,6 +123,6 @@
          return pathPoint2;
      }
 -    
+-    private final PathPoint openPoint(final int x, final int y, final int z) {
 +
-     private final PathPoint openPoint(final int x, final int y, final int z) {
++    private PathPoint openPoint(final int x, final int y, final int z) {
          final int i4 = x | y << 10 | z << 20;
+         PathPoint pathPoint5 = (PathPoint)this.pointMap.lookup(i4);
 @@ -134,5 +133,5 @@
          return pathPoint5;
      }

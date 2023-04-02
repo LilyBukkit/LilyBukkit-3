@@ -48,7 +48,7 @@
 +                        org.bukkit.block.Block block = bworld.getBlockAt(x,y,z);
 +
 +                        if (block.getTypeId() != Block.FIRE.blockID) {
-+                            BlockIgniteEvent event = new BlockIgniteEvent((block, igniteCause, null));
++                            BlockIgniteEvent event = new BlockIgniteEvent(block, igniteCause, null);
 +                            world.getServer().getPluginManager().callEvent(event);
 +
 +                            if (event.isCancelled()){

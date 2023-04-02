@@ -155,7 +155,7 @@
 +        }
          if (this.playerEntities.size() >= this.maxPlayers) {
              netLoginHandler1.kickUser("The server is full!");
-@@ -114,10 +141,28 @@
+@@ -114,10 +141,27 @@
              return null;
          }
 +        {
@@ -181,12 +181,12 @@
 +            netLoginHandler1.kickUser("This user is authenticated! Log in using Rosepad >=1.1.0.6-beta to authenticate.");
              return null;
          }
-         for (int i5 = 0; i5 < this.playerEntities.size(); ++i5) {
+-        for (int i5 = 0; i5 < this.playerEntities.size(); ++i5) {
 -            final EntityPlayerMP entityPlayerMP6 = (EntityPlayerMP)this.playerEntities.get(i5);
-+            final EntityPlayerMP entityPlayerMP6 = this.playerEntities.get(i5);
++        for (final EntityPlayerMP entityPlayerMP6 : this.playerEntities) {
              if (entityPlayerMP6.username.equals(username)) {
                  if (!this.mcServer.ULPPOnlineMode) {
-@@ -131,47 +176,48 @@
+@@ -131,47 +175,47 @@
              this.authPlayer(username);
          }
 +        netLoginHandler1.netManager.addToSendQueue(new Packet130RosepadMeta().Default());
@@ -205,9 +205,9 @@
 -    
 +
      public void sendPacketToAllPlayers(final Packet packet1) {
-         for (int i2 = 0; i2 < this.playerEntities.size(); ++i2) {
+-        for (int i2 = 0; i2 < this.playerEntities.size(); ++i2) {
 -            final EntityPlayerMP entityPlayerMP3 = (EntityPlayerMP)this.playerEntities.get(i2);
-+            final EntityPlayerMP entityPlayerMP3 = this.playerEntities.get(i2);
++        for (final EntityPlayerMP entityPlayerMP3 : this.playerEntities) {
              entityPlayerMP3.playerNetServerHandler.sendPacket(packet1);
          }
      }
@@ -248,7 +248,7 @@
 +            BufferedReader bufferedReader1 = new BufferedReader(new FileReader(this.bannedPlayersFile));
              String string2 = "";
              while ((string2 = bufferedReader1.readLine()) != null) {
-@@ -181,11 +227,11 @@
+@@ -181,11 +225,11 @@
          }
          catch (Exception exception3) {
 -            ServerConfigurationManager.logger.warning(new StringBuilder("Failed to load ban list: ").append(exception3).toString());
@@ -263,7 +263,7 @@
 +            final PrintWriter printWriter1 = new PrintWriter(new FileWriter(this.bannedPlayersFile, false));
              for (final String string3 : this.bannedPlayers) {
                  printWriter1.println(string3);
-@@ -194,18 +240,102 @@
+@@ -194,22 +238,106 @@
          }
          catch (Exception exception4) {
 -            ServerConfigurationManager.logger.warning(new StringBuilder("Failed to save ban list: ").append(exception4).toString());
@@ -370,7 +370,12 @@
 +
      private void loadBannedList() {
          try {
-@@ -219,8 +349,8 @@
+             this.bannedIPs.clear();
+-            final BufferedReader bufferedReader1 = new BufferedReader((Reader)new FileReader(this.ipBanFile));
++            final BufferedReader bufferedReader1 = new BufferedReader(new FileReader(this.ipBanFile));
+             String string2 = "";
+             while ((string2 = bufferedReader1.readLine()) != null) {
+@@ -219,11 +347,11 @@
          }
          catch (Exception exception3) {
 -            ServerConfigurationManager.logger.warning(new StringBuilder("Failed to load ip ban list: ").append(exception3).toString());
@@ -381,7 +386,11 @@
 +
      private void saveBannedList() {
          try {
-@@ -232,27 +362,27 @@
+-            final PrintWriter printWriter1 = new PrintWriter((Writer)new FileWriter(this.ipBanFile, false));
++            final PrintWriter printWriter1 = new PrintWriter(new FileWriter(this.ipBanFile, false));
+             for (final String string3 : this.bannedIPs) {
+                 printWriter1.println(string3);
+@@ -232,31 +360,31 @@
          }
          catch (Exception exception4) {
 -            ServerConfigurationManager.logger.warning(new StringBuilder("Failed to save ip ban list: ").append(exception4).toString());
@@ -415,7 +424,12 @@
 +
      private void loadOps() {
          try {
-@@ -266,11 +396,11 @@
+             this.ops.clear();
+-            final BufferedReader bufferedReader1 = new BufferedReader((Reader)new FileReader(this.opFile));
++            final BufferedReader bufferedReader1 = new BufferedReader(new FileReader(this.opFile));
+             String string2 = "";
+             while ((string2 = bufferedReader1.readLine()) != null) {
+@@ -266,11 +394,11 @@
          }
          catch (Exception exception3) {
 -            ServerConfigurationManager.logger.warning(new StringBuilder("Failed to load op list: ").append(exception3).toString());
@@ -430,7 +444,7 @@
 +            final PrintWriter printWriter1 = new PrintWriter(new FileWriter(this.opFile, false));
              for (final String string3 : this.ops) {
                  printWriter1.println(string3);
-@@ -279,8 +409,8 @@
+@@ -279,12 +407,12 @@
          }
          catch (Exception exception4) {
 -            ServerConfigurationManager.logger.warning(new StringBuilder("Failed to save op list: ").append(exception4).toString());
@@ -441,7 +455,12 @@
 +
      private void loadAuthedPlayers() {
          try {
-@@ -294,8 +424,8 @@
+             this.authenticatedPlayers.clear();
+-            final BufferedReader bufferedReader1 = new BufferedReader((Reader)new FileReader(this.authFile));
++            final BufferedReader bufferedReader1 = new BufferedReader(new FileReader(this.authFile));
+             String string2 = "";
+             while ((string2 = bufferedReader1.readLine()) != null) {
+@@ -294,11 +422,11 @@
          }
          catch (Exception exception3) {
 -            ServerConfigurationManager.logger.warning(new StringBuilder("Failed to load authenticated player list: ").append(exception3).toString());
@@ -452,7 +471,11 @@
 +
      private void saveAuthedPlayers() {
          try {
-@@ -307,12 +437,12 @@
+-            final PrintWriter printWriter1 = new PrintWriter((Writer)new FileWriter(this.authFile, false));
++            final PrintWriter printWriter1 = new PrintWriter(new FileWriter(this.authFile, false));
+             for (final String string3 : this.authenticatedPlayers) {
+                 printWriter1.println(string3);
+@@ -307,22 +435,21 @@
          }
          catch (Exception exception4) {
 -            ServerConfigurationManager.logger.warning(new StringBuilder("Failed to save authenticated player list: ").append(exception4).toString());
@@ -467,29 +490,43 @@
 -    
 +
      public EntityPlayerMP getPlayerEntity(final String string1) {
-         for (int i2 = 0; i2 < this.playerEntities.size(); ++i2) {
-@@ -324,5 +454,5 @@
+-        for (int i2 = 0; i2 < this.playerEntities.size(); ++i2) {
+-            final EntityPlayerMP entityPlayerMP3 = (EntityPlayerMP)this.playerEntities.get(i2);
+-            if (entityPlayerMP3.username.equals(string1)) {
+-                return entityPlayerMP3;
++        for (EntityPlayerMP playerEntity : this.playerEntities) {
++            if (((EntityPlayerMP) playerEntity).username.equals(string1)) {
++                return (EntityPlayerMP) playerEntity;
+             }
+         }
          return null;
      }
 -    
 +
      public void sendChatMessageToPlayer(final String string1, final String string2) {
          final EntityPlayerMP entityPlayerMP3 = this.getPlayerEntity(string1);
-@@ -331,5 +461,5 @@
+@@ -331,15 +458,14 @@
          }
      }
 -    
 +
      public void sendChatMessageToAllOps(final String string1) {
          final Packet3Chat packet3Chat2 = new Packet3Chat(string1);
-@@ -341,5 +471,5 @@
+-        for (int i3 = 0; i3 < this.playerEntities.size(); ++i3) {
+-            final EntityPlayerMP entityPlayerMP4 = (EntityPlayerMP)this.playerEntities.get(i3);
+-            if (this.isOp(entityPlayerMP4.username)) {
+-                entityPlayerMP4.playerNetServerHandler.sendPacket(packet3Chat2);
++        for (EntityPlayerMP playerEntity : this.playerEntities) {
++            if (this.isOp(((EntityPlayerMP) playerEntity).username)) {
++                ((EntityPlayerMP) playerEntity).playerNetServerHandler.sendPacket(packet3Chat2);
+             }
          }
      }
 -    
 +
      public boolean sendPacketToPlayer(final String string1, final Packet packet2) {
          final EntityPlayerMP entityPlayerMP3 = this.getPlayerEntity(string1);
-@@ -350,9 +480,9 @@
+@@ -350,12 +476,12 @@
          return false;
      }
 -    
@@ -500,4 +537,9 @@
 -    
 +
      public void savePlayerStates() {
-         for (int i1 = 0; i1 < this.playerEntities.size(); ++i1) {
+-        for (int i1 = 0; i1 < this.playerEntities.size(); ++i1) {
+-            this.playerNBTManagerObj.writePlayerNBT((EntityPlayerMP)this.playerEntities.get(i1));
++        for (EntityPlayerMP playerEntity : this.playerEntities) {
++            this.playerNBTManagerObj.writePlayerNBT(playerEntity);
+         }
+     }

@@ -5,7 +5,7 @@
 +package net.minecraft.server;
  
  import java.io.DataInput;
-@@ -7,27 +7,27 @@
+@@ -7,29 +7,29 @@
  public class NBTTagByte extends NBTBase {
      public byte byteValue;
 -    
@@ -21,7 +21,8 @@
 +
      @Override
      void writeTagContents(final DataOutput dataOutput) throws IOException {
-         dataOutput.writeByte((int)this.byteValue);
+-        dataOutput.writeByte((int)this.byteValue);
++        dataOutput.writeByte(this.byteValue);
      }
 -    
 +
@@ -38,4 +39,7 @@
 -    
 +
      public String toString() {
-         return new StringBuilder().append((int)this.byteValue).toString();
+-        return new StringBuilder().append((int)this.byteValue).toString();
++        return String.valueOf(this.byteValue);
+     }
+ }

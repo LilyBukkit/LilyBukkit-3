@@ -5,7 +5,7 @@
 +package net.minecraft.server;
  
  import java.io.DataInput;
-@@ -7,27 +7,27 @@
+@@ -7,29 +7,29 @@
  public class NBTTagShort extends NBTBase {
      public short shortValue;
 -    
@@ -21,7 +21,8 @@
 +
      @Override
      void writeTagContents(final DataOutput dataOutput) throws IOException {
-         dataOutput.writeShort((int)this.shortValue);
+-        dataOutput.writeShort((int)this.shortValue);
++        dataOutput.writeShort(this.shortValue);
      }
 -    
 +
@@ -38,4 +39,7 @@
 -    
 +
      public String toString() {
-         return new StringBuilder().append((int)this.shortValue).toString();
+-        return new StringBuilder().append((int)this.shortValue).toString();
++        return String.valueOf(this.shortValue);
+     }
+ }

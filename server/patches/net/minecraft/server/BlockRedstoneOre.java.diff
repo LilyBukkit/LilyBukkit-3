@@ -78,3 +78,24 @@
 +
      private void sparkle(final World world, final int x, final int y, final int z) {
          final Random random5 = world.rand;
+@@ -72,5 +72,5 @@
+             }
+             if (i8 == 1 && !world.isBlockNormalCube(x, y - 1, z)) {
+-                d8 = y + 0 - d6;
++                d8 = y - d6;
+             }
+             if (i8 == 2 && !world.isBlockNormalCube(x, y, z + 1)) {
+@@ -78,5 +78,5 @@
+             }
+             if (i8 == 3 && !world.isBlockNormalCube(x, y, z - 1)) {
+-                d9 = z + 0 - d6;
++                d9 = z - d6;
+             }
+             if (i8 == 4 && !world.isBlockNormalCube(x + 1, y, z)) {
+@@ -84,5 +84,5 @@
+             }
+             if (i8 == 5 && !world.isBlockNormalCube(x - 1, y, z)) {
+-                d7 = x + 0 - d6;
++                d7 = x - d6;
+             }
+             if (d7 < x || d7 > x + 1 || d8 < 0.0 || d8 > y + 1 || d9 < z || d9 > z + 1) {

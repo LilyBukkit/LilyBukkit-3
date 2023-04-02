@@ -168,6 +168,22 @@
 +            new WorldGenMinable(Block.ORE_DIAMOND.blockID, 7).generate(this.worldObj, this.rand, i7, i8, i9);
          }
          d10 = 0.5;
+@@ -356,5 +356,5 @@
+             ++i6;
+         }
+-        Object object18 = new WorldGenTrees();
++        WorldGenerator object18 = new WorldGenTrees();
+         if (this.rand.nextInt(10) == 0) {
+             object18 = new WorldGenBigTree();
+@@ -363,6 +363,6 @@
+             final int i9 = i4 + this.rand.nextInt(16) + 8;
+             final int i10 = i5 + this.rand.nextInt(16) + 8;
+-            ((WorldGenerator)object18).setScale(1.0, 1.0, 1.0);
+-            ((WorldGenerator)object18).generate(this.worldObj, this.rand, i9, this.worldObj.getHeightValue(i9, i10), i10);
++            object18.setScale(1.0, 1.0, 1.0);
++            object18.generate(this.worldObj, this.rand, i9, this.worldObj.getHeightValue(i9, i10), i10);
+         }
+         for (int i8 = 0; i8 < 2; ++i8) {
 @@ -370,5 +370,5 @@
              final int i10 = this.rand.nextInt(128);
              final int i11 = i5 + this.rand.nextInt(16) + 8;

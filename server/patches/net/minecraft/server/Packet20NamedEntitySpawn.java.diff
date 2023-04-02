@@ -30,7 +30,13 @@
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-@@ -53,10 +53,10 @@
+@@ -49,14 +49,14 @@
+         dataOutputStream.writeInt(this.yPosition);
+         dataOutputStream.writeInt(this.zPosition);
+-        dataOutputStream.writeByte((int)this.rotation);
+-        dataOutputStream.writeByte((int)this.pitch);
++        dataOutputStream.writeByte(this.rotation);
++        dataOutputStream.writeByte(this.pitch);
          dataOutputStream.writeShort(this.currentItem);
      }
 -    

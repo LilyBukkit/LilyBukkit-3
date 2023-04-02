@@ -14,23 +14,28 @@
          }
      }
 -    
+-    public static final float sin(final float floatValue) {
 +
-     public static final float sin(final float floatValue) {
++    public static float sin(final float floatValue) {
          return MathHelper.SIN_TABLE[(int)(floatValue * 10430.378f) & 0xFFFF];
      }
 -    
+-    public static final float cos(final float floatValue) {
 +
-     public static final float cos(final float floatValue) {
++    public static float cos(final float floatValue) {
          return MathHelper.SIN_TABLE[(int)(floatValue * 10430.378f + 16384.0f) & 0xFFFF];
      }
 -    
+-    public static final float sqrt_float(final float floatValue) {
+-        return (float)Math.sqrt((double)floatValue);
 +
-     public static final float sqrt_float(final float floatValue) {
-         return (float)Math.sqrt((double)floatValue);
++    public static float sqrt_float(final float floatValue) {
++        return (float)Math.sqrt(floatValue);
      }
 -    
+-    public static final float sqrt_double(final double doubleValue) {
 +
-     public static final float sqrt_double(final double doubleValue) {
++    public static float sqrt_double(final double doubleValue) {
          return (float)Math.sqrt(doubleValue);
      }
 -    
@@ -54,3 +59,10 @@
 +
      public static double abs_max(double doubleValue1, double doubleValue2) {
          if (doubleValue1 < 0.0) {
+@@ -48,5 +48,5 @@
+             doubleValue2 = -doubleValue2;
+         }
+-        return (doubleValue1 > doubleValue2) ? doubleValue1 : doubleValue2;
++        return Math.max(doubleValue1, doubleValue2);
+     }
+ }

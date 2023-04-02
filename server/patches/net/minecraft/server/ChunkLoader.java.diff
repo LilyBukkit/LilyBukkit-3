@@ -7,7 +7,7 @@
 -import java.util.Iterator;
  import java.io.OutputStream;
  import java.io.FileOutputStream;
-@@ -11,10 +10,10 @@
+@@ -11,12 +10,12 @@
      private File saveDir;
      private boolean createIfNecessary;
 -    
@@ -19,7 +19,10 @@
 -    
 +
      private File chunkFileForXZ(final int x, final int z) {
-         final String string3 = new StringBuilder("c.").append(Integer.toString(x, 36)).append(".").append(Integer.toString(z, 36)).append(".dat").toString();
+-        final String string3 = new StringBuilder("c.").append(Integer.toString(x, 36)).append(".").append(Integer.toString(z, 36)).append(".dat").toString();
++        final String string3 = "c." + Integer.toString(x, 36) + "." + Integer.toString(z, 36) + ".dat";
+         final String string4 = Integer.toString(x & 0x3F, 36);
+         final String string5 = Integer.toString(z & 0x3F, 36);
 @@ -38,5 +37,5 @@
          return (!file6.exists() && !this.createIfNecessary) ? null : file6;
      }
@@ -27,6 +30,27 @@
 +
      public Chunk loadChunk(final World world, final int x, final int z) {
          final File file4 = this.chunkFileForXZ(x, z);
+@@ -44,16 +43,16 @@
+             try {
+                 final FileInputStream fileInputStream5 = new FileInputStream(file4);
+-                final NBTTagCompound nBTTagCompound6 = CompressedStreamTools.readCompressed((InputStream)fileInputStream5);
++                final NBTTagCompound nBTTagCompound6 = CompressedStreamTools.readCompressed(fileInputStream5);
+                 if (!nBTTagCompound6.hasKey("Level")) {
+-                    System.out.println(new StringBuilder("Chunk file at ").append(x).append(",").append(z).append(" is missing level data, skipping").toString());
++                    System.out.println("Chunk file at " + x + "," + z + " is missing level data, skipping");
+                     return null;
+                 }
+                 if (!nBTTagCompound6.getCompoundTag("Level").hasKey("Blocks")) {
+-                    System.out.println(new StringBuilder("Chunk file at ").append(x).append(",").append(z).append(" is missing block data, skipping").toString());
++                    System.out.println("Chunk file at " + x + "," + z + " is missing block data, skipping");
+                     return null;
+                 }
+                 Chunk chunk7 = loadChunkIntoWorldFromCompound(world, nBTTagCompound6.getCompoundTag("Level"));
+                 if (!chunk7.isAtLocation(x, z)) {
+-                    System.out.println(new StringBuilder("Chunk file at ").append(x).append(",").append(z).append(" is in the wrong location; relocating. (Expected ").append(x).append(", ").append(z).append(", got ").append(chunk7.xPosition).append(", ").append(chunk7.zPosition).append(")").toString());
++                    System.out.println("Chunk file at " + x + "," + z + " is in the wrong location; relocating. (Expected " + x + ", " + z + ", got " + chunk7.xPosition + ", " + chunk7.zPosition + ")");
+                     nBTTagCompound6.setInteger("xPos", x);
+                     nBTTagCompound6.setInteger("zPos", z);
 @@ -68,5 +67,5 @@
          return null;
      }
@@ -34,6 +58,16 @@
 +
      public void saveChunk(final World world, final Chunk chunk) {
          world.checkSessionLock();
+@@ -80,7 +79,7 @@
+             final NBTTagCompound nBTTagCompound6 = new NBTTagCompound();
+             final NBTTagCompound nBTTagCompound7 = new NBTTagCompound();
+-            nBTTagCompound6.setTag("Level", (NBTBase)nBTTagCompound7);
++            nBTTagCompound6.setTag("Level", nBTTagCompound7);
+             this.storeChunkInCompound(chunk, world, nBTTagCompound7);
+-            CompressedStreamTools.writeCompressed(nBTTagCompound6, (OutputStream)fileOutputStream5);
++            CompressedStreamTools.writeCompressed(nBTTagCompound6, fileOutputStream5);
+             fileOutputStream5.close();
+             if (file3.exists()) {
 @@ -94,5 +93,5 @@
          }
      }
@@ -41,8 +75,18 @@
 +
      public void storeChunkInCompound(final Chunk chunk, final World world, final NBTTagCompound nbttagcompound) {
          world.checkSessionLock();
-@@ -126,5 +125,5 @@
-         nbttagcompound.setTag("TileEntities", (NBTBase)nBTTagList5);
+@@ -117,5 +116,5 @@
+             }
+         }
+-        nbttagcompound.setTag("Entities", (NBTBase)nBTTagList4);
++        nbttagcompound.setTag("Entities", nBTTagList4);
+         final NBTTagList nBTTagList5 = new NBTTagList();
+         for (final TileEntity tileEntity10 : chunk.chunkTileEntityMap.values()) {
+@@ -124,7 +123,7 @@
+             nBTTagList5.setTag(nBTTagCompound8);
+         }
+-        nbttagcompound.setTag("TileEntities", (NBTBase)nBTTagList5);
++        nbttagcompound.setTag("TileEntities", nBTTagList5);
      }
 -    
 +

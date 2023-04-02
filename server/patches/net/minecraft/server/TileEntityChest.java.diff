@@ -41,8 +41,11 @@
 +
      @Override
      public void writeToNBT(final NBTTagCompound nbttagcompound) {
-@@ -54,5 +54,5 @@
-         nbttagcompound.setTag("Items", (NBTBase)nBTTagList2);
+@@ -52,7 +52,7 @@
+             }
+         }
+-        nbttagcompound.setTag("Items", (NBTBase)nBTTagList2);
++        nbttagcompound.setTag("Items", nBTTagList2);
      }
 -    
 +

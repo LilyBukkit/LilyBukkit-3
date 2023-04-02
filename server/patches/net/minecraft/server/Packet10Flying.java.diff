@@ -24,7 +24,8 @@
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-         dataOutputStream.write((int)(this.onGround ? 1 : 0));
+-        dataOutputStream.write((int)(this.onGround ? 1 : 0));
++        dataOutputStream.write(this.onGround ? 1 : 0);
      }
 -    
 +

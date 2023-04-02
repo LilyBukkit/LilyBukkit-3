@@ -17,28 +17,34 @@
 +
      @Override
      public boolean attackEntityFrom(final Entity entity, final int damage) {
-@@ -17,5 +17,5 @@
+@@ -17,15 +17,13 @@
              for (int i3 = 1 + this.rand.nextInt(3), i4 = 0; i4 < i3; ++i4) {
                  final EntityItem entityDropItem;
 -                final EntityItem entityItem5 = entityDropItem = this.entityDropItem(Block.cloth.blockID, 1, 1.0f);
 +                final EntityItem entityItem5 = entityDropItem = this.entityDropItem(Block.CLOTH.blockID, 1, 1.0f);
                  entityDropItem.motionY += this.rand.nextFloat() * 0.05f;
-                 final EntityItem entityItem6 = entityItem5;
-@@ -27,5 +27,5 @@
+-                final EntityItem entityItem6 = entityItem5;
+-                entityItem6.motionX += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
+-                final EntityItem entityItem7 = entityItem5;
+-                entityItem7.motionZ += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
++                entityItem5.motionX += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
++                entityItem5.motionZ += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
+             }
+         }
          return super.attackEntityFrom(entity, damage);
      }
 -    
 +
      @Override
      public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
-@@ -33,5 +33,5 @@
+@@ -33,5 +31,5 @@
          nbttagcompound.setBoolean("Sheared", this.sheared);
      }
 -    
 +
      @Override
      public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
-@@ -39,15 +39,15 @@
+@@ -39,15 +37,15 @@
          this.sheared = nbttagcompound.getBoolean("Sheared");
      }
 -    

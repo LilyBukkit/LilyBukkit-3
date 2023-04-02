@@ -14,10 +14,17 @@
 +
      protected BlockGlowingFlowerInfused(final int n, final int n2, final int n3, final int n4) {
          super(n, n2, n3);
-@@ -13,5 +9,5 @@
+@@ -13,10 +9,10 @@
          this.power = n4;
      }
 -    
 +
      @Override
      public void onEntityCollidedWithBlock(final World world, final int x, final int y, final int z, final Entity entity) {
+         if (entity instanceof EntityMob) {
+-            ((EntityMob)entity).attackEntityFrom(null, 2 * this.power);
+-            ((EntityMob)entity).fire = 300;
++            entity.attackEntityFrom(null, 2 * this.power);
++            entity.fire = 300;
+         }
+     }

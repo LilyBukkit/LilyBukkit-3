@@ -1,6 +1,6 @@
 --- EnumSkyBlock.java
 +++ EnumSkyBlock.java
-@@ -1,10 +1,10 @@
+@@ -1,11 +1,11 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
@@ -12,6 +12,8 @@
 +
      public final int defaultLightValue;
 -    
+-    private EnumSkyBlock(final int i3) {
 +
-     private EnumSkyBlock(final int i3) {
++    EnumSkyBlock(final int i3) {
          this.defaultLightValue = i3;
+     }

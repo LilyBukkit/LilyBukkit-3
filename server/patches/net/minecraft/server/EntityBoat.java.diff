@@ -70,6 +70,15 @@
 +                this.entityDropItem(Block.PLANKS.blockID, 1, 0.0f);
              }
              for (int i6 = 0; i6 < 2; ++i6) {
+@@ -162,6 +162,6 @@
+         final List list18 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224, 0.0, 0.20000000298023224));
+         if (list18 != null && list18.size() > 0) {
+-            for (int i7 = 0; i7 < list18.size(); ++i7) {
+-                final Entity entity20 = (Entity)list18.get(i7);
++            for (Object o : list18) {
++                final Entity entity20 = (Entity) o;
+                 if (entity20 != this.riddenByEntity && entity20.canBePushed() && entity20 instanceof EntityBoat) {
+                     entity20.applyEntityCollision(this);
 @@ -173,5 +173,5 @@
          }
      }

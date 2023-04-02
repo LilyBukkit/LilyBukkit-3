@@ -12,15 +12,18 @@
 +
      protected BlockFluid(final int id, final Material material) {
          super(id, ((material == Material.lava) ? 14 : 12) * 16 + 13, material);
-@@ -17,5 +17,5 @@
+@@ -17,22 +17,21 @@
          this.setTickOnLoad(true);
      }
 -    
 +
      public static float getFluidHeightPercent(int i0) {
          if (i0 >= 8) {
-@@ -25,14 +25,14 @@
-         return f1;
+             i0 = 0;
+         }
+-        final float f1 = (i0 + 1) / 9.0f;
+-        return f1;
++        return (i0 + 1) / 9.0f;
      }
 -    
 +
@@ -37,7 +40,7 @@
 +
      protected int getEffectiveFlowDecay(final IBlockAccess blockAccess, final int x, final int y, final int z) {
          if (blockAccess.getBlockMaterial(x, y, z) != this.material) {
-@@ -45,15 +45,15 @@
+@@ -45,15 +44,15 @@
          return i5;
      }
 -    
@@ -56,7 +59,7 @@
 +
      @Override
      public boolean shouldSideBeRendered(final IBlockAccess blockAccess, final int x, final int y, final int z, final int side) {
-@@ -61,25 +61,25 @@
+@@ -61,25 +60,25 @@
          return material6 != this.material && material6 != Material.ice && (side == 1 || super.shouldSideBeRendered(blockAccess, x, y, z, side));
      }
 -    
@@ -87,14 +90,28 @@
 +
      private Vec3D getFlowVector(final IBlockAccess blockAccess, final int x, final int y, final int z) {
          Vec3D vec3D5 = Vec3D.createVector(0.0, 0.0, 0.0);
-@@ -148,5 +148,5 @@
+@@ -106,5 +105,5 @@
+                     if (i10 >= 0) {
+                         final int i11 = i10 - (i6 - 8);
+-                        vec3D5 = vec3D5.addVector((i8 - x) * i11, (y - y) * i11, (i9 - z) * i11);
++                        vec3D5 = vec3D5.addVector((i8 - x) * i11, 0, (i9 - z) * i11);
+                     }
+                 }
+@@ -112,5 +111,5 @@
+             else if (i10 >= 0) {
+                 final int i11 = i10 - i6;
+-                vec3D5 = vec3D5.addVector((i8 - x) * i11, (y - y) * i11, (i9 - z) * i11);
++                vec3D5 = vec3D5.addVector((i8 - x) * i11, 0, (i9 - z) * i11);
+             }
+         }
+@@ -148,5 +147,5 @@
          return vec3D5;
      }
 -    
 +
      @Override
      public void velocityToAddToEntity(final World world, final int x, final int y, final int z, final Entity entity, final Vec3D vector) {
-@@ -156,25 +156,25 @@
+@@ -156,25 +155,25 @@
          vector.zCoord += vec3D7.zCoord;
      }
 -    
@@ -125,7 +142,7 @@
 +
      private void checkForHarden(final World world, final int x, final int y, final int z) {
          if (world.getBlockId(x, y, z) == this.blockID && this.material == Material.lava) {
-@@ -198,8 +198,8 @@
+@@ -198,8 +197,8 @@
                  final int i6 = world.getBlockMetadata(x, y, z);
                  if (i6 == 0) {
 -                    world.setBlockWithNotify(x, y, z, Block.obsidian.blockID);
@@ -136,10 +153,13 @@
 +                    world.setBlockWithNotify(x, y, z, Block.COBBLESTONE.blockID);
                  }
                  this.triggerLavaMixEffects(world, x, y, z);
-@@ -207,5 +207,5 @@
+@@ -207,7 +206,7 @@
          }
      }
 -    
 +
      protected void triggerLavaMixEffects(final World world, final int x, final int y, final int z) {
-         world.playSoundEffect((double)(x + 0.5f), (double)(y + 0.5f), (double)(z + 0.5f), "random.fizz", 0.5f, 2.6f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8f);
+-        world.playSoundEffect((double)(x + 0.5f), (double)(y + 0.5f), (double)(z + 0.5f), "random.fizz", 0.5f, 2.6f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8f);
++        world.playSoundEffect(x + 0.5f, y + 0.5f, z + 0.5f, "random.fizz", 0.5f, 2.6f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8f);
+         for (int i5 = 0; i5 < 8; ++i5) {
+             world.spawnParticle("largesmoke", x + Math.random(), y + 1.2, z + Math.random(), 0.0, 0.0, 0.0);

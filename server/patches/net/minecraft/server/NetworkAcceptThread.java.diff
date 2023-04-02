@@ -15,7 +15,7 @@
 -    
 +
 +    final Map<ByteArrayWrapper, Long> lastConnectionAt;
-+    public final class ByteArrayWrapper {
++    public static final class ByteArrayWrapper {
 +        private final byte[] data;
 +        public ByteArrayWrapper(byte[] data) {
 +            if (data == null) {
@@ -55,9 +55,11 @@
 +
      public void run() {
          while (this.networkListenThread.isListening) {
-@@ -23,4 +55,16 @@
+@@ -22,5 +54,17 @@
+                     continue;
                  }
-                 final NetLoginHandler netLoginHandler2 = new NetLoginHandler(this.minecraftServer, socket1, new StringBuilder("Connection #").append(NetworkListenThread.incrementConnections(this.networkListenThread)).toString());
+-                final NetLoginHandler netLoginHandler2 = new NetLoginHandler(this.minecraftServer, socket1, new StringBuilder("Connection #").append(NetworkListenThread.incrementConnections(this.networkListenThread)).toString());
++                final NetLoginHandler netLoginHandler2 = new NetLoginHandler(this.minecraftServer, socket1, "Connection #" + NetworkListenThread.incrementConnections(this.networkListenThread));
 +                ByteArrayWrapper address = new ByteArrayWrapper(socket1.getInetAddress().getAddress());
 +                if (!lastConnectionAt.containsKey(address)) {
 +                    lastConnectionAt.put(address, 0L);

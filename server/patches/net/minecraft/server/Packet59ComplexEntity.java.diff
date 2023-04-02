@@ -31,7 +31,11 @@
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-@@ -48,10 +48,10 @@
+@@ -45,13 +45,13 @@
+         dataOutputStream.writeShort(this.yCoord);
+         dataOutputStream.writeInt(this.zCoord);
+-        dataOutputStream.writeShort((int)(short)this.compressedNBT.length);
++        dataOutputStream.writeShort((short)this.compressedNBT.length);
          dataOutputStream.write(this.compressedNBT);
      }
 -    

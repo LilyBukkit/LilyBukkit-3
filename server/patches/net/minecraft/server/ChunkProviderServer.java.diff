@@ -5,83 +5,237 @@
 +package net.minecraft.server;
  
  import java.io.IOException;
-@@ -17,5 +17,5 @@
-     private List loadedChunks;
-     private WorldServer worldObj;
+@@ -9,17 +9,31 @@
+ import java.util.Set;
+ 
++//LilyBukkit start
++import java.util.Random;
++
++import org.bukkit.craftbukkit.CraftChunk;
++import org.bukkit.craftbukkit.util.LongHashset;
++import org.bukkit.craftbukkit.util.LongHashtable;
++import org.bukkit.event.world.ChunkLoadEvent;
++import org.bukkit.event.world.ChunkPopulateEvent;
++import org.bukkit.event.world.ChunkUnloadEvent;
++import org.bukkit.generator.BlockPopulator;
++//LilyBukkit end
++
+ public class ChunkProviderServer implements IChunkProvider {
+-    private Set droppedChunksSet;
+-    private Chunk chunk;
+-    private IChunkProvider serverChunkProvider;
+-    private IChunkLoader serverChunkLoader;
+-    private Map id2ChunkMap;
+-    private List loadedChunks;
+-    private WorldServer worldObj;
 -    
++    // CraftBukkit start - private -> public
++    public Set<ChunkCoordinates> droppedChunksSet;
++    public Chunk chunk;
++    public IChunkProvider serverChunkProvider;
++    public IChunkLoader serverChunkLoader;
++    public Map<ChunkCoordinates, Chunk> id2ChunkMap;
++    public List<Chunk> loadedChunks;
++    public WorldServer worldObj;
++    // CraftBukkit end
 +
      public ChunkProviderServer(final WorldServer worldServer, final IChunkLoader chunkLoader, final IChunkProvider chunkProvider) {
-         this.droppedChunksSet = (Set)new HashSet();
-@@ -29,10 +29,10 @@
+-        this.droppedChunksSet = (Set)new HashSet();
+-        this.id2ChunkMap = (Map)new HashMap();
+-        this.loadedChunks = (List)new ArrayList();
++        this.droppedChunksSet = new HashSet<>();
++        this.id2ChunkMap = new HashMap<>();
++        this.loadedChunks = new ArrayList<>();
+         this.chunk = new Chunk(worldServer, new byte[32768], 0, 0);
+         this.chunk.isChunkRendered = true;
+@@ -29,39 +43,37 @@
          this.serverChunkProvider = chunkProvider;
      }
 -    
 +
      public boolean chunkExists(final int x, final int z) {
-         final ChunkCoordinates chunkCoordinates3 = new ChunkCoordinates(x, z);
-         return this.id2ChunkMap.containsKey(chunkCoordinates3);
+-        final ChunkCoordinates chunkCoordinates3 = new ChunkCoordinates(x, z);
+-        return this.id2ChunkMap.containsKey(chunkCoordinates3);
++        return this.id2ChunkMap.containsKey(new ChunkCoordinates(x, z));
      }
 -    
+-    public void dropChunk(final int i1, final int i2) {
+-        final int i3 = i1 * 16 + 8 - this.worldObj.spawnX;
+-        final int i4 = i2 * 16 + 8 - this.worldObj.spawnZ;
 +
-     public void dropChunk(final int i1, final int i2) {
-         final int i3 = i1 * 16 + 8 - this.worldObj.spawnX;
-@@ -43,5 +43,5 @@
++    public void dropChunk(final int x, final int z) {
++        final int i3 = x * 16 + 8 - this.worldObj.spawnX;
++        final int i4 = z * 16 + 8 - this.worldObj.spawnZ;
+         final byte b5 = 20;
+         if (i3 < -b5 || i3 > b5 || i4 < -b5 || i4 > b5) {
+-            this.droppedChunksSet.add(new ChunkCoordinates(i1, i2));
++            this.droppedChunksSet.add(new ChunkCoordinates(x, z));
          }
      }
 -    
 +
      public Chunk loadChunk(final int x, final int z) {
-         final ChunkCoordinates chunkCoordinates3 = new ChunkCoordinates(x, z);
-@@ -78,5 +78,5 @@
-         return chunk4;
+-        final ChunkCoordinates chunkCoordinates3 = new ChunkCoordinates(x, z);
++        final ChunkCoordinates chunkCoordinates = new ChunkCoordinates(x, z);
+         this.droppedChunksSet.remove(new ChunkCoordinates(x, z));
+-        Chunk chunk4 = (Chunk)this.id2ChunkMap.get(chunkCoordinates3);
+-        if (chunk4 == null) {
+-            chunk4 = this.loadAndSaveChunk(x, z);
+-            if (chunk4 == null) {
++        Chunk chunkToLoad = this.id2ChunkMap.get(chunkCoordinates);
++        if (chunkToLoad == null) {
++            chunkToLoad = this.loadAndSaveChunk(x, z);
++            if (chunkToLoad == null) {
+                 if (this.serverChunkProvider == null) {
+-                    chunk4 = this.chunk;
++                    chunkToLoad = this.chunk;
++                } else {
++                    chunkToLoad = this.serverChunkProvider.provideChunk(x, z);
+                 }
+-                else {
+-                    chunk4 = this.serverChunkProvider.provideChunk(x, z);
+-                }
+             }
+-            this.id2ChunkMap.put(chunkCoordinates3, chunk4);
+-            this.loadedChunks.add(chunk4);
+-            if (chunk4 != null) {
+-                chunk4.onChunkLoad();
++            this.id2ChunkMap.put(chunkCoordinates, chunkToLoad);
++            this.loadedChunks.add(chunkToLoad);
++            if (chunkToLoad != null) {
++                chunkToLoad.onChunkLoad();
+             }
+-            if (!chunk4.isTerrainPopulated && this.chunkExists(x + 1, z + 1) && this.chunkExists(x, z + 1) && this.chunkExists(x + 1, z)) {
++            if (!chunkToLoad.isTerrainPopulated && this.chunkExists(x + 1, z + 1) && this.chunkExists(x, z + 1) && this.chunkExists(x + 1, z)) {
+                 this.populate(this, x, z);
+             }
+@@ -76,13 +88,13 @@
+             }
+         }
+-        return chunk4;
++        return chunkToLoad;
      }
 -    
 +
      public Chunk provideChunk(final int x, final int z) {
          final ChunkCoordinates chunkCoordinates3 = new ChunkCoordinates(x, z);
-@@ -84,5 +84,5 @@
+-        final Chunk chunk4 = (Chunk)this.id2ChunkMap.get(chunkCoordinates3);
++        final Chunk chunk4 = this.id2ChunkMap.get(chunkCoordinates3);
          return (chunk4 == null) ? (this.worldObj.worldChunkLoadOverride ? this.loadChunk(x, z) : this.chunk) : chunk4;
      }
 -    
 +
      private Chunk loadAndSaveChunk(final int x, final int z) {
          if (this.serverChunkLoader == null) {
-@@ -101,5 +101,5 @@
+@@ -90,27 +102,25 @@
+         }
+         try {
+-            final Chunk chunk3 = this.serverChunkLoader.loadChunk(this.worldObj, x, z);
+-            if (chunk3 != null) {
+-                chunk3.lastSaveTime = this.worldObj.worldTime;
++            final Chunk chunkToLoad = this.serverChunkLoader.loadChunk(this.worldObj, x, z);
++            if (chunkToLoad != null) {
++                chunkToLoad.lastSaveTime = this.worldObj.worldTime;
+             }
+-            return chunk3;
+-        }
+-        catch (Exception exception4) {
+-            exception4.printStackTrace();
++            return chunkToLoad;
++        } catch (Exception exception) {
++            exception.printStackTrace();
+             return null;
          }
      }
 -    
 +
      private void saveExtraChunkData(final Chunk chunk) {
          if (this.serverChunkLoader != null) {
-@@ -112,5 +112,5 @@
+             try {
+                 this.serverChunkLoader.saveExtraChunkData(this.worldObj, chunk);
+-            }
+-            catch (Exception exception3) {
++            } catch (Exception exception3) {
+                 exception3.printStackTrace();
+             }
          }
      }
 -    
 +
      private void saveChunk(final Chunk chunk) {
          if (this.serverChunkLoader != null) {
-@@ -124,5 +124,5 @@
+@@ -118,33 +128,31 @@
+                 chunk.lastSaveTime = this.worldObj.worldTime;
+                 this.serverChunkLoader.saveChunk(this.worldObj, chunk);
+-            }
+-            catch (IOException iOException3) {
++            } catch (IOException iOException3) {
+                 iOException3.printStackTrace();
+             }
          }
      }
 -    
 +
      public void populate(final IChunkProvider chunkProvider, final int x, final int z) {
-         final Chunk chunk4 = this.provideChunk(x, z);
-@@ -135,5 +135,5 @@
+-        final Chunk chunk4 = this.provideChunk(x, z);
+-        if (!chunk4.isTerrainPopulated) {
+-            chunk4.isTerrainPopulated = true;
++        final Chunk chunkToPopulate = this.provideChunk(x, z);
++        if (!chunkToPopulate.isTerrainPopulated) {
++            chunkToPopulate.isTerrainPopulated = true;
+             if (this.serverChunkProvider != null) {
+                 this.serverChunkProvider.populate(chunkProvider, x, z);
+-                chunk4.setChunkModified();
++                chunkToPopulate.setChunkModified();
+             }
          }
      }
 -    
 +
      public boolean saveChunks(final boolean flag, final IProgressUpdate progressUpdate) {
-         int i3 = 0;
-@@ -159,5 +159,5 @@
+-        int i3 = 0;
+-        for (int i4 = 0; i4 < this.loadedChunks.size(); ++i4) {
+-            final Chunk chunk5 = (Chunk)this.loadedChunks.get(i4);
+-            if (flag && !chunk5.neverSave) {
+-                this.saveExtraChunkData(chunk5);
++        int counter = 0;
++        for (final Chunk chunkToSave : this.loadedChunks) {
++            if (flag && !chunkToSave.neverSave) {
++                this.saveExtraChunkData(chunkToSave);
+             }
+-            if (chunk5.needsSaving(flag)) {
+-                this.saveChunk(chunk5);
+-                chunk5.isModified = false;
+-                if (++i3 == 2 && !flag) {
++            if (chunkToSave.needsSaving(flag)) {
++                this.saveChunk(chunkToSave);
++                chunkToSave.isModified = false;
++                if (++counter == 2 && !flag) {
+                     return false;
+                 }
+@@ -159,16 +167,16 @@
          return true;
      }
 -    
 +
      public boolean unload100OldestChunks() {
          if (!this.worldObj.levelSaving) {
-@@ -180,5 +180,5 @@
+             for (int i1 = 0; i1 < 16; ++i1) {
+                 if (!this.droppedChunksSet.isEmpty()) {
+-                    final ChunkCoordinates chunkCoordinates2 = (ChunkCoordinates)this.droppedChunksSet.iterator().next();
+-                    final Chunk chunk3 = this.provideChunk(chunkCoordinates2.posX, chunkCoordinates2.posZ);
++                    final ChunkCoordinates chunkCoordinates = this.droppedChunksSet.iterator().next();
++                    final Chunk chunk3 = this.provideChunk(chunkCoordinates.posX, chunkCoordinates.posZ);
+                     chunk3.onChunkUnload();
+                     this.saveChunk(chunk3);
+                     this.saveExtraChunkData(chunk3);
+-                    this.droppedChunksSet.remove(chunkCoordinates2);
+-                    this.id2ChunkMap.remove(chunkCoordinates2);
++                    this.droppedChunksSet.remove(chunkCoordinates);
++                    this.id2ChunkMap.remove(chunkCoordinates);
+                     this.loadedChunks.remove(chunk3);
+                 }
+@@ -180,5 +188,5 @@
          return this.serverChunkProvider.unload100OldestChunks();
      }
 -    

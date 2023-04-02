@@ -48,6 +48,15 @@
 +
      public void updateTrackedEntities() {
          final ArrayList arrayList1 = new ArrayList();
+@@ -70,6 +68,6 @@
+             }
+         }
+-        for (int i6 = 0; i6 < arrayList1.size(); ++i6) {
+-            final EntityPlayerMP entityPlayerMP7 = (EntityPlayerMP)arrayList1.get(i6);
++        for (Object o : arrayList1) {
++            final EntityPlayerMP entityPlayerMP7 = (EntityPlayerMP) o;
+             for (final EntityTrackerEntry entityTrackerEntry4 : this.trackedEntitySet) {
+                 if (entityTrackerEntry4.trackedEntity != entityPlayerMP7) {
 @@ -79,5 +77,5 @@
          }
      }

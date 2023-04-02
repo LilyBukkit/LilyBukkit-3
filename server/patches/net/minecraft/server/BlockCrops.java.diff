@@ -46,14 +46,15 @@
 +
      @Override
      public void onBlockDestroyedByPlayer(final World world, final int x, final int y, final int z, final int flag) {
-@@ -87,5 +87,5 @@
+@@ -87,11 +87,11 @@
          }
      }
 -    
 +
      @Override
      public int idDropped(final int count, final Random random) {
-@@ -93,5 +93,5 @@
+-        System.out.println(new StringBuilder("Get resource: ").append(count).toString());
++        System.out.println("Get resource: " + count);
          return (count == 7) ? Item.wheat.shiftedIndex : -1;
      }
 -    

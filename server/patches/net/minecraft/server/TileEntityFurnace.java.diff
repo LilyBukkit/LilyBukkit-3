@@ -38,8 +38,11 @@
 +
      @Override
      public void writeToNBT(final NBTTagCompound nbttagcompound) {
-@@ -59,9 +59,9 @@
-         nbttagcompound.setTag("Items", (NBTBase)nBTTagList);
+@@ -57,11 +57,11 @@
+             }
+         }
+-        nbttagcompound.setTag("Items", (NBTBase)nBTTagList);
++        nbttagcompound.setTag("Items", nBTTagList);
      }
 -    
 +
@@ -62,21 +65,29 @@
 +
      @Override
      public void updateEntity() {
-@@ -116,5 +116,5 @@
+@@ -83,6 +83,5 @@
+         }
+         if (this.furnaceBurnTime == 0 && this.canSmelt()) {
+-            final int n = this.furnaceBurnTime = this.getItemBurnTime(this.furnaceItemStacks[1]);
+-            this.currentItemBurnTime = n;
++            this.currentItemBurnTime = this.furnaceBurnTime = this.getItemBurnTime(this.furnaceItemStacks[1]);
+             if (this.furnaceBurnTime > 0) {
+                 bl2 = true;
+@@ -116,5 +115,5 @@
          }
      }
 -    
 +
      private boolean canSmelt() {
          if (this.furnaceItemStacks[0] == null) {
-@@ -124,5 +124,5 @@
+@@ -124,5 +123,5 @@
          return n >= 0 && (this.furnaceItemStacks[2] == null || (this.furnaceItemStacks[2].itemID == n && (this.furnaceItemStacks[2].stackSize < this.furnaceItemStacks[2].getMaxStackSize() || this.furnaceItemStacks[2].stackSize < Item.itemsList[n].getItemStackLimit())));
      }
 -    
 +
      public void smeltItem() {
          if (!this.canSmelt()) {
-@@ -145,28 +145,28 @@
+@@ -145,28 +144,28 @@
          }
      }
 -    
@@ -114,7 +125,7 @@
 +        if (blockID == Block.OBSIDIAN.blockID) {
              return Item.obsidianIngot.shiftedIndex;
          }
-@@ -177,16 +177,16 @@
+@@ -177,16 +176,16 @@
              return Item.greenDye.shiftedIndex;
          }
 -        if (blockID == Block.plantYellow.blockID) {

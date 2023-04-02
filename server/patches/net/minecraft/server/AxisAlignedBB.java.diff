@@ -5,13 +5,21 @@
 +package net.minecraft.server;
  
  import java.util.ArrayList;
-@@ -13,18 +13,18 @@
+@@ -5,5 +5,5 @@
+ 
+ public class AxisAlignedBB {
+-    private static List boundingBoxes;
++    private static List<AxisAlignedBB> boundingBoxes;
+     private static int numBoundingBoxesInUse;
+     public double minX;
+@@ -13,25 +13,25 @@
      public double maxY;
      public double maxZ;
 -    
 +
      static {
-         AxisAlignedBB.boundingBoxes = (List)new ArrayList();
+-        AxisAlignedBB.boundingBoxes = (List)new ArrayList();
++        AxisAlignedBB.boundingBoxes = new ArrayList<>();
          AxisAlignedBB.numBoundingBoxesInUse = 0;
      }
 -    
@@ -28,8 +36,10 @@
 +
      public static AxisAlignedBB getBoundingBoxFromPool(final double minX, final double minY, final double minZ, final double maxX, final double maxY, final double maxZ) {
          if (AxisAlignedBB.numBoundingBoxesInUse >= AxisAlignedBB.boundingBoxes.size()) {
-@@ -33,5 +33,5 @@
-         return ((AxisAlignedBB)AxisAlignedBB.boundingBoxes.get(AxisAlignedBB.numBoundingBoxesInUse++)).setBounds(minX, minY, minZ, maxX, maxY, maxZ);
+             AxisAlignedBB.boundingBoxes.add(getBoundingBox(0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+         }
+-        return ((AxisAlignedBB)AxisAlignedBB.boundingBoxes.get(AxisAlignedBB.numBoundingBoxesInUse++)).setBounds(minX, minY, minZ, maxX, maxY, maxZ);
++        return AxisAlignedBB.boundingBoxes.get(AxisAlignedBB.numBoundingBoxesInUse++).setBounds(minX, minY, minZ, maxX, maxY, maxZ);
      }
 -    
 +
@@ -42,22 +52,68 @@
 +
      public AxisAlignedBB setBounds(final double minX, final double minY, final double minZ, final double maxX, final double maxY, final double maxZ) {
          this.minX = minX;
-@@ -52,5 +52,5 @@
+@@ -52,47 +52,47 @@
          return this;
      }
 -    
 +
      public AxisAlignedBB addCoord(final double x, final double y, final double z) {
-         double d7 = this.minX;
-@@ -80,5 +80,5 @@
-         return getBoundingBoxFromPool(d7, d8, d9, d10, d11, d12);
+-        double d7 = this.minX;
+-        double d8 = this.minY;
+-        double d9 = this.minZ;
+-        double d10 = this.maxX;
+-        double d11 = this.maxY;
+-        double d12 = this.maxZ;
++        double newMinX = this.minX;
++        double newMinY = this.minY;
++        double newMinZ = this.minZ;
++        double newMaxX = this.maxX;
++        double newMaxY = this.maxY;
++        double newMaxZ = this.maxZ;
+         if (x < 0.0) {
+-            d7 += x;
++            newMinX += x;
+         }
+         if (x > 0.0) {
+-            d10 += x;
++            newMaxX += x;
+         }
+         if (y < 0.0) {
+-            d8 += y;
++            newMinY += y;
+         }
+         if (y > 0.0) {
+-            d11 += y;
++            newMaxY += y;
+         }
+         if (z < 0.0) {
+-            d9 += z;
++            newMinZ += z;
+         }
+         if (z > 0.0) {
+-            d12 += z;
++            newMaxZ += z;
+         }
+-        return getBoundingBoxFromPool(d7, d8, d9, d10, d11, d12);
++        return getBoundingBoxFromPool(newMinX, newMinY, newMinZ, newMaxX, newMaxY, newMaxZ);
      }
 -    
 +
      public AxisAlignedBB expand(final double x, final double y, final double z) {
-         final double d7 = this.minX - x;
-@@ -90,9 +90,9 @@
-         return getBoundingBoxFromPool(d7, d8, d9, d10, d11, d12);
+-        final double d7 = this.minX - x;
+-        final double d8 = this.minY - y;
+-        final double d9 = this.minZ - z;
+-        final double d10 = this.maxX + x;
+-        final double d11 = this.maxY + y;
+-        final double d12 = this.maxZ + z;
+-        return getBoundingBoxFromPool(d7, d8, d9, d10, d11, d12);
++        final double newMinX = this.minX - x;
++        final double newMinY = this.minY - y;
++        final double newMinZ = this.minZ - z;
++        final double newMaxX = this.maxX + x;
++        final double newMaxY = this.maxY + y;
++        final double newMaxZ = this.maxZ + z;
++        return getBoundingBoxFromPool(newMinX, newMinY, newMinZ, newMaxX, newMaxY, newMaxZ);
      }
 -    
 +
@@ -68,6 +124,26 @@
 +
      public double calculateXOffset(final AxisAlignedBB aabb, double offsetX) {
          if (aabb.maxY <= this.minY || aabb.minY >= this.maxY) {
+@@ -101,13 +101,13 @@
+         if (aabb.maxZ > this.minZ && aabb.minZ < this.maxZ) {
+             if (offsetX > 0.0 && aabb.maxX <= this.minX) {
+-                final double d4 = this.minX - aabb.maxX;
+-                if (d4 < offsetX) {
+-                    offsetX = d4;
++                final double calculatedOffset = this.minX - aabb.maxX;
++                if (calculatedOffset < offsetX) {
++                    offsetX = calculatedOffset;
+                 }
+             }
+             if (offsetX < 0.0 && aabb.minX >= this.maxX) {
+-                final double d4 = this.maxX - aabb.minX;
+-                if (d4 > offsetX) {
+-                    offsetX = d4;
++                final double calculatedOffset = this.maxX - aabb.minX;
++                if (calculatedOffset > offsetX) {
++                    offsetX = calculatedOffset;
+                 }
+             }
 @@ -116,5 +116,5 @@
          return offsetX;
      }
@@ -75,6 +151,26 @@
 +
      public double calculateYOffset(final AxisAlignedBB aabb, double offsetY) {
          if (aabb.maxX <= this.minX || aabb.minX >= this.maxX) {
+@@ -123,13 +123,13 @@
+         if (aabb.maxZ > this.minZ && aabb.minZ < this.maxZ) {
+             if (offsetY > 0.0 && aabb.maxY <= this.minY) {
+-                final double d4 = this.minY - aabb.maxY;
+-                if (d4 < offsetY) {
+-                    offsetY = d4;
++                final double calculatedOffset = this.minY - aabb.maxY;
++                if (calculatedOffset < offsetY) {
++                    offsetY = calculatedOffset;
+                 }
+             }
+             if (offsetY < 0.0 && aabb.minY >= this.maxY) {
+-                final double d4 = this.maxY - aabb.minY;
+-                if (d4 > offsetY) {
+-                    offsetY = d4;
++                final double calculatedOffset = this.maxY - aabb.minY;
++                if (calculatedOffset > offsetY) {
++                    offsetY = calculatedOffset;
+                 }
+             }
 @@ -138,5 +138,5 @@
          return offsetY;
      }
@@ -82,6 +178,26 @@
 +
      public double calculateZOffset(final AxisAlignedBB aabb, double offsetZ) {
          if (aabb.maxX <= this.minX || aabb.minX >= this.maxX) {
+@@ -145,13 +145,13 @@
+         if (aabb.maxY > this.minY && aabb.minY < this.maxY) {
+             if (offsetZ > 0.0 && aabb.maxZ <= this.minZ) {
+-                final double d4 = this.minZ - aabb.maxZ;
+-                if (d4 < offsetZ) {
+-                    offsetZ = d4;
++                final double calculatedOffset = this.minZ - aabb.maxZ;
++                if (calculatedOffset < offsetZ) {
++                    offsetZ = calculatedOffset;
+                 }
+             }
+             if (offsetZ < 0.0 && aabb.minZ >= this.maxZ) {
+-                final double d4 = this.maxZ - aabb.minZ;
+-                if (d4 > offsetZ) {
+-                    offsetZ = d4;
++                final double calculatedOffset = this.maxZ - aabb.minZ;
++                if (calculatedOffset > offsetZ) {
++                    offsetZ = calculatedOffset;
+                 }
+             }
 @@ -160,9 +160,9 @@
          return offsetZ;
      }
@@ -94,15 +210,50 @@
 +
      public AxisAlignedBB offset(final double offsetX, final double offsetY, final double offsetZ) {
          this.minX += offsetX;
-@@ -174,5 +174,5 @@
+@@ -174,118 +174,118 @@
          return this;
      }
 -    
 +
      public AxisAlignedBB removeCoord(final double x, final double y, final double z) {
-         double d7 = this.minX;
-@@ -202,9 +202,9 @@
-         return getBoundingBoxFromPool(d7, d8, d9, d10, d11, d12);
+-        double d7 = this.minX;
+-        double d8 = this.minY;
+-        double d9 = this.minZ;
+-        double d10 = this.maxX;
+-        double d11 = this.maxY;
+-        double d12 = this.maxZ;
++        double newMinX = this.minX;
++        double newMinY = this.minY;
++        double newMinZ = this.minZ;
++        double newMaxX = this.maxX;
++        double newMaxY = this.maxY;
++        double newMaxZ = this.maxZ;
+         if (x < 0.0) {
+-            d7 -= x;
++            newMinX -= x;
+         }
+         if (x > 0.0) {
+-            d10 -= x;
++            newMaxX -= x;
+         }
+         if (y < 0.0) {
+-            d8 -= y;
++            newMinY -= y;
+         }
+         if (y > 0.0) {
+-            d11 -= y;
++            newMaxY -= y;
+         }
+         if (z < 0.0) {
+-            d9 -= z;
++            newMinZ -= z;
+         }
+         if (z > 0.0) {
+-            d12 -= z;
++            newMaxZ -= z;
+         }
+-        return getBoundingBoxFromPool(d7, d8, d9, d10, d11, d12);
++        return getBoundingBoxFromPool(newMinX, newMinY, newMinZ, newMaxX, newMaxY, newMaxZ);
      }
 -    
 +
@@ -112,9 +263,118 @@
 -    
 +
      public MovingObjectPosition calculateIntercept(final Vec3D vector1, final Vec3D vector2) {
-         Vec3D vec3D3 = vector1.getIntermediateWithXValue(vector2, this.minX);
-@@ -275,17 +275,17 @@
-         return new MovingObjectPosition(0, 0, 0, b10, vec3D9);
+-        Vec3D vec3D3 = vector1.getIntermediateWithXValue(vector2, this.minX);
+-        Vec3D vec3D4 = vector1.getIntermediateWithXValue(vector2, this.maxX);
+-        Vec3D vec3D5 = vector1.getIntermediateWithYValue(vector2, this.minY);
+-        Vec3D vec3D6 = vector1.getIntermediateWithYValue(vector2, this.maxY);
+-        Vec3D vec3D7 = vector1.getIntermediateWithZValue(vector2, this.minZ);
+-        Vec3D vec3D8 = vector1.getIntermediateWithZValue(vector2, this.maxZ);
+-        if (!this.isVecInYZ(vec3D3)) {
+-            vec3D3 = null;
++        Vec3D minIntermediateX = vector1.getIntermediateWithXValue(vector2, this.minX);
++        Vec3D maxIntermediateX = vector1.getIntermediateWithXValue(vector2, this.maxX);
++        Vec3D minIntermediateY = vector1.getIntermediateWithYValue(vector2, this.minY);
++        Vec3D maxIntermediateY = vector1.getIntermediateWithYValue(vector2, this.maxY);
++        Vec3D minIntermediateZ = vector1.getIntermediateWithZValue(vector2, this.minZ);
++        Vec3D maxIntermediateZ = vector1.getIntermediateWithZValue(vector2, this.maxZ);
++        if (!this.isVecInYZ(minIntermediateX)) {
++            minIntermediateX = null;
+         }
+-        if (!this.isVecInYZ(vec3D4)) {
+-            vec3D4 = null;
++        if (!this.isVecInYZ(maxIntermediateX)) {
++            maxIntermediateX = null;
+         }
+-        if (!this.isVecInXZ(vec3D5)) {
+-            vec3D5 = null;
++        if (!this.isVecInXZ(minIntermediateY)) {
++            minIntermediateY = null;
+         }
+-        if (!this.isVecInXZ(vec3D6)) {
+-            vec3D6 = null;
++        if (!this.isVecInXZ(maxIntermediateY)) {
++            maxIntermediateY = null;
+         }
+-        if (!this.isVecInXY(vec3D7)) {
+-            vec3D7 = null;
++        if (!this.isVecInXY(minIntermediateZ)) {
++            minIntermediateZ = null;
+         }
+-        if (!this.isVecInXY(vec3D8)) {
+-            vec3D8 = null;
++        if (!this.isVecInXY(maxIntermediateZ)) {
++            maxIntermediateZ = null;
+         }
+-        Vec3D vec3D9 = null;
+-        if (vec3D3 != null && (vec3D9 == null || vector1.squareDistanceTo(vec3D3) < vector1.squareDistanceTo(vec3D9))) {
+-            vec3D9 = vec3D3;
++        Vec3D interception = null;
++        if (minIntermediateX != null && (interception == null || vector1.squareDistanceTo(minIntermediateX) < vector1.squareDistanceTo(interception))) {
++            interception = minIntermediateX;
+         }
+-        if (vec3D4 != null && (vec3D9 == null || vector1.squareDistanceTo(vec3D4) < vector1.squareDistanceTo(vec3D9))) {
+-            vec3D9 = vec3D4;
++        if (maxIntermediateX != null && (interception == null || vector1.squareDistanceTo(maxIntermediateX) < vector1.squareDistanceTo(interception))) {
++            interception = maxIntermediateX;
+         }
+-        if (vec3D5 != null && (vec3D9 == null || vector1.squareDistanceTo(vec3D5) < vector1.squareDistanceTo(vec3D9))) {
+-            vec3D9 = vec3D5;
++        if (minIntermediateY != null && (interception == null || vector1.squareDistanceTo(minIntermediateY) < vector1.squareDistanceTo(interception))) {
++            interception = minIntermediateY;
+         }
+-        if (vec3D6 != null && (vec3D9 == null || vector1.squareDistanceTo(vec3D6) < vector1.squareDistanceTo(vec3D9))) {
+-            vec3D9 = vec3D6;
++        if (maxIntermediateY != null && (interception == null || vector1.squareDistanceTo(maxIntermediateY) < vector1.squareDistanceTo(interception))) {
++            interception = maxIntermediateY;
+         }
+-        if (vec3D7 != null && (vec3D9 == null || vector1.squareDistanceTo(vec3D7) < vector1.squareDistanceTo(vec3D9))) {
+-            vec3D9 = vec3D7;
++        if (minIntermediateZ != null && (interception == null || vector1.squareDistanceTo(minIntermediateZ) < vector1.squareDistanceTo(interception))) {
++            interception = minIntermediateZ;
+         }
+-        if (vec3D8 != null && (vec3D9 == null || vector1.squareDistanceTo(vec3D8) < vector1.squareDistanceTo(vec3D9))) {
+-            vec3D9 = vec3D8;
++        if (maxIntermediateZ != null && (interception == null || vector1.squareDistanceTo(maxIntermediateZ) < vector1.squareDistanceTo(interception))) {
++            interception = maxIntermediateZ;
+         }
+-        if (vec3D9 == null) {
++        if (interception == null) {
+             return null;
+         }
+-        byte b10 = -1;
+-        if (vec3D9 == vec3D3) {
+-            b10 = 4;
++        byte state = -1;
++        if (interception == minIntermediateX) {
++            state = 4;
+         }
+-        if (vec3D9 == vec3D4) {
+-            b10 = 5;
++        if (interception == maxIntermediateX) {
++            state = 5;
+         }
+-        if (vec3D9 == vec3D5) {
+-            b10 = 0;
++        if (interception == minIntermediateY) {
++            state = 0;
+         }
+-        if (vec3D9 == vec3D6) {
+-            b10 = 1;
++        if (interception == maxIntermediateY) {
++            state = 1;
+         }
+-        if (vec3D9 == vec3D7) {
+-            b10 = 2;
++        if (interception == minIntermediateZ) {
++            state = 2;
+         }
+-        if (vec3D9 == vec3D8) {
+-            b10 = 3;
++        if (interception == maxIntermediateZ) {
++            state = 3;
+         }
+-        return new MovingObjectPosition(0, 0, 0, b10, vec3D9);
++        return new MovingObjectPosition(0, 0, 0, state, interception);
      }
 -    
 +

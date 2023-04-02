@@ -14,12 +14,13 @@
 +
  public class BlockRedstoneTorch extends BlockTorch {
      private boolean torchActive;
-     private static List torchUpdates;
+-    private static List torchUpdates;
 -    
++    private static List<RedstoneUpdateInfo> torchUpdates;
 +
      static {
 -        BlockRedstoneTorch.torchUpdates = (List)new ArrayList();
-+        BlockRedstoneTorch.torchUpdates = (List) new ArrayList();
++        BlockRedstoneTorch.torchUpdates = new ArrayList<>();
      }
 -    
 +
@@ -29,17 +30,18 @@
          int i6 = 0;
          for (int i7 = 0; i7 < BlockRedstoneTorch.torchUpdates.size(); ++i7) {
 -            final RedstoneUpdateInfo redstoneUpdateInfo8 = (RedstoneUpdateInfo)BlockRedstoneTorch.torchUpdates.get(i7);
-+            final RedstoneUpdateInfo redstoneUpdateInfo8 = (RedstoneUpdateInfo) BlockRedstoneTorch.torchUpdates.get(i7);
++            final RedstoneUpdateInfo redstoneUpdateInfo8 = BlockRedstoneTorch.torchUpdates.get(i7);
              if (redstoneUpdateInfo8.x == x && redstoneUpdateInfo8.y == y && redstoneUpdateInfo8.z == z && ++i6 >= 8) {
                  return true;
-@@ -26,5 +30,5 @@
+@@ -26,17 +30,16 @@
          return false;
      }
 -    
 +
      protected BlockRedstoneTorch(final int id, final int blockIndex, final boolean torchActive) {
          super(id, blockIndex);
-@@ -33,10 +37,10 @@
+-        this.torchActive = false;
+         this.torchActive = torchActive;
          this.setTickOnLoad(true);
      }
 -    
@@ -52,21 +54,21 @@
 +
      @Override
      public void onBlockAdded(final World world, final int x, final int y, final int z) {
-@@ -53,5 +57,5 @@
+@@ -53,5 +56,5 @@
          }
      }
 -    
 +
      @Override
      public void onBlockRemoval(final World world, final int x, final int y, final int z) {
-@@ -65,5 +69,5 @@
+@@ -65,5 +68,5 @@
          }
      }
 -    
 +
      @Override
      public boolean isPoweringTo(final IBlockAccess blockAccess, final int x, final int y, final int z, final int unused) {
-@@ -74,21 +78,37 @@
+@@ -74,21 +77,37 @@
          return (i6 != 5 || unused != 1) && (i6 != 3 || unused != 3) && (i6 != 4 || unused != 2) && (i6 != 1 || unused != 5) && (i6 != 2 || unused != 4);
      }
 -    
@@ -81,7 +83,7 @@
      public void updateTick(final World world, final int x, final int y, final int z, final Random random) {
          final boolean z2 = this.isIndirectlyPowered(world, x, y, z);
 -        while (BlockRedstoneTorch.torchUpdates.size() > 0 && world.worldTime - ((RedstoneUpdateInfo)BlockRedstoneTorch.torchUpdates.get(0)).updateTime > 100L) {
-+        while (BlockRedstoneTorch.torchUpdates.size() > 0 && world.worldTime - ((RedstoneUpdateInfo) BlockRedstoneTorch.torchUpdates.get(0)).updateTime > 100L) {
++        while (BlockRedstoneTorch.torchUpdates.size() > 0 && world.worldTime - BlockRedstoneTorch.torchUpdates.get(0).updateTime > 100L) {
              BlockRedstoneTorch.torchUpdates.remove(0);
          }
 +        //LilyBukkit start
@@ -106,10 +108,10 @@
 +                world.setBlockAndMetadataWithNotify(x, y, z, Block.TORCH_REDSTONE_IDLE.blockID, world.getBlockMetadata(x, y, z));
                  if (this.checkForBurnout(world, x, y, z, true)) {
 -                    world.playSoundEffect((double)(x + 0.5f), (double)(y + 0.5f), (double)(z + 0.5f), "random.fizz", 0.5f, 2.6f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8f);
-+                    world.playSoundEffect((double) (x + 0.5f), (double) (y + 0.5f), (double) (z + 0.5f), "random.fizz", 0.5f, 2.6f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8f);
++                    world.playSoundEffect(x + 0.5f, y + 0.5f, z + 0.5f, "random.fizz", 0.5f, 2.6f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8f);
                      for (int i7 = 0; i7 < 5; ++i7) {
                          final double d8 = x + random.nextDouble() * 0.6 + 0.2;
-@@ -99,10 +119,18 @@
+@@ -99,10 +118,18 @@
                  }
              }
 +        } else if (!z2 && !this.checkForBurnout(world, x, y, z, false)) {
@@ -132,7 +134,7 @@
 +
      @Override
      public void onNeighborBlockChange(final World world, final int x, final int y, final int z, final int flag) {
-@@ -110,15 +138,15 @@
+@@ -110,15 +137,15 @@
          world.scheduleBlockUpdate(x, y, z, this.blockID);
      }
 -    

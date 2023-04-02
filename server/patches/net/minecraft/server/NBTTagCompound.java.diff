@@ -30,7 +30,7 @@
 +
      @Override
      void readTagContents(final DataInput dataInput) throws IOException {
-@@ -31,102 +30,102 @@
+@@ -31,104 +30,104 @@
          }
      }
 -    
@@ -157,4 +157,7 @@
 -    
 +
      public String toString() {
-         return new StringBuilder().append(this.tagMap.size()).append(" entries").toString();
+-        return new StringBuilder().append(this.tagMap.size()).append(" entries").toString();
++        return this.tagMap.size() + " entries";
+     }
+ }

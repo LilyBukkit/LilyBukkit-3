@@ -140,13 +140,13 @@
                      final float f3 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width;
                      final float f4 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width;
 -                    this.worldObj.spawnParticle("bubble", this.posX + f3, (double)(f2 + 1.0f), this.posZ + f4, this.motionX, this.motionY - this.rand.nextFloat() * 0.2f, this.motionZ);
-+                    this.worldObj.spawnParticle("bubble", this.posX + f3, (double) (f2 + 1.0f), this.posZ + f4, this.motionX, this.motionY - this.rand.nextFloat() * 0.2f, this.motionZ);
++                    this.worldObj.spawnParticle("bubble", this.posX + f3, f2 + 1.0f, this.posZ + f4, this.motionX, this.motionY - this.rand.nextFloat() * 0.2f, this.motionZ);
                  }
                  for (int i3 = 0; i3 < 1.0f + this.width * 20.0f; ++i3) {
                      final float f3 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width;
                      final float f4 = (this.rand.nextFloat() * 2.0f - 1.0f) * this.width;
 -                    this.worldObj.spawnParticle("splash", this.posX + f3, (double)(f2 + 1.0f), this.posZ + f4, this.motionX, this.motionY, this.motionZ);
-+                    this.worldObj.spawnParticle("splash", this.posX + f3, (double) (f2 + 1.0f), this.posZ + f4, this.motionX, this.motionY, this.motionZ);
++                    this.worldObj.spawnParticle("splash", this.posX + f3, f2 + 1.0f, this.posZ + f4, this.motionX, this.motionY, this.motionZ);
                  }
              }
 @@ -172,15 +220,55 @@
@@ -259,46 +259,58 @@
 +                    } else {
                          z += d12;
                      }
-@@ -249,5 +332,5 @@
+@@ -248,6 +331,6 @@
+             }
              List list35 = this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox.addCoord(x, y, z));
-             for (int i20 = 0; i20 < list35.size(); ++i20) {
+-            for (int i20 = 0; i20 < list35.size(); ++i20) {
 -                y = ((AxisAlignedBB)list35.get(i20)).calculateYOffset(this.boundingBox, y);
-+                y = ((AxisAlignedBB) list35.get(i20)).calculateYOffset(this.boundingBox, y);
++            for (Object o2 : list35) {
++                y = ((AxisAlignedBB) o2).calculateYOffset(this.boundingBox, y);
              }
              this.boundingBox.offset(0.0, y, 0.0);
-@@ -259,5 +342,5 @@
+@@ -258,6 +341,6 @@
+             }
              final boolean z3 = this.onGround || (d10 != y && d10 < 0.0);
-             for (int i21 = 0; i21 < list35.size(); ++i21) {
+-            for (int i21 = 0; i21 < list35.size(); ++i21) {
 -                x = ((AxisAlignedBB)list35.get(i21)).calculateXOffset(this.boundingBox, x);
-+                x = ((AxisAlignedBB) list35.get(i21)).calculateXOffset(this.boundingBox, x);
++            for (Object o1 : list35) {
++                x = ((AxisAlignedBB) o1).calculateXOffset(this.boundingBox, x);
              }
              this.boundingBox.offset(x, 0.0, 0.0);
-@@ -268,5 +351,5 @@
+@@ -267,6 +350,6 @@
+                 x = 0.0;
              }
-             for (int i21 = 0; i21 < list35.size(); ++i21) {
+-            for (int i21 = 0; i21 < list35.size(); ++i21) {
 -                z = ((AxisAlignedBB)list35.get(i21)).calculateZOffset(this.boundingBox, z);
-+                z = ((AxisAlignedBB) list35.get(i21)).calculateZOffset(this.boundingBox, z);
++            for (Object element : list35) {
++                z = ((AxisAlignedBB) element).calculateZOffset(this.boundingBox, z);
              }
              this.boundingBox.offset(0.0, 0.0, z);
-@@ -287,5 +370,5 @@
+@@ -286,6 +369,6 @@
+                 this.boundingBox.setBB(axisAlignedBB17);
                  list35 = this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox.addCoord(d9, y, d11));
-                 for (int i22 = 0; i22 < list35.size(); ++i22) {
+-                for (int i22 = 0; i22 < list35.size(); ++i22) {
 -                    y = ((AxisAlignedBB)list35.get(i22)).calculateYOffset(this.boundingBox, y);
-+                    y = ((AxisAlignedBB) list35.get(i22)).calculateYOffset(this.boundingBox, y);
++                for (Object item : list35) {
++                    y = ((AxisAlignedBB) item).calculateYOffset(this.boundingBox, y);
                  }
                  this.boundingBox.offset(0.0, y, 0.0);
-@@ -296,5 +379,5 @@
+@@ -295,6 +378,6 @@
+                     x = 0.0;
                  }
-                 for (int i22 = 0; i22 < list35.size(); ++i22) {
+-                for (int i22 = 0; i22 < list35.size(); ++i22) {
 -                    x = ((AxisAlignedBB)list35.get(i22)).calculateXOffset(this.boundingBox, x);
-+                    x = ((AxisAlignedBB) list35.get(i22)).calculateXOffset(this.boundingBox, x);
++                for (Object value : list35) {
++                    x = ((AxisAlignedBB) value).calculateXOffset(this.boundingBox, x);
                  }
                  this.boundingBox.offset(x, 0.0, 0.0);
-@@ -305,5 +388,5 @@
+@@ -304,6 +387,6 @@
+                     x = 0.0;
                  }
-                 for (int i22 = 0; i22 < list35.size(); ++i22) {
+-                for (int i22 = 0; i22 < list35.size(); ++i22) {
 -                    z = ((AxisAlignedBB)list35.get(i22)).calculateZOffset(this.boundingBox, z);
-+                    z = ((AxisAlignedBB) list35.get(i22)).calculateZOffset(this.boundingBox, z);
++                for (Object o : list35) {
++                    z = ((AxisAlignedBB) o).calculateZOffset(this.boundingBox, z);
                  }
                  this.boundingBox.offset(0.0, 0.0, z);
 @@ -318,6 +401,5 @@
@@ -553,14 +565,14 @@
 -        nbttagcompound.setTag("Pos", (NBTBase)this.newDoubleNBTList(this.posX, this.posY, this.posZ));
 -        nbttagcompound.setTag("Motion", (NBTBase)this.newDoubleNBTList(this.motionX, this.motionY, this.motionZ));
 -        nbttagcompound.setTag("Rotation", (NBTBase)this.newFloatNBTList(this.rotationYaw, this.rotationPitch));
-+        nbttagcompound.setTag("Pos", (NBTBase) this.newDoubleNBTList(this.posX, this.posY, this.posZ));
-+        nbttagcompound.setTag("Motion", (NBTBase) this.newDoubleNBTList(this.motionX, this.motionY, this.motionZ));
++        nbttagcompound.setTag("Pos", this.newDoubleNBTList(this.posX, this.posY, this.posZ));
++        nbttagcompound.setTag("Motion", this.newDoubleNBTList(this.motionX, this.motionY, this.motionZ));
 +        //LilyBukkit start - checking for NaN pitch/yaw and resetting to zero
 +        //TODO: make sure this is the best way to address this.
 +        if (Float.isNaN(this.rotationYaw)) this.rotationYaw = 0;
 +        if (Float.isNaN(this.rotationPitch)) this.rotationPitch = 0;
 +        //LilyBukkit end
-+        nbttagcompound.setTag("Rotation", (NBTBase) this.newFloatNBTList(this.rotationYaw, this.rotationPitch));
++        nbttagcompound.setTag("Rotation", this.newFloatNBTList(this.rotationYaw, this.rotationPitch));
          nbttagcompound.setFloat("FallDistance", this.fallDistance);
 -        nbttagcompound.setShort("Fire", (short)this.fire);
 -        nbttagcompound.setShort("Air", (short)this.air);
@@ -610,7 +622,7 @@
 +        final float floatValue2 = ((NBTTagFloat) nBTTagList4.tagAt(1)).floatValue;
          this.rotationPitch = floatValue2;
          this.prevRotationPitch = floatValue2;
-@@ -633,15 +762,72 @@
+@@ -633,39 +762,94 @@
          this.onGround = nbttagcompound.getBoolean("OnGround");
          this.setPosition(this.posX, this.posY, this.posZ);
 +        //LilyBukkit start
@@ -687,14 +699,24 @@
 +
      protected NBTTagList newDoubleNBTList(final double... d1) {
          final NBTTagList nBTTagList2 = new NBTTagList();
-@@ -653,5 +839,5 @@
+-        final double[] d2 = d1;
+         for (int i4 = d1.length, i5 = 0; i5 < i4; ++i5) {
+-            final double d3 = d2[i5];
++            final double d3 = d1[i5];
+             nBTTagList2.setTag(new NBTTagDouble(d3));
+         }
          return nBTTagList2;
      }
 -    
 +
      protected NBTTagList newFloatNBTList(final float... f1) {
          final NBTTagList nBTTagList2 = new NBTTagList();
-@@ -663,9 +849,9 @@
+-        final float[] f2 = f1;
+         for (int i4 = f1.length, i5 = 0; i5 < i4; ++i5) {
+-            final float f3 = f2[i5];
++            final float f3 = f1[i5];
+             nBTTagList2.setTag(new NBTTagFloat(f3));
+         }
          return nBTTagList2;
      }
 -    
@@ -706,7 +728,7 @@
 +
      public EntityItem entityDropItem(final int itemID, final int count, final float velocity) {
          final EntityItem entityItem4 = new EntityItem(this.worldObj, this.posX, this.posY + velocity, this.posZ, new ItemStack(itemID, count));
-@@ -674,9 +860,9 @@
+@@ -674,9 +858,9 @@
          return entityItem4;
      }
 -    
@@ -718,7 +740,7 @@
 +
      public boolean isEntityInsideOpaqueBlock() {
          final int i1 = MathHelper.floor_double(this.posX);
-@@ -685,14 +871,13 @@
+@@ -685,14 +869,13 @@
          return this.worldObj.isBlockNormalCube(i1, i2, i3);
      }
 -    
@@ -736,7 +758,7 @@
 +        } else {
              this.motionX = 0.0;
              this.motionY = 0.0;
-@@ -731,30 +916,53 @@
+@@ -731,30 +914,53 @@
              this.entityRiderYawDelta -= d1;
              this.entityRiderPitchDelta -= d2;
 -            this.rotationYaw += (float)d1;

@@ -41,7 +41,8 @@
 -    
 +
      public int comparer(final NextTickListEntry nextTickListEntry1) {
-         return (this.scheduledTime < nextTickListEntry1.scheduledTime) ? -1 : ((this.scheduledTime > nextTickListEntry1.scheduledTime) ? 1 : ((this.tickEntryID < nextTickListEntry1.tickEntryID) ? -1 : ((this.tickEntryID > nextTickListEntry1.tickEntryID) ? 1 : 0)));
+-        return (this.scheduledTime < nextTickListEntry1.scheduledTime) ? -1 : ((this.scheduledTime > nextTickListEntry1.scheduledTime) ? 1 : ((this.tickEntryID < nextTickListEntry1.tickEntryID) ? -1 : ((this.tickEntryID > nextTickListEntry1.tickEntryID) ? 1 : 0)));
++        return (this.scheduledTime < nextTickListEntry1.scheduledTime) ? -1 : ((this.scheduledTime > nextTickListEntry1.scheduledTime) ? 1 : (Long.compare(this.tickEntryID, nextTickListEntry1.tickEntryID)));
      }
 -    
 +

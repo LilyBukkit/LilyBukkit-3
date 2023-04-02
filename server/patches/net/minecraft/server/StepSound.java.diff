@@ -12,7 +12,7 @@
 +
      public StepSound(final String string1, final float f2, final float f3) {
          this.stepSoundName = string1;
-@@ -11,13 +11,13 @@
+@@ -11,15 +11,15 @@
          this.stepSoundPitch = f3;
      }
 -    
@@ -28,4 +28,7 @@
 -    
 +
      public String getStepSound() {
-         return new StringBuilder("step.").append(this.stepSoundName).toString();
+-        return new StringBuilder("step.").append(this.stepSoundName).toString();
++        return "step." + this.stepSoundName;
+     }
+ }

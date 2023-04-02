@@ -127,7 +127,7 @@
 +
      public void onDeath(final Entity entity) {
          if (this.scoreValue > 0 && entity != null) {
-@@ -365,9 +362,9 @@
+@@ -365,12 +362,12 @@
          }
      }
 -    
@@ -139,6 +139,10 @@
 +
      @Override
      protected void fall(final float f1) {
+-        final int i2 = (int)Math.ceil((double)(f1 - 3.0f));
++        final int i2 = (int)Math.ceil(f1 - 3.0f);
+         if (i2 > 0) {
+             this.attackEntityFrom(null, i2);
 @@ -382,5 +379,5 @@
          }
      }
@@ -182,6 +186,15 @@
 +
      public void onLivingUpdate() {
          if (this.newPosRotationIncrements > 0) {
+@@ -526,6 +523,6 @@
+         final List list10 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224, 0.0, 0.20000000298023224));
+         if (list10 != null && list10.size() > 0) {
+-            for (int i4 = 0; i4 < list10.size(); ++i4) {
+-                final Entity entity11 = (Entity)list10.get(i4);
++            for (Object o : list10) {
++                final Entity entity11 = (Entity) o;
+                 if (entity11.canBePushed()) {
+                     entity11.applyEntityCollision(this);
 @@ -534,9 +531,9 @@
          }
      }

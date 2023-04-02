@@ -11,19 +11,35 @@
 -    
 +
      public NBTTagList() {
-         this.tagList = (List)new ArrayList();
+-        this.tagList = (List)new ArrayList();
++        this.tagList = new ArrayList();
      }
 -    
 +
      @Override
      void writeTagContents(final DataOutput dataOutput) throws IOException {
-@@ -29,5 +29,5 @@
+@@ -23,16 +23,16 @@
+             this.tagType = 1;
+         }
+-        dataOutput.writeByte((int)this.tagType);
++        dataOutput.writeByte(this.tagType);
+         dataOutput.writeInt(this.tagList.size());
+-        for (int i2 = 0; i2 < this.tagList.size(); ++i2) {
+-            ((NBTBase)this.tagList.get(i2)).writeTagContents(dataOutput);
++        for (Object o : this.tagList) {
++            ((NBTBase) o).writeTagContents(dataOutput);
          }
      }
 -    
 +
      @Override
      void readTagContents(final DataInput dataInput) throws IOException {
+         this.tagType = dataInput.readByte();
+         final int i2 = dataInput.readInt();
+-        this.tagList = (List)new ArrayList();
++        this.tagList = new ArrayList();
+         for (int i3 = 0; i3 < i2; ++i3) {
+             final NBTBase nBTBase4 = NBTBase.createTagOfType(this.tagType);
 @@ -41,23 +41,23 @@
          }
      }
@@ -36,7 +52,8 @@
 -    
 +
      public String toString() {
-         return new StringBuilder().append(this.tagList.size()).append(" entries of type ").append(NBTBase.getTagName(this.tagType)).toString();
+-        return new StringBuilder().append(this.tagList.size()).append(" entries of type ").append(NBTBase.getTagName(this.tagType)).toString();
++        return this.tagList.size() + " entries of type " + NBTBase.getTagName(this.tagType);
      }
 -    
 +

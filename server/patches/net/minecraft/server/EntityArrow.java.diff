@@ -26,13 +26,49 @@
 +
      public void setArrowHeading(double motionX, double motionY, double motionZ, final float offsetY, final float offsetX) {
          final float f9 = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
-@@ -72,5 +72,5 @@
+@@ -67,10 +67,10 @@
+         this.rotationYaw = n;
+         this.prevRotationYaw = n;
+-        final float n2 = (float)(Math.atan2(motionY, (double)f10) * 180.0 / 3.1415927410125732);
++        final float n2 = (float)(Math.atan2(motionY, f10) * 180.0 / 3.1415927410125732);
+         this.rotationPitch = n2;
+         this.prevRotationPitch = n2;
          this.ticksInGround = 0;
      }
 -    
 +
      @Override
      public void onUpdate() {
+@@ -109,6 +109,6 @@
+         final List list5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0, 1.0, 1.0));
+         double d6 = 0.0;
+-        for (int i2 = 0; i2 < list5.size(); ++i2) {
+-            final Entity entity5 = (Entity)list5.get(i2);
++        for (Object o : list5) {
++            final Entity entity5 = (Entity) o;
+             if (entity5.canBeCollidedWith() && (entity5 != this.shootingEntity || this.ticksInAir >= 5)) {
+                 final float f10 = 0.3f;
+@@ -130,5 +130,5 @@
+             if (movingObjectPosition3.entityHit != null) {
+                 if (movingObjectPosition3.entityHit.attackEntityFrom(this.shootingEntity, 4)) {
+-                    this.worldObj.playSoundAtEntity((Entity)this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
++                    this.worldObj.playSoundAtEntity(this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
+                     this.setEntityDead();
+                 }
+@@ -154,5 +154,5 @@
+                 this.posY -= this.motionY / f11 * 0.05000000074505806;
+                 this.posZ -= this.motionZ / f11 * 0.05000000074505806;
+-                this.worldObj.playSoundAtEntity((Entity)this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
++                this.worldObj.playSoundAtEntity(this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
+                 this.inData = true;
+                 this.arrowShake = 7;
+@@ -164,5 +164,5 @@
+         final float f11 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+         this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0 / 3.1415927410125732);
+-        this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f11) * 180.0 / 3.1415927410125732);
++        this.rotationPitch = (float)(Math.atan2(this.motionY, f11) * 180.0 / 3.1415927410125732);
+         while (this.rotationPitch - this.prevRotationPitch < -180.0f) {
+             this.prevRotationPitch -= 360.0f;
 @@ -194,5 +194,5 @@
          this.setPosition(this.posX, this.posY, this.posZ);
      }
@@ -40,17 +76,25 @@
 +
      public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
          nbttagcompound.setShort("xTile", (short)this.xTile);
-@@ -203,5 +203,5 @@
-         nbttagcompound.setByte("inGround", (byte)(byte)(this.inData ? 1 : 0));
+@@ -201,7 +201,7 @@
+         nbttagcompound.setByte("inTile", (byte)this.inTile);
+         nbttagcompound.setByte("shake", (byte)this.arrowShake);
+-        nbttagcompound.setByte("inGround", (byte)(byte)(this.inData ? 1 : 0));
++        nbttagcompound.setByte("inGround", (byte)(this.inData ? 1 : 0));
      }
 -    
 +
      public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
          this.xTile = nbttagcompound.getShort("xTile");
-@@ -212,5 +212,5 @@
+@@ -212,9 +212,9 @@
          this.inData = (nbttagcompound.getByte("inGround") == 1);
      }
 -    
 +
      @Override
      public void onCollideWithPlayer(final EntityPlayer entityPlayer) {
+         if (this.inData && this.shootingEntity == entityPlayer && this.arrowShake <= 0 && entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.arrow.shiftedIndex, 1))) {
+-            this.worldObj.playSoundAtEntity((Entity)this, "random.pop", 0.2f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
++            this.worldObj.playSoundAtEntity(this, "random.pop", 0.2f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+             entityPlayer.onItemPickup(this, 1);
+             this.setEntityDead();

@@ -5,7 +5,7 @@
 +package net.minecraft.server;
  
  import java.io.IOException;
-@@ -9,9 +9,9 @@
+@@ -9,11 +9,11 @@
  public class ThreadCommandReader extends Thread {
      final MinecraftServer mcServer;
 -    
@@ -16,4 +16,7 @@
 -    
 +
      public void run() {
-         final BufferedReader bufferedReader1 = new BufferedReader((Reader)new InputStreamReader(System.in));
+-        final BufferedReader bufferedReader1 = new BufferedReader((Reader)new InputStreamReader(System.in));
++        final BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(System.in));
+         String string2 = null;
+         try {

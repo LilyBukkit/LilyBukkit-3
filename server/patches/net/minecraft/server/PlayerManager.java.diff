@@ -9,21 +9,27 @@
 -import net.minecraft.server.MinecraftServer;
  import java.util.List;
  
-@@ -11,5 +10,5 @@
+@@ -11,19 +10,19 @@
      private List playerInstancesToUpdate;
      private MinecraftServer mcServer;
 -    
 +
      public PlayerManager(final MinecraftServer mcServer) {
-         this.players = (List)new ArrayList();
-@@ -18,5 +17,5 @@
+-        this.players = (List)new ArrayList();
++        this.players = new ArrayList();
+         this.playerInstances = new MCHashTable2();
+-        this.playerInstancesToUpdate = (List)new ArrayList();
++        this.playerInstancesToUpdate = new ArrayList();
          this.mcServer = mcServer;
      }
 -    
 +
      public void updatePlayerInstances() throws IOException {
-         for (int i1 = 0; i1 < this.playerInstancesToUpdate.size(); ++i1) {
-@@ -25,5 +24,5 @@
+-        for (int i1 = 0; i1 < this.playerInstancesToUpdate.size(); ++i1) {
+-            ((PlayerInstance)this.playerInstancesToUpdate.get(i1)).onUpdate();
++        for (Object o : this.playerInstancesToUpdate) {
++            ((PlayerInstance) o).onUpdate();
+         }
          this.playerInstancesToUpdate.clear();
      }
 -    
@@ -44,20 +50,26 @@
 +
      public void markBlockNeedsUpdate(final int x, final int y, final int z) {
          final int i4 = x >> 4;
-@@ -53,5 +52,5 @@
+@@ -53,7 +52,7 @@
          }
      }
 -    
 +
      public void addPlayer(final EntityPlayerMP entityPlayerMP) {
-         this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat(new StringBuilder("§e").append(entityPlayerMP.username).append(" joined the game.").toString()));
-@@ -67,5 +66,5 @@
+-        this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat(new StringBuilder("§e").append(entityPlayerMP.username).append(" joined the game.").toString()));
++        this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat("§e" + entityPlayerMP.username + " joined the game."));
+         final int i2 = (int)entityPlayerMP.posX >> 4;
+         final int i3 = (int)entityPlayerMP.posZ >> 4;
+@@ -67,7 +66,7 @@
          this.players.add(entityPlayerMP);
      }
 -    
 +
      public void removePlayer(final EntityPlayerMP entityPlayerMP) {
-         this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat(new StringBuilder("§e").append(entityPlayerMP.username).append(" left the game.").toString()));
+-        this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat(new StringBuilder("§e").append(entityPlayerMP.username).append(" left the game.").toString()));
++        this.mcServer.configManager.sendPacketToAllPlayers(new Packet3Chat("§e" + entityPlayerMP.username + " left the game."));
+         final int i2 = (int)entityPlayerMP.posX >> 4;
+         final int i3 = (int)entityPlayerMP.posZ >> 4;
 @@ -82,5 +81,5 @@
          this.players.remove(entityPlayerMP);
      }

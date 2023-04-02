@@ -30,10 +30,25 @@
 +
      protected ChunkPosition getRandomSpawningPointInChunk(final World world1, final int i2, final int i3) {
          final int i4 = i2 + world1.rand.nextInt(16);
-@@ -33,5 +32,5 @@
+@@ -33,9 +32,9 @@
          return new ChunkPosition(i4, i5, i6);
      }
 -    
 +
      private int performSpawning(final World world1, final int i2, final IProgressUpdate iProgressUpdate3) {
          this.eligibleChunksForSpawning.clear();
+         for (int i3 = 0; i3 < world1.playerEntities.size(); ++i3) {
+-            final EntityPlayer entityPlayer5 = (EntityPlayer)world1.playerEntities.get(i3);
++            final EntityPlayer entityPlayer5 = world1.playerEntities.get(i3);
+             final int i4 = MathHelper.floor_double(entityPlayer5.posX / 16.0);
+             final int i5 = MathHelper.floor_double(entityPlayer5.posZ / 16.0);
+@@ -67,7 +66,7 @@
+                     final byte b9 = 6;
+                     for (int i13 = 0; i13 < 2; ++i13) {
+-                        i10 += world1.rand.nextInt((int)b9) - world1.rand.nextInt((int)b9);
++                        i10 += world1.rand.nextInt(b9) - world1.rand.nextInt(b9);
+                         i11 += world1.rand.nextInt(1) - world1.rand.nextInt(1);
+-                        i12 += world1.rand.nextInt((int)b9) - world1.rand.nextInt((int)b9);
++                        i12 += world1.rand.nextInt(b9) - world1.rand.nextInt(b9);
+                         if (world1.isBlockNormalCube(i10, i11 - 1, i12) && !world1.isBlockNormalCube(i10, i11, i12) && !world1.getBlockMaterial(i10, i11, i12).getIsLiquid() && !world1.isBlockNormalCube(i10, i11 + 1, i12)) {
+                             final float f18 = i10 + 0.5f;

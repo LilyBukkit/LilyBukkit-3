@@ -25,7 +25,7 @@
 +
      @Override
      public boolean canPlaceBlockAt(final World world, final int x, final int y, final int z) {
-@@ -34,9 +34,9 @@
+@@ -34,31 +34,30 @@
          return i5 <= 1 && !this.isThereANeighborChest(world, x - 1, y, z) && !this.isThereANeighborChest(world, x + 1, y, z) && !this.isThereANeighborChest(world, x, y, z - 1) && !this.isThereANeighborChest(world, x, y, z + 1);
      }
 -    
@@ -37,14 +37,49 @@
 +
      @Override
      public void onBlockRemoval(final World world, final int x, final int y, final int z) {
-@@ -66,5 +66,5 @@
+-        final TileEntityChest tileEntityChest5 = (TileEntityChest)world.getBlockTileEntity(x, y, z);
+-        for (int i6 = 0; i6 < tileEntityChest5.getSizeInventory(); ++i6) {
+-            final ItemStack itemStack7 = tileEntityChest5.getStackInSlot(i6);
+-            if (itemStack7 != null) {
++        final TileEntityChest tileEntityChest = (TileEntityChest)world.getBlockTileEntity(x, y, z);
++        for (int i6 = 0; i6 < tileEntityChest.getSizeInventory(); ++i6) {
++            final ItemStack itemStack = tileEntityChest.getStackInSlot(i6);
++            if (itemStack != null) {
+                 final float f8 = this.random.nextFloat() * 0.8f + 0.1f;
+                 final float f9 = this.random.nextFloat() * 0.8f + 0.1f;
+                 final float f10 = this.random.nextFloat() * 0.8f + 0.1f;
+-                while (itemStack7.stackSize > 0) {
++                while (itemStack.stackSize > 0) {
+                     int i7 = this.random.nextInt(21) + 10;
+-                    if (i7 > itemStack7.stackSize) {
+-                        i7 = itemStack7.stackSize;
++                    if (i7 > itemStack.stackSize) {
++                        i7 = itemStack.stackSize;
+                     }
+-                    final ItemStack itemStack8 = itemStack7;
+-                    itemStack8.stackSize -= i7;
+-                    final EntityItem entityItem12 = new EntityItem(world, x + f8, y + f9, z + f10, new ItemStack(itemStack7.itemID, i7, itemStack7.itemDmg));
++                    itemStack.stackSize -= i7;
++                    final EntityItem entityItem = new EntityItem(world, x + f8, y + f9, z + f10, new ItemStack(itemStack.itemID, i7, itemStack.itemDmg));
+                     final float f11 = 0.05f;
+-                    entityItem12.motionX = (float)this.random.nextGaussian() * f11;
+-                    entityItem12.motionY = (float)this.random.nextGaussian() * f11 + 0.2f;
+-                    entityItem12.motionZ = (float)this.random.nextGaussian() * f11;
+-                    world.spawnEntityInWorld(entityItem12);
++                    entityItem.motionX = (float)this.random.nextGaussian() * f11;
++                    entityItem.motionY = (float)this.random.nextGaussian() * f11 + 0.2f;
++                    entityItem.motionZ = (float)this.random.nextGaussian() * f11;
++                    world.spawnEntityInWorld(entityItem);
+                 }
+             }
+@@ -66,5 +65,5 @@
          super.onBlockRemoval(world, x, y, z);
      }
 -    
 +
      @Override
      public boolean blockActivated(final World world, final int x, final int y, final int z, final EntityPlayer entityPlayer) {
-@@ -100,5 +100,5 @@
+@@ -100,5 +99,5 @@
          return true;
      }
 -    

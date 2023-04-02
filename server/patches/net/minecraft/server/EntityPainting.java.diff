@@ -45,6 +45,15 @@
 +
      public boolean onValidSurface() {
          if (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() > 0) {
+@@ -140,6 +140,6 @@
+         }
+         final List list9 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox);
+-        for (int i7 = 0; i7 < list9.size(); ++i7) {
+-            if (list9.get(i7) instanceof EntityPainting) {
++        for (Object o : list9) {
++            if (o instanceof EntityPainting) {
+                 return false;
+             }
 @@ -147,10 +147,10 @@
          return true;
      }

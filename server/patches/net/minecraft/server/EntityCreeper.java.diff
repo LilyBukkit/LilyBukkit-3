@@ -50,13 +50,19 @@
 +
      @Override
      public void onDeath(final Entity entity) {
-@@ -56,5 +56,5 @@
+@@ -56,10 +56,10 @@
          }
      }
 -    
 +
      @Override
      protected void attackEntity(final Entity entity, final float damage) {
+         if ((this.creeperState <= 0 && damage < 3.0f) || (this.creeperState > 0 && damage < 7.0f)) {
+             if (this.timeSinceIgnited == 0) {
+-                this.worldObj.playSoundAtEntity((Entity)this, "random.fuse", 1.0f, 0.5f);
++                this.worldObj.playSoundAtEntity(this, "random.fuse", 1.0f, 0.5f);
+             }
+             this.creeperState = 1;
 @@ -72,5 +72,5 @@
          }
      }

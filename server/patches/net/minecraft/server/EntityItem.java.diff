@@ -26,6 +26,13 @@
 +
      @Override
      public void onUpdate() {
+@@ -48,5 +48,5 @@
+             this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f;
+             this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f;
+-            this.worldObj.playSoundAtEntity((Entity)this, "random.fizz", 0.4f, 2.0f + this.rand.nextFloat() * 0.4f);
++            this.worldObj.playSoundAtEntity(this, "random.fizz", 0.4f, 2.0f + this.rand.nextFloat() * 0.4f);
+         }
+         this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
 @@ -73,10 +73,10 @@
          }
      }
@@ -52,14 +59,15 @@
 +
      @Override
      public boolean attackEntityFrom(final Entity entity, final int damage) {
-@@ -155,5 +155,5 @@
+@@ -155,11 +155,11 @@
          return false;
      }
 -    
 +
      public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
-         nbttagcompound.setShort("Health", (short)(byte)this.health);
-@@ -161,5 +161,5 @@
+-        nbttagcompound.setShort("Health", (short)(byte)this.health);
++        nbttagcompound.setShort("Health", (byte)this.health);
+         nbttagcompound.setShort("Age", (short)this.age);
          nbttagcompound.setCompoundTag("Item", this.item.writeToNBT(new NBTTagCompound()));
      }
 -    
@@ -73,3 +81,10 @@
 +
      @Override
      public void onCollideWithPlayer(final EntityPlayer entityPlayer) {
+@@ -174,5 +174,5 @@
+             final int i2 = this.item.stackSize;
+             if (this.delayBeforeCanPickup == 0 && entityPlayer.inventory.addItemStackToInventory(this.item)) {
+-                this.worldObj.playSoundAtEntity((Entity)this, "random.pop", 0.2f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
++                this.worldObj.playSoundAtEntity(this, "random.pop", 0.2f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+                 entityPlayer.onItemPickup(this, i2);
+                 this.setEntityDead();

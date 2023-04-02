@@ -17,10 +17,16 @@
 +
      @Override
      public void writeToNBT(final NBTTagCompound nbttagcompound) {
-@@ -18,5 +18,5 @@
+@@ -18,10 +18,10 @@
          nbttagcompound.setString("Text4", this.signText[3]);
      }
 -    
 +
      @Override
      public void readFromNBT(final NBTTagCompound nbttagcompound) {
+         super.readFromNBT(nbttagcompound);
+         for (int i2 = 0; i2 < 4; ++i2) {
+-            this.signText[i2] = nbttagcompound.getString(new StringBuilder("Text").append(i2 + 1).toString());
++            this.signText[i2] = nbttagcompound.getString("Text" + (i2 + 1));
+             if (this.signText[i2].length() > 15) {
+                 this.signText[i2] = this.signText[i2].substring(0, 15);

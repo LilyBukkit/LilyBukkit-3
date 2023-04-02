@@ -19,15 +19,20 @@
 +
      @Override
      public void readPacketData(final DataInputStream dataInputStream) throws IOException {
-@@ -23,5 +23,5 @@
+@@ -23,13 +23,13 @@
          this.zPosition = dataInputStream.readByte();
      }
 -    
 +
      @Override
      public void writePacket(final DataOutputStream dataOutputStream) throws IOException {
-@@ -31,5 +31,5 @@
-         dataOutputStream.writeByte((int)this.zPosition);
+         super.writePacket(dataOutputStream);
+-        dataOutputStream.writeByte((int)this.xPosition);
+-        dataOutputStream.writeByte((int)this.yPosition);
+-        dataOutputStream.writeByte((int)this.zPosition);
++        dataOutputStream.writeByte(this.xPosition);
++        dataOutputStream.writeByte(this.yPosition);
++        dataOutputStream.writeByte(this.zPosition);
      }
 -    
 +

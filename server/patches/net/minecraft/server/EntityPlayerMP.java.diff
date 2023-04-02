@@ -11,13 +11,19 @@
 -import net.minecraft.server.MinecraftServer;
  
  public class EntityPlayerMP extends EntityPlayer {
-@@ -16,5 +15,5 @@
+@@ -16,9 +15,9 @@
      public Set loadChunks;
      public double managedPosY;
 -    
 +
      public EntityPlayerMP(final MinecraftServer minecraftServer, final World world, final String username, final ItemInWorldManager itemManager) {
          super(world);
+-        this.loadedChunks = (List)new LinkedList();
+-        this.loadChunks = (Set)new HashSet();
++        this.loadedChunks = new LinkedList();
++        this.loadChunks = new HashSet();
+         final int i5 = world.spawnX + this.rand.nextInt(20) - 10;
+         final int i6 = world.spawnZ + this.rand.nextInt(20) - 10;
 @@ -32,22 +31,22 @@
          this.yOffset = 0.0f;
      }
@@ -46,6 +52,15 @@
 +
      public void onUpdateEntity() {
          super.onUpdate();
+@@ -74,6 +73,6 @@
+                 this.playerNetServerHandler.sendPacket(new Packet51MapChunk(chunkCoordIntPair1.chunkXPos * 16, 0, chunkCoordIntPair1.chunkZPos * 16, 16, 128, 16, this.mcServer.worldMngr));
+                 final List list9 = this.mcServer.worldMngr.getTileEntityList(chunkCoordIntPair1.chunkXPos * 16, 0, chunkCoordIntPair1.chunkZPos * 16, chunkCoordIntPair1.chunkXPos * 16 + 16, 128, chunkCoordIntPair1.chunkZPos * 16 + 16);
+-                for (int i5 = 0; i5 < list9.size(); ++i5) {
+-                    final TileEntity tileEntity7 = (TileEntity)list9.get(i5);
++                for (Object o : list9) {
++                    final TileEntity tileEntity7 = (TileEntity) o;
+                     this.playerNetServerHandler.sendPacket(new Packet59ComplexEntity(tileEntity7.xCoord, tileEntity7.yCoord, tileEntity7.zCoord, tileEntity7));
+                 }
 @@ -81,5 +80,5 @@
          }
      }

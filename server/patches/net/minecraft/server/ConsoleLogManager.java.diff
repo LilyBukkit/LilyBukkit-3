@@ -5,7 +5,7 @@
 +package net.minecraft.server;
  
  import java.util.logging.Level;
-@@ -10,9 +10,9 @@
+@@ -10,22 +10,22 @@
  public class ConsoleLogManager {
      public static Logger logger;
 -    
@@ -17,3 +17,21 @@
 +
      public static void init() {
          final ConsoleLogFormatter consoleLogFormatter0 = new ConsoleLogFormatter();
+         ConsoleLogManager.logger.setUseParentHandlers(false);
+         final ConsoleHandler consoleHandler1 = new ConsoleHandler();
+-        consoleHandler1.setFormatter((Formatter)consoleLogFormatter0);
+-        ConsoleLogManager.logger.addHandler((Handler)consoleHandler1);
++        consoleHandler1.setFormatter(consoleLogFormatter0);
++        ConsoleLogManager.logger.addHandler(consoleHandler1);
+         try {
+             final FileHandler fileHandler2 = new FileHandler("server.log");
+-            fileHandler2.setFormatter((Formatter)consoleLogFormatter0);
+-            ConsoleLogManager.logger.addHandler((Handler)fileHandler2);
++            fileHandler2.setFormatter(consoleLogFormatter0);
++            ConsoleLogManager.logger.addHandler(fileHandler2);
+         }
+         catch (Exception exception3) {
+-            ConsoleLogManager.logger.log(Level.WARNING, "Failed to log to server.log", (Throwable)exception3);
++            ConsoleLogManager.logger.log(Level.WARNING, "Failed to log to server.log", exception3);
+         }
+     }

@@ -79,28 +79,45 @@
 +
      @Override
      public void setEntityDead() {
-@@ -119,5 +119,5 @@
+@@ -106,6 +106,5 @@
+                         i2 = itemStack2.stackSize;
+                     }
+-                    final ItemStack itemStack3 = itemStack2;
+-                    itemStack3.stackSize -= i2;
++                    itemStack2.stackSize -= i2;
+                     final EntityItem entityItem7 = new EntityItem(this.worldObj, this.posX + f3, this.posY + f4, this.posZ + f5, new ItemStack(itemStack2.itemID, i2, itemStack2.itemDmg));
+                     final float f6 = 0.05f;
+@@ -119,5 +118,5 @@
          super.setEntityDead();
      }
 -    
 +
      @Override
      public void onUpdate() {
-@@ -157,5 +157,5 @@
+@@ -157,5 +156,5 @@
              int i2 = MathHelper.floor_double(this.posY);
              final int i3 = MathHelper.floor_double(this.posZ);
 -            if (this.worldObj.getBlockId(i1, i2 - 1, i3) == Block.minecartTrack.blockID) {
 +            if (this.worldObj.getBlockId(i1, i2 - 1, i3) == Block.MINECART_TRACK.blockID) {
                  --i2;
              }
-@@ -163,5 +163,5 @@
+@@ -163,5 +162,5 @@
              boolean z6 = false;
              final double d44 = 0.0078125;
 -            if (this.worldObj.getBlockId(i1, i2, i3) == Block.minecartTrack.blockID) {
 +            if (this.worldObj.getBlockId(i1, i2, i3) == Block.MINECART_TRACK.blockID) {
                  final Vec3D vec3D9 = this.getPos(this.posX, this.posY, this.posZ);
                  final int i4 = this.worldObj.getBlockMetadata(i1, i2, i3);
-@@ -371,13 +371,13 @@
+@@ -350,6 +349,6 @@
+             final List list15 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224, 0.0, 0.20000000298023224));
+             if (list15 != null && list15.size() > 0) {
+-                for (int i8 = 0; i8 < list15.size(); ++i8) {
+-                    final Entity entity17 = (Entity)list15.get(i8);
++                for (Object o : list15) {
++                    final Entity entity17 = (Entity) o;
+                     if (entity17 != this.riddenByEntity && entity17.canBePushed() && entity17 instanceof EntityMinecart) {
+                         entity17.applyEntityCollision(this);
+@@ -371,13 +370,13 @@
          }
      }
 -    
@@ -117,28 +134,32 @@
 +        if (this.worldObj.getBlockId(i7, i8, i9) == Block.MINECART_TRACK.blockID) {
              final int i10 = this.worldObj.getBlockMetadata(i7, i8, i9);
              y = i8;
-@@ -422,5 +422,5 @@
+@@ -422,5 +421,5 @@
          return null;
      }
 -    
 +
      @Override
      protected void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
-@@ -444,5 +444,5 @@
+@@ -441,8 +440,8 @@
+                 }
+             }
+-            nbttagcompound.setTag("Items", (NBTBase)nBTTagList2);
++            nbttagcompound.setTag("Items", nBTTagList2);
          }
      }
 -    
 +
      @Override
      protected void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
-@@ -465,5 +465,5 @@
+@@ -465,5 +464,5 @@
          }
      }
 -    
 +
      @Override
      public void applyEntityCollision(final Entity entity) {
-@@ -526,10 +526,10 @@
+@@ -526,10 +525,10 @@
          }
      }
 -    

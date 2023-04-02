@@ -48,7 +48,7 @@
 +                } else {
                      i8 = i9 + 8;
                  }
-@@ -49,6 +58,5 @@
+@@ -49,10 +58,9 @@
                  if (world.isBlockNormalCube(x, y - 1, z)) {
                      i8 = 0;
 -                }
@@ -56,6 +56,11 @@
 +                } else if (world.getBlockMaterial(x, y - 1, z) == this.material && world.getBlockMetadata(x, y, z) == 0) {
                      i8 = 0;
                  }
+             }
+-            if (this.material == Material.lava && i6 < 8 && i8 < 8 && i8 > i6 && random.nextInt(4) != 0) {
++            if (this.material == Material.lava && i8 < 8 && i8 > i6 && random.nextInt(4) != 0) {
+                 i8 = i6;
+                 z2 = false;
 @@ -61,27 +69,31 @@
                  if ((i6 = i8) < 0) {
                      world.setBlockWithNotify(x, y, z, 0);

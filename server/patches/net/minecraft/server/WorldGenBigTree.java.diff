@@ -24,6 +24,13 @@
 +
      void generateLeafNodeList() {
          this.height = (int)(this.heightLimit * this.heightAttenuation);
+@@ -75,5 +75,5 @@
+                     if (this.checkBlockLine(i10, i11) == -1) {
+                         final int[] i12 = { this.basePos[0], this.basePos[1], this.basePos[2] };
+-                        final double d12 = Math.sqrt(Math.pow((double)Math.abs(this.basePos[0] - i10[0]), 2.0) + Math.pow((double)Math.abs(this.basePos[2] - i10[2]), 2.0));
++                        final double d12 = Math.sqrt(Math.pow(Math.abs(this.basePos[0] - i10[0]), 2.0) + Math.pow(Math.abs(this.basePos[2] - i10[2]), 2.0));
+                         final double d13 = d12 * this.branchSlope;
+                         if (i10[1] - d13 > i5) {
 @@ -99,5 +99,5 @@
          System.arraycopy(i2, 0, (this.leafNodes = new int[i4][4]), 0, i4);
      }
@@ -38,7 +45,13 @@
 +
      float layerSize(final int i1) {
          if (i1 < (float)this.heightLimit * 0.3) {
-@@ -144,9 +144,9 @@
+@@ -139,14 +139,14 @@
+         }
+         else {
+-            f4 = (float)Math.sqrt(Math.pow((double)Math.abs(f2), 2.0) - Math.pow((double)Math.abs(f3), 2.0));
++            f4 = (float)Math.sqrt(Math.pow(Math.abs(f2), 2.0) - Math.pow(Math.abs(f3), 2.0));
+         }
+         f4 *= 0.5f;
          return f4;
      }
 -    
@@ -57,14 +70,21 @@
 +
      void placeBlockLine(final int[] i1, final int[] i2, final int i3) {
          final int[] i4 = new int[3];
-@@ -188,5 +188,5 @@
+@@ -188,18 +188,18 @@
          }
      }
 -    
 +
      void generateLeaves() {
-         for (int i1 = 0, i2 = this.leafNodes.length; i1 < i2; ++i1) {
-@@ -197,9 +197,9 @@
+-        for (int i1 = 0, i2 = this.leafNodes.length; i1 < i2; ++i1) {
+-            final int i3 = this.leafNodes[i1][0];
+-            final int i4 = this.leafNodes[i1][1];
+-            final int i5 = this.leafNodes[i1][2];
++        for (int[] leafNode : this.leafNodes) {
++            final int i3 = leafNode[0];
++            final int i4 = leafNode[1];
++            final int i5 = leafNode[2];
+             this.generateLeafNode(i3, i4, i5);
          }
      }
 -    
@@ -76,35 +96,64 @@
 +
      void generateTrunk() {
          final int i1 = this.basePos[0];
-@@ -234,5 +234,5 @@
+@@ -211,28 +211,22 @@
+         this.placeBlockLine(i5, i6, 17);
+         if (this.trunkSize == 2) {
+-            final int[] array = i5;
+             final int n = 0;
+-            ++array[n];
+-            final int[] array2 = i6;
++            ++i5[n];
+             final int n2 = 0;
+-            ++array2[n2];
++            ++i6[n2];
+             this.placeBlockLine(i5, i6, 17);
+-            final int[] array3 = i5;
+             final int n3 = 2;
+-            ++array3[n3];
+-            final int[] array4 = i6;
++            ++i5[n3];
+             final int n4 = 2;
+-            ++array4[n4];
++            ++i6[n4];
+             this.placeBlockLine(i5, i6, 17);
+-            final int[] array5 = i5;
+             final int n5 = 0;
+-            --array5[n5];
+-            final int[] array6 = i6;
++            --i5[n5];
+             final int n6 = 0;
+-            --array6[n6];
++            --i6[n6];
+             this.placeBlockLine(i5, i6, 17);
          }
      }
 -    
 +
      void generateLeafNodeBases() {
          int i1 = 0;
-@@ -250,5 +250,5 @@
+@@ -250,5 +244,5 @@
          }
      }
 -    
 +
      int checkBlockLine(final int[] i1, final int[] i2) {
          final int[] i3 = new int[3];
-@@ -290,5 +290,5 @@
+@@ -290,5 +284,5 @@
          return (i5 == i6) ? -1 : Math.abs(i5);
      }
 -    
 +
      boolean validTreeLocation() {
          final int[] i1 = { this.basePos[0], this.basePos[1], this.basePos[2] };
-@@ -308,5 +308,5 @@
+@@ -308,5 +302,5 @@
          return true;
      }
 -    
 +
      @Override
      public void setScale(final double scaleX, final double scaleY, final double scaleZ) {
-@@ -318,5 +318,5 @@
+@@ -318,5 +312,5 @@
          this.leafDensity = scaleZ;
      }
 -    

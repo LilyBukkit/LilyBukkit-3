@@ -5,7 +5,7 @@
 +package net.minecraft.server;
  
  import java.io.DataInput;
-@@ -7,27 +7,27 @@
+@@ -7,29 +7,29 @@
  public class NBTTagDouble extends NBTBase {
      public double doubleValue;
 -    
@@ -38,4 +38,7 @@
 -    
 +
      public String toString() {
-         return new StringBuilder().append(this.doubleValue).toString();
+-        return new StringBuilder().append(this.doubleValue).toString();
++        return String.valueOf(this.doubleValue);
+     }
+ }

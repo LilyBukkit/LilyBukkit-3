@@ -1,11 +1,14 @@
 --- MCHashTable.java
 +++ MCHashTable.java
-@@ -1,3 +1,3 @@
+@@ -1,4 +1,6 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
++import java.util.*;
++
  public class MCHashTable {
-@@ -7,19 +7,19 @@
+     private transient MCHashEntry[] slots;
+@@ -7,19 +9,19 @@
      private final float growFactor = 0.75f;
      private transient volatile int versionStamp;
 -    
@@ -29,7 +32,7 @@
 +
      public Object lookup(final int i1) {
          final int i2 = computeHash(i1);
-@@ -31,9 +31,9 @@
+@@ -31,9 +33,9 @@
          return null;
      }
 -    
@@ -41,28 +44,28 @@
 +
      final MCHashEntry lookupEntry(final int i1) {
          final int i2 = computeHash(i1);
-@@ -45,5 +45,5 @@
+@@ -45,5 +47,5 @@
          return null;
      }
 -    
 +
      public void addKey(final int i1, final Object object2) {
          final int i2 = computeHash(i1);
-@@ -57,5 +57,5 @@
+@@ -57,5 +59,5 @@
          this.insert(i2, i1, object2, i3);
      }
 -    
 +
      private void grow(final int i1) {
          final MCHashEntry[] mCHashEntry2 = this.slots;
-@@ -71,5 +71,5 @@
+@@ -71,5 +73,5 @@
          }
      }
 -    
 +
      private void copyTo(final MCHashEntry[] mCHashEntry1) {
          final MCHashEntry[] mCHashEntry2 = this.slots;
-@@ -89,10 +89,10 @@
+@@ -89,10 +91,10 @@
          }
      }
 -    
@@ -75,14 +78,18 @@
 +
      final MCHashEntry removeEntry(final int i1) {
          final int i2 = computeHash(i1);
-@@ -117,5 +117,5 @@
+@@ -117,14 +119,12 @@
          return mCHashEntry5;
      }
 -    
 +
      public void clearMap() {
          ++this.versionStamp;
-@@ -126,5 +126,5 @@
+         final MCHashEntry[] mCHashEntry1 = this.slots;
+-        for (int i2 = 0; i2 < mCHashEntry1.length; ++i2) {
+-            mCHashEntry1[i2] = null;
+-        }
++        Arrays.fill(mCHashEntry1, null);
          this.count = 0;
      }
 -    

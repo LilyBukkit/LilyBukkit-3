@@ -33,7 +33,20 @@
 +
      @Override
      public void onLivingUpdate() {
-@@ -108,9 +108,9 @@
+@@ -80,6 +80,6 @@
+             final List list3 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(1.0, 0.0, 1.0));
+             if (list3 != null) {
+-                for (int i4 = 0; i4 < list3.size(); ++i4) {
+-                    this.collideWithPlayer((Entity)list3.get(i4));
++                for (Object o : list3) {
++                    this.collideWithPlayer((Entity) o);
+                 }
+             }
+@@ -105,12 +105,12 @@
+             this.posY = n2;
+             this.setPosition(this.posX, this.posY, this.posZ);
+-            System.out.println(new StringBuilder("Sending player to Brazil at: ").append(this.posX).append(" ").append(this.posY).append(" ").append(this.posZ).toString());
++            System.out.println("Sending player to Brazil at: " + this.posX + " " + this.posY + " " + this.posZ);
          }
      }
 -    
@@ -63,7 +76,20 @@
 +
      public void dropPlayerItemWithRandomChoice(final ItemStack stack, final boolean z2) {
          if (stack != null) {
-@@ -173,9 +173,9 @@
+@@ -163,19 +163,16 @@
+                 final float f5 = this.rand.nextFloat() * 3.1415927f * 2.0f;
+                 f4 *= this.rand.nextFloat();
+-                final EntityItem entityItem4 = entityItem3;
+-                entityItem4.motionX += Math.cos((double)f5) * f4;
+-                final EntityItem entityItem5 = entityItem3;
+-                entityItem5.motionY += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
+-                final EntityItem entityItem6 = entityItem3;
+-                entityItem6.motionZ += Math.sin((double)f5) * f4;
++                entityItem3.motionX += Math.cos(f5) * f4;
++                entityItem3.motionY += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
++                entityItem3.motionZ += Math.sin(f5) * f4;
+             }
+             this.joinEntityItemWithWorld(entityItem3);
          }
      }
 -    
@@ -75,7 +101,7 @@
 +
      public float getCurrentPlayerStrVsBlock(final Block block) {
          float f2 = this.inventory.getStrVsBlock(block);
-@@ -188,9 +188,9 @@
+@@ -188,9 +185,9 @@
          return f2;
      }
 -    
@@ -87,15 +113,16 @@
 +
      @Override
      public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
-@@ -199,5 +199,5 @@
+@@ -199,25 +196,25 @@
          this.inventory.readFromNBT(nBTTagList2);
      }
 -    
 +
      @Override
      public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
-@@ -205,19 +205,19 @@
-         nbttagcompound.setTag("Inventory", (NBTBase)this.inventory.writeToNBT(new NBTTagList()));
+         super.writeEntityToNBT(nbttagcompound);
+-        nbttagcompound.setTag("Inventory", (NBTBase)this.inventory.writeToNBT(new NBTTagList()));
++        nbttagcompound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
      }
 -    
 +
@@ -119,7 +146,7 @@
 +
      @Override
      public boolean attackEntityFrom(final Entity entity, int damage) {
-@@ -247,24 +247,24 @@
+@@ -247,24 +244,24 @@
          return damage != 0 && super.attackEntityFrom(entity, damage);
      }
 -    

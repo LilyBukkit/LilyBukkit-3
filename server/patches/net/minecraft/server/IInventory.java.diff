@@ -11,6 +11,6 @@
      ItemStack getStackInSlot(final int slot);
 +
 +    //LilyBukkit start
-+    public abstract ItemStack[] getContents();
++    ItemStack[] getContents();
 +    //LilyBukkit end
  }

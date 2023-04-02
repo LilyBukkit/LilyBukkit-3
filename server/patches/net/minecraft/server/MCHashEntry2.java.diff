@@ -1,18 +1,21 @@
 --- MCHashEntry2.java
 +++ MCHashEntry2.java
-@@ -1,3 +1,3 @@
+@@ -1,4 +1,6 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
++import java.util.*;
++
  class MCHashEntry2 {
-@@ -6,5 +6,5 @@
+     final long hashEntry;
+@@ -6,5 +8,5 @@
      MCHashEntry2 nextEntry;
      final int slotHash;
 -    
 +
      MCHashEntry2(final int slotHash, final long hashEntry, final Object valueEntry, final MCHashEntry2 nextEntry) {
          this.valueEntry = valueEntry;
-@@ -13,13 +13,13 @@
+@@ -13,13 +15,13 @@
          this.slotHash = slotHash;
      }
 -    
@@ -29,7 +32,20 @@
 +
      public final boolean equals(final Object object) {
          if (!(object instanceof MCHashEntry2)) {
-@@ -38,9 +38,9 @@
+@@ -28,9 +30,9 @@
+         final MCHashEntry2 mCHashEntry22 = (MCHashEntry2)object;
+         final Long long3 = this.getHash();
+-        final Long long4 = mCHashEntry22.getHash();
+-        if (long3 == long4 || (long3 != null && long3.equals(long4))) {
++        final long long4 = mCHashEntry22.getHash();
++        if (Objects.equals(long3, long4)) {
+             final Object object2 = this.getValue();
+             final Object object3 = mCHashEntry22.getValue();
+-            if (object2 == object3 || (object2 != null && object2.equals(object3))) {
++            if (Objects.equals(object2, object3)) {
+                 return true;
+             }
+@@ -38,11 +40,11 @@
          return false;
      }
 -    
@@ -40,4 +56,7 @@
 -    
 +
      public final String toString() {
-         return String.valueOf(this.getHash()) + "=" + this.getValue();
+-        return String.valueOf(this.getHash()) + "=" + this.getValue();
++        return this.getHash() + "=" + this.getValue();
+     }
+ }

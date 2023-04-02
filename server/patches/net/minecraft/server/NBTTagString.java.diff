@@ -16,7 +16,7 @@
 +
      public NBTTagString(final String stringValue) {
          this.stringValue = stringValue;
-@@ -17,20 +17,20 @@
+@@ -17,22 +17,22 @@
          }
      }
 -    
@@ -40,4 +40,7 @@
 -    
 +
      public String toString() {
-         return new StringBuilder().append(this.stringValue).toString();
+-        return new StringBuilder().append(this.stringValue).toString();
++        return this.stringValue;
+     }
+ }

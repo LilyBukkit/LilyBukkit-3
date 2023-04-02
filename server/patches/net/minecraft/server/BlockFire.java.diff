@@ -152,7 +152,8 @@
 +
      public int getChanceToEncourageFire(final World world, final int x, final int y, final int z, final int flag) {
          final int i6 = this.chanceToEncourageFire[world.getBlockId(x, y, z)];
-         return (i6 > flag) ? i6 : flag;
+-        return (i6 > flag) ? i6 : flag;
++        return Math.max(i6, flag);
      }
 -    
 +
