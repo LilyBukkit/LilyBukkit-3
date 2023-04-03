@@ -1,0 +1,6 @@
+[submodule "loader"]
+	path = loader
+	url = https://github.com/LilyBukkit/RosepadLoader
+[submodule "rml"]
+	path = rml
+	url = https://github.com/LilyBukkit/RML
