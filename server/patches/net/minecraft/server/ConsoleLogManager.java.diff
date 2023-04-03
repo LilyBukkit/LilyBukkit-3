@@ -5,23 +5,42 @@
 +package net.minecraft.server;
  
  import java.util.logging.Level;
-@@ -10,22 +10,22 @@
+@@ -7,25 +7,42 @@
+ import java.util.logging.ConsoleHandler;
+ import java.util.logging.Logger;
++// CraftBukkit start
++import org.bukkit.craftbukkit.util.ShortConsoleLogFormatter;
++import org.bukkit.craftbukkit.util.TerminalConsoleHandler;
++// CraftBukkit end
+ 
  public class ConsoleLogManager {
      public static Logger logger;
 -    
++    public static Logger global;
 +
      static {
          ConsoleLogManager.logger = Logger.getLogger("Minecraft");
++        ConsoleLogManager.global = Logger.getLogger("");
      }
 -    
+-    public static void init() {
 +
-     public static void init() {
++    //LilyBukkit - added MinecraftServer as an argument
++    public static void init(MinecraftServer server) {
          final ConsoleLogFormatter consoleLogFormatter0 = new ConsoleLogFormatter();
          ConsoleLogManager.logger.setUseParentHandlers(false);
-         final ConsoleHandler consoleHandler1 = new ConsoleHandler();
+-        final ConsoleHandler consoleHandler1 = new ConsoleHandler();
 -        consoleHandler1.setFormatter((Formatter)consoleLogFormatter0);
 -        ConsoleLogManager.logger.addHandler((Handler)consoleHandler1);
-+        consoleHandler1.setFormatter(consoleLogFormatter0);
++        //LilyBukkit start
++        final ConsoleHandler consoleHandler1 = new TerminalConsoleHandler(server.reader);
++
++        for (Handler handler : global.getHandlers()){
++            global.removeHandler(handler);
++        }
++        consoleHandler1.setFormatter(new ShortConsoleLogFormatter(server));
++        global.addHandler(consoleHandler1);
++        //LilyBukkit end
 +        ConsoleLogManager.logger.addHandler(consoleHandler1);
          try {
              final FileHandler fileHandler2 = new FileHandler("server.log");
@@ -29,6 +48,9 @@
 -            ConsoleLogManager.logger.addHandler((Handler)fileHandler2);
 +            fileHandler2.setFormatter(consoleLogFormatter0);
 +            ConsoleLogManager.logger.addHandler(fileHandler2);
++            //LilyBukkit start
++            global.addHandler(fileHandler2);
++            //LilyBukkit end
          }
          catch (Exception exception3) {
 -            ConsoleLogManager.logger.log(Level.WARNING, "Failed to log to server.log", (Throwable)exception3);
