@@ -1,36 +1,53 @@
 --- EntityArrow.java
 +++ EntityArrow.java
-@@ -1,3 +1,3 @@
+@@ -1,5 +1,12 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
  import java.util.List;
-@@ -13,5 +13,5 @@
++//LilyBukkit start
++import org.bukkit.craftbukkit.entity.CraftLivingEntity;
++import org.bukkit.entity.Projectile;
++import org.bukkit.event.entity.EntityDamageByProjectileEvent;
++import org.bukkit.event.entity.EntityDamageEvent;
++import org.bukkit.event.player.PlayerPickupItemEvent;
++//LilyBukkit end
+ 
+ public class EntityArrow extends Entity {
+@@ -10,8 +17,8 @@
+     private boolean inData;
+     public int arrowShake;
+-    private EntityLiving shootingEntity;
++    public EntityLiving shootingEntity; //LilyBukkit  private -> public
      private int ticksInGround;
      private int ticksInAir;
 -    
 +
      public EntityArrow(final World world) {
          super(world);
-@@ -25,5 +25,5 @@
+@@ -25,5 +32,5 @@
          this.setSize(0.5f, 0.5f);
      }
 -    
 +
      public EntityArrow(final World world, final EntityLiving entityLiving) {
          super(world);
-@@ -48,5 +48,5 @@
+@@ -48,5 +55,5 @@
          this.setArrowHeading(this.motionX, this.motionY, this.motionZ, 1.5f, 1.0f);
      }
 -    
 +
      public void setArrowHeading(double motionX, double motionY, double motionZ, final float offsetY, final float offsetX) {
          final float f9 = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
-@@ -67,10 +67,10 @@
+@@ -64,13 +71,13 @@
+         this.motionZ = motionZ;
+         final float f10 = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
+-        final float n = (float)(Math.atan2(motionX, motionZ) * 180.0 / 3.1415927410125732);
++        final float n = (float) (Math.atan2(motionX, motionZ) * 180.0 / 3.1415927410125732);
          this.rotationYaw = n;
          this.prevRotationYaw = n;
 -        final float n2 = (float)(Math.atan2(motionY, (double)f10) * 180.0 / 3.1415927410125732);
-+        final float n2 = (float)(Math.atan2(motionY, f10) * 180.0 / 3.1415927410125732);
++        final float n2 = (float) (Math.atan2(motionY, f10) * 180.0 / 3.1415927410125732);
          this.rotationPitch = n2;
          this.prevRotationPitch = n2;
          this.ticksInGround = 0;
@@ -39,62 +56,155 @@
 +
      @Override
      public void onUpdate() {
-@@ -109,6 +109,6 @@
-         final List list5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0, 1.0, 1.0));
+@@ -94,6 +101,5 @@
+             this.ticksInGround = 0;
+             this.ticksInAir = 0;
+-        }
+-        else {
++        } else {
+             ++this.ticksInAir;
+         }
+@@ -107,16 +113,15 @@
+         }
+         Entity entity4 = null;
+-        final List list5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0, 1.0, 1.0));
++        final List<Entity> list5 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0, 1.0, 1.0));
          double d6 = 0.0;
 -        for (int i2 = 0; i2 < list5.size(); ++i2) {
 -            final Entity entity5 = (Entity)list5.get(i2);
-+        for (Object o : list5) {
-+            final Entity entity5 = (Entity) o;
-             if (entity5.canBeCollidedWith() && (entity5 != this.shootingEntity || this.ticksInAir >= 5)) {
+-            if (entity5.canBeCollidedWith() && (entity5 != this.shootingEntity || this.ticksInAir >= 5)) {
++        for (Entity entity : list5) {
++            if (entity.canBeCollidedWith() && (entity != this.shootingEntity || this.ticksInAir >= 5)) {
                  final float f10 = 0.3f;
-@@ -130,5 +130,5 @@
+-                final AxisAlignedBB axisAlignedBB11 = entity5.boundingBox.expand(f10, f10, f10);
++                final AxisAlignedBB axisAlignedBB11 = entity.boundingBox.expand(f10, f10, f10);
+                 final MovingObjectPosition movingObjectPosition4 = axisAlignedBB11.calculateIntercept(vec3D15, vec3D16);
+                 if (movingObjectPosition4 != null) {
+                     final double d7 = vec3D15.distanceTo(movingObjectPosition4.hitVec);
+                     if (d7 < d6 || d6 == 0.0) {
+-                        entity4 = entity5;
++                        entity4 = entity;
+                         d6 = d7;
+                     }
+@@ -129,9 +134,33 @@
+         if (movingObjectPosition3 != null) {
              if (movingObjectPosition3.entityHit != null) {
-                 if (movingObjectPosition3.entityHit.attackEntityFrom(this.shootingEntity, 4)) {
+-                if (movingObjectPosition3.entityHit.attackEntityFrom(this.shootingEntity, 4)) {
 -                    this.worldObj.playSoundAtEntity((Entity)this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
-+                    this.worldObj.playSoundAtEntity(this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
-                     this.setEntityDead();
+-                    this.setEntityDead();
++                //LilyBukkit start
++                boolean stick;
++                if (entity4 instanceof EntityLiving) {
++                    org.bukkit.Server server = this.worldObj.getServer();
++
++                    // TODO decide if we should create DamageCause.ARROW, DamageCause.PROJECTILE
++                    // or leave as DamageCause.ENTITY_ATTACK
++                    org.bukkit.entity.Entity damagee = movingObjectPosition3.entityHit.getBukkitEntity();
++                    Projectile projectile = (Projectile) this.getBukkitEntity();
++                    // TODO deal with arrows being fired from a non-entity
++
++                    EntityDamageByProjectileEvent event = new EntityDamageByProjectileEvent(damagee, projectile, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 4);
++                    server.getPluginManager().callEvent(event);
++                    this.shootingEntity = (projectile.getShooter() == null) ? null : ((CraftLivingEntity) projectile.getShooter()).getHandle();
++
++                    if (event.isCancelled()) {
++                        stick = !event.getBounce();
++                    } else {
++                        // this function returns if the arrow should stick in or not, i.e. !bounce
++                        stick = movingObjectPosition3.entityHit.attackEntityFrom(this.shootingEntity, event.getDamage());
++                    }
++                } else {
++                    stick = movingObjectPosition3.entityHit.attackEntityFrom(this.shootingEntity, 4);
                  }
-@@ -154,5 +154,5 @@
+-                else {
++                if (stick) {
++                    //LilyBukkit end
++                    this.worldObj.playSoundAtEntity(this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
++                    this.setEntityDead();
++                } else {
+                     this.motionX *= -0.10000000149011612;
+                     this.motionY *= -0.10000000149011612;
+@@ -141,18 +170,17 @@
+                     this.ticksInAir = 0;
+                 }
+-            }
+-            else {
++            } else {
+                 this.xTile = movingObjectPosition3.blockX;
+                 this.yTile = movingObjectPosition3.blockY;
+                 this.zTile = movingObjectPosition3.blockZ;
+                 this.inTile = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
+-                this.motionX = (float)(movingObjectPosition3.hitVec.xCoord - this.posX);
+-                this.motionY = (float)(movingObjectPosition3.hitVec.yCoord - this.posY);
+-                this.motionZ = (float)(movingObjectPosition3.hitVec.zCoord - this.posZ);
++                this.motionX = (float) (movingObjectPosition3.hitVec.xCoord - this.posX);
++                this.motionY = (float) (movingObjectPosition3.hitVec.yCoord - this.posY);
++                this.motionZ = (float) (movingObjectPosition3.hitVec.zCoord - this.posZ);
+                 final float f11 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+                 this.posX -= this.motionX / f11 * 0.05000000074505806;
                  this.posY -= this.motionY / f11 * 0.05000000074505806;
                  this.posZ -= this.motionZ / f11 * 0.05000000074505806;
 -                this.worldObj.playSoundAtEntity((Entity)this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
 +                this.worldObj.playSoundAtEntity(this, "random.drr", 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
                  this.inData = true;
                  this.arrowShake = 7;
-@@ -164,5 +164,5 @@
+@@ -163,6 +191,6 @@
+         this.posZ += this.motionZ;
          final float f11 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
-         this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0 / 3.1415927410125732);
+-        this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0 / 3.1415927410125732);
 -        this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f11) * 180.0 / 3.1415927410125732);
-+        this.rotationPitch = (float)(Math.atan2(this.motionY, f11) * 180.0 / 3.1415927410125732);
++        this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0 / 3.1415927410125732);
++        this.rotationPitch = (float) (Math.atan2(this.motionY, f11) * 180.0 / 3.1415927410125732);
          while (this.rotationPitch - this.prevRotationPitch < -180.0f) {
              this.prevRotationPitch -= 360.0f;
-@@ -194,5 +194,5 @@
+@@ -194,14 +222,14 @@
          this.setPosition(this.posX, this.posY, this.posZ);
      }
 -    
 +
      public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
-         nbttagcompound.setShort("xTile", (short)this.xTile);
-@@ -201,7 +201,7 @@
-         nbttagcompound.setByte("inTile", (byte)this.inTile);
-         nbttagcompound.setByte("shake", (byte)this.arrowShake);
+-        nbttagcompound.setShort("xTile", (short)this.xTile);
+-        nbttagcompound.setShort("yTile", (short)this.yTile);
+-        nbttagcompound.setShort("zTile", (short)this.zTile);
+-        nbttagcompound.setByte("inTile", (byte)this.inTile);
+-        nbttagcompound.setByte("shake", (byte)this.arrowShake);
 -        nbttagcompound.setByte("inGround", (byte)(byte)(this.inData ? 1 : 0));
-+        nbttagcompound.setByte("inGround", (byte)(this.inData ? 1 : 0));
++        nbttagcompound.setShort("xTile", (short) this.xTile);
++        nbttagcompound.setShort("yTile", (short) this.yTile);
++        nbttagcompound.setShort("zTile", (short) this.zTile);
++        nbttagcompound.setByte("inTile", (byte) this.inTile);
++        nbttagcompound.setByte("shake", (byte) this.arrowShake);
++        nbttagcompound.setByte("inGround", (byte) (this.inData ? 1 : 0));
      }
 -    
 +
      public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
          this.xTile = nbttagcompound.getShort("xTile");
-@@ -212,9 +212,9 @@
+@@ -212,9 +240,24 @@
          this.inData = (nbttagcompound.getByte("inGround") == 1);
      }
 -    
 +
      @Override
      public void onCollideWithPlayer(final EntityPlayer entityPlayer) {
-         if (this.inData && this.shootingEntity == entityPlayer && this.arrowShake <= 0 && entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.arrow.shiftedIndex, 1))) {
+-        if (this.inData && this.shootingEntity == entityPlayer && this.arrowShake <= 0 && entityPlayer.inventory.addItemStackToInventory(new ItemStack(Item.arrow.shiftedIndex, 1))) {
 -            this.worldObj.playSoundAtEntity((Entity)this, "random.pop", 0.2f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
++        //LilyBukkit start
++        ItemStack itemStack = new ItemStack(Item.arrow, 1);
++        //LilyBukkit end
++        if (this.inData && this.shootingEntity == entityPlayer && this.arrowShake <= 0 && entityPlayer.inventory.canHold(itemStack) > 0) {
++            //LilyBukkit start
++            net.minecraft.server.EntityItem item = new net.minecraft.server.EntityItem(this.worldObj, this.posX, this.posY, this.posZ, itemStack);
++
++            PlayerPickupItemEvent event = new PlayerPickupItemEvent((org.bukkit.entity.Player) entityPlayer.getBukkitEntity(), new org.bukkit.craftbukkit.entity.CraftItem(this.worldObj.getServer(), item), 0);
++            this.worldObj.getServer().getPluginManager().callEvent(event);
++
++            if (event.isCancelled()) {
++                return;
++            }
++        }
++        //LilyBukkit end
++        if (this.inData && this.shootingEntity == entityPlayer && this.arrowShake <= 0 && entityPlayer.inventory.addItemStackToInventory(itemStack)) {
 +            this.worldObj.playSoundAtEntity(this, "random.pop", 0.2f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
              entityPlayer.onItemPickup(this, 1);
              this.setEntityDead();

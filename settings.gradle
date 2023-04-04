@@ -1,6 +1,6 @@
 rootProject.name = 'Rosepad'
 
 include ':server'
-//include ':rml'
-//include ':loader'
+include ':rml'
+include ':loader'
 

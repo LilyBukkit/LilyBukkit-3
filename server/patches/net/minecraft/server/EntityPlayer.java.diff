@@ -1,48 +1,100 @@
 --- EntityPlayer.java
 +++ EntityPlayer.java
-@@ -1,3 +1,3 @@
+@@ -1,6 +1,15 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
- import java.util.List;
-@@ -15,5 +15,5 @@
+-import java.util.List;
+-import java.util.Random;
++import java.util.*;
++CraftBukkit start
++import org.bukkit.craftbukkit.entity.CraftItem;
++import org.bukkit.craftbukkit.TrigMath;
++import org.bukkit.entity.Player;
++import org.bukkit.event.entity.EntityDamageByEntityEvent;
++import org.bukkit.event.entity.EntityDamageEvent;
++import org.bukkit.event.entity.EntityTargetEvent;
++import org.bukkit.event.player.PlayerDropItemEvent;
++import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
++// CraftBukkit end
+ 
+ public class EntityPlayer extends EntityLiving {
+@@ -15,5 +24,8 @@
      private int damageRemainder;
      public Random playerRand;
 -    
++    //LilyBukkit start
++    public String spawnWorld = "";
++    //LilyBukkit end
 +
      public EntityPlayer(final World world) {
          super(world);
-@@ -33,5 +33,5 @@
+@@ -33,5 +45,5 @@
          this.playerRand = new Random();
      }
 -    
 +
      @Override
      public void updateRidden() {
-@@ -40,5 +40,5 @@
+@@ -40,5 +52,5 @@
          this.cameraYaw = 0.0f;
      }
 -    
 +
      @Override
      protected void updateEntityActionState() {
-@@ -55,5 +55,5 @@
+@@ -49,14 +61,14 @@
+                 this.isSwinging = false;
+             }
+-        }
+-        else {
++        } else {
+             this.swingProgressInt = 0;
+         }
          this.swingProgress = this.swingProgressInt / 8.0f;
      }
 -    
 +
      @Override
      public void onLivingUpdate() {
-@@ -80,6 +80,6 @@
-             final List list3 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(1.0, 0.0, 1.0));
+-        if (this.worldObj.difficultySetting == 0 && this.health < 20 && this.ticksExisted % 20 * 4 == 0) {
++        //LilyBukkit - this.worldObj.difficultySetting==0 -> !this.worldObj.allowMonsters
++        if (!this.worldObj.allowMonsters && this.health < 20 && this.ticksExisted % 20 * 4 == 0) {
+             this.heal(1);
+         }
+@@ -65,5 +77,5 @@
+         super.onLivingUpdate();
+         float f1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+-        float f2 = (float)Math.atan(-this.motionY * 0.20000000298023224) * 15.0f;
++        float f2 = (float) TrigMath.atan(-this.motionY * 0.20000000298023224) * 15.0f; //LilyBukkit - Math -> TrigMath
+         if (f1 > 0.1f) {
+             f1 = 0.1f;
+@@ -78,8 +90,8 @@
+         this.cameraPitch += (f2 - this.cameraPitch) * 0.8f;
+         if (this.health > 0) {
+-            final List list3 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(1.0, 0.0, 1.0));
++            final List<Entity> list3 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(1.0, 0.0, 1.0));
              if (list3 != null) {
 -                for (int i4 = 0; i4 < list3.size(); ++i4) {
 -                    this.collideWithPlayer((Entity)list3.get(i4));
-+                for (Object o : list3) {
-+                    this.collideWithPlayer((Entity) o);
++                for (Entity o : list3) {
++                    this.collideWithPlayer(o);
                  }
              }
-@@ -105,12 +105,12 @@
+@@ -90,10 +102,9 @@
+             int n3 = 0;
+             while (n2 != 0) {
+-                final int n4 = this.worldObj.getBlockId((int)this.posX, n2, (int)this.posZ);
++                final int n4 = this.worldObj.getBlockId((int) this.posX, n2, (int) this.posZ);
+                 if (n4 == 0 || n4 == 116) {
+                     --n2;
+                     n3 = 1;
+-                }
+-                else {
++                } else {
+                     if (n3 != 0) {
+                         ++n2;
+@@ -105,12 +116,12 @@
              this.posY = n2;
              this.setPosition(this.posX, this.posY, this.posZ);
 -            System.out.println(new StringBuilder("Sending player to Brazil at: ").append(this.posX).append(" ").append(this.posY).append(" ").append(this.posZ).toString());
@@ -58,7 +110,15 @@
 +
      @Override
      public void onDeath(final Entity entity) {
-@@ -133,14 +133,14 @@
+@@ -125,6 +136,5 @@
+             this.motionX = -MathHelper.cos((this.attackedAtYaw + this.rotationYaw) * 3.1415927f / 180.0f) * 0.1f;
+             this.motionZ = -MathHelper.sin((this.attackedAtYaw + this.rotationYaw) * 3.1415927f / 180.0f) * 0.1f;
+-        }
+-        else {
++        } else {
+             final double n = 0.0;
+             this.motionZ = n;
+@@ -133,14 +143,14 @@
          this.yOffset = 0.1f;
      }
 -    
@@ -76,7 +136,15 @@
 +
      public void dropPlayerItemWithRandomChoice(final ItemStack stack, final boolean z2) {
          if (stack != null) {
-@@ -163,19 +163,16 @@
+@@ -154,6 +164,5 @@
+                 entityItem3.motionZ = MathHelper.cos(f6) * f5;
+                 entityItem3.motionY = 0.20000000298023224;
+-            }
+-            else {
++            } else {
+                 f4 = 0.3f;
+                 entityItem3.motionX = -MathHelper.sin(this.rotationYaw / 180.0f * 3.1415927f) * MathHelper.cos(this.rotationPitch / 180.0f * 3.1415927f) * f4;
+@@ -163,19 +172,31 @@
                  final float f5 = this.rand.nextFloat() * 3.1415927f * 2.0f;
                  f4 *= this.rand.nextFloat();
 -                final EntityItem entityItem4 = entityItem3;
@@ -89,6 +157,21 @@
 +                entityItem3.motionY += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1f;
 +                entityItem3.motionZ += Math.sin(f5) * f4;
              }
++            //LilyBukkit start
++            Player player = (Player) this.getBukkitEntity();
++            CraftItem drop = new CraftItem(this.worldObj.getServer(), entityItem3);
++
++            PlayerDropItemEvent event = new PlayerDropItemEvent(player, drop);
++            this.worldObj.getServer().getPluginManager().callEvent(event);
++
++            if (event.isCancelled()) {
++                org.bukkit.inventory.ItemStack itemStack = drop.getItemStack();
++                itemStack.setAmount(1);
++                player.getInventory().addItem(itemStack);
++
++                return;
++            }
++            //LilyBukkit end
              this.joinEntityItemWithWorld(entityItem3);
          }
      }
@@ -101,7 +184,7 @@
 +
      public float getCurrentPlayerStrVsBlock(final Block block) {
          float f2 = this.inventory.getStrVsBlock(block);
-@@ -188,9 +185,9 @@
+@@ -188,9 +209,9 @@
          return f2;
      }
 -    
@@ -113,8 +196,15 @@
 +
      @Override
      public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
-@@ -199,25 +196,25 @@
+@@ -198,26 +219,35 @@
+         final NBTTagList nBTTagList2 = nbttagcompound.getTagList("Inventory");
          this.inventory.readFromNBT(nBTTagList2);
++        //LilyBukkit start
++        this.spawnWorld = nbttagcompound.getString("SpawnWorld");
++        if (Objects.equals(this.spawnWorld, "")) {
++            this.spawnWorld = this.worldObj.getServer().getWorlds().get(0).getName();
++        }
++        //LilyBukkit end
      }
 -    
 +
@@ -123,6 +213,9 @@
          super.writeEntityToNBT(nbttagcompound);
 -        nbttagcompound.setTag("Inventory", (NBTBase)this.inventory.writeToNBT(new NBTTagList()));
 +        nbttagcompound.setTag("Inventory", this.inventory.writeToNBT(new NBTTagList()));
++        //LilyBukkit start
++        nbttagcompound.setString("SpawnWorld", this.spawnWorld);
++        //LilyBukkit end
      }
 -    
 +
@@ -146,8 +239,74 @@
 +
      @Override
      public boolean attackEntityFrom(final Entity entity, int damage) {
-@@ -247,24 +244,24 @@
-         return damage != 0 && super.attackEntityFrom(entity, damage);
+@@ -226,45 +256,74 @@
+             return false;
+         }
+-        if (this.heartsLife > this.heartsHalvesLife / 2.0f) {
+-            return false;
+-        }
+-        if (entity instanceof EntityMob || entity instanceof EntityArrow) {
+-            if (this.worldObj.difficultySetting == 0) {
+-                damage = 0;
++        //LilyBukkit start
++        else {
++            //LilyBukkit end
++            if (this.heartsLife > this.heartsHalvesLife / 2.0f) {
++                return false;
+             }
+-            if (this.worldObj.difficultySetting == 1) {
+-                damage = damage / 3 + 1;
++            if (entity instanceof EntityMob || entity instanceof EntityArrow) {
++                if (this.worldObj.difficultySetting == 0) {
++                    damage = 0;
++                }
++                if (this.worldObj.difficultySetting == 1) {
++                    damage = damage / 3 + 1;
++                }
++                if (this.worldObj.difficultySetting == 3) {
++                    damage = damage * 3 / 2;
++                }
+             }
+-            if (this.worldObj.difficultySetting == 3) {
+-                damage = damage * 3 / 2;
++            //LilyBukkit start
++            if (damage == 0) {
++                return false;
++            } else {
++                Entity object = entity;
++                if (object instanceof EntityArrow && ((EntityArrow)entity).shootingEntity != null){
++                    object = ((EntityArrow) entity).shootingEntity;
++                }
++                if (object instanceof EntityLiving) {
++                    // this is here instead of EntityMonster because EntityLiving(s) that aren't monsters
++                    // also damage the player in this way. For example, EntitySlime.
++                    org.bukkit.entity.Entity damager = object.getBukkitEntity();
++                    org.bukkit.entity.Entity damagee = this.getBukkitEntity();
++
++                    EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, damagee, EntityDamageEvent.DamageCause.ENTITY_ATTACK, i);
++                    this.worldObj.getServer().getPluginManager().callEvent(event);
++
++                    if (event.isCancelled() || event.getDamage() == 0) {
++                        return false;
++                    }
++
++                    damage = event.getDamage();
++                }
++                //LilyBukkit end
++                final int i3 = 25 - this.inventory.getTotalArmorValue();
++                final int i4 = damage * i3 + this.damageRemainder;
++                this.inventory.damageArmor(damage);
++                damage = i4 / 25;
++                this.damageRemainder = i4 % 25;
++                return damage != 0 && super.attackEntityFrom(entity, damage);
+             }
+         }
+-        final int i3 = 25 - this.inventory.getTotalArmorValue();
+-        final int i4 = damage * i3 + this.damageRemainder;
+-        this.inventory.damageArmor(damage);
+-        damage = i4 / 25;
+-        this.damageRemainder = i4 % 25;
+-        return damage != 0 && super.attackEntityFrom(entity, damage);
      }
 -    
 +

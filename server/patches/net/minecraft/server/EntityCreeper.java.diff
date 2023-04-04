@@ -1,18 +1,25 @@
 --- EntityCreeper.java
 +++ EntityCreeper.java
-@@ -1,3 +1,3 @@
+@@ -1,4 +1,10 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
++//LilyBukkit start
++
++import org.bukkit.craftbukkit.entity.CraftEntity;
++import org.bukkit.event.entity.ExplosionPrimeEvent;
++//LilyBukkit end
++
  public class EntityCreeper extends EntityMob {
-@@ -6,5 +6,5 @@
+     int timeSinceIgnited;
+@@ -6,5 +12,5 @@
      int fuseDuration;
      int creeperState;
 -    
 +
      public EntityCreeper(final World world) {
          super(world);
-@@ -13,15 +13,15 @@
+@@ -13,15 +19,15 @@
          this.texture = "/mob/creeper.png";
      }
 -    
@@ -31,7 +38,7 @@
 +
      @Override
      protected void updateEntityActionState() {
-@@ -38,15 +38,15 @@
+@@ -38,15 +44,15 @@
          }
      }
 -    
@@ -50,7 +57,7 @@
 +
      @Override
      public void onDeath(final Entity entity) {
-@@ -56,10 +56,10 @@
+@@ -56,21 +62,30 @@
          }
      }
 -    
@@ -63,7 +70,23 @@
 +                this.worldObj.playSoundAtEntity(this, "random.fuse", 1.0f, 0.5f);
              }
              this.creeperState = 1;
-@@ -72,5 +72,5 @@
+             ++this.timeSinceIgnited;
+             if (this.timeSinceIgnited == this.fuseDuration) {
+-                this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 3.0f);
+-                this.setEntityDead();
++                //LilyBukkit start
++                ExplosionPrimeEvent event = new ExplosionPrimeEvent(CraftEntity.getEntity(this.worldObj.getServer(), this), 3.0F, false);
++                this.worldObj.getServer().getPluginManager().callEvent(event);
++
++                if (!event.isCancelled()) {
++                    this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, event.getRadius());
++                    this.setEntityDead();
++                } else {
++                    this.timeSinceIgnited = 0;
++                }
++                //LilyBukkit end
+             }
+             this.hasAttacked = true;
          }
      }
 -    

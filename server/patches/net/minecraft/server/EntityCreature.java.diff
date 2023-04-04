@@ -1,12 +1,20 @@
 --- EntityCreature.java
 +++ EntityCreature.java
-@@ -1,3 +1,3 @@
+@@ -1,14 +1,20 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
++// CraftBukkit start
++import org.bukkit.craftbukkit.entity.CraftEntity;
++import org.bukkit.craftbukkit.TrigMath;
++import org.bukkit.event.entity.EntityTargetEvent;
++// CraftBukkit end
++
  public class EntityCreature extends EntityLiving {
-@@ -5,10 +5,10 @@
-     protected Entity entityToAttack;
+-    private PathEntity pathToEntity;
+-    protected Entity entityToAttack;
++    public PathEntity pathToEntity; //LilyBukkit - private -> public
++    public Entity entityToAttack; //LilyBukkit - protected -> public
      protected boolean hasAttacked;
 -    
 +
@@ -18,7 +26,53 @@
 +
      @Override
      protected void updateEntityActionState() {
-@@ -122,16 +122,16 @@
+@@ -16,5 +22,19 @@
+         final float f1 = 16.0f;
+         if (this.entityToAttack == null) {
+-            this.entityToAttack = this.findPlayerToAttack();
++            //LilyBukkit start
++            Entity target = this.findPlayerToAttack();
++            if (target != null){
++                EntityTargetEvent event = new EntityTargetEvent(this.getBukkitEntity(), target.getBukkitEntity(), EntityTargetEvent.TargetReason.CLOSEST_PLAYER);
++                this.worldObj.getServer().getPluginManager().callEvent(event);
++
++                if (!event.isCancelled()) {
++                    if (event.getTarget() == null) {
++                        this.entityToAttack = null;
++                    } else {
++                        this.entityToAttack = ((CraftEntity) event.getTarget()).getHandle();
++                    }
++                }
++            }
++            //LilyBukkit end
+             if (this.entityToAttack != null) {
+                 this.pathToEntity = this.worldObj.getPathToEntity(this, this.entityToAttack, f1);
+@@ -22,5 +42,16 @@
+         }
+         else if (!this.entityToAttack.isEntityAlive()) {
+-            this.entityToAttack = null;
++            //LilyBukkit start
++            EntityTargetEvent event = new EntityTargetEvent(this.getBukkitEntity(), null, EntityTargetEvent.TargetReason.TARGET_DIED);
++            this.worldObj.getServer().getPluginManager().callEvent(event);
++
++            if (!event.isCancelled()) {
++                if (event.getTarget() == null) {
++                    this.entityToAttack = null;
++                } else {
++                    this.entityToAttack = ((CraftEntity) event.getTarget()).getHandle();
++                }
++            }
++            //LilyBukkit end
+         }
+         else {
+@@ -78,5 +109,5 @@
+                 final double d28 = vec3D25.zCoord - this.posZ;
+                 final double d29 = vec3D25.yCoord - i10;
+-                final float f5 = (float)(Math.atan2(d28, d27) * 180.0 / 3.1415927410125732) - 90.0f;
++                final float f5 = (float)(TrigMath.atan2(d28, d27) * 180.0 / 3.1415927410125732) - 90.0f; //LilyBukkit - Math -> TrigMath
+                 float f6 = f5 - this.rotationYaw;
+                 this.moveForward = this.moveSpeed;
+@@ -122,16 +153,16 @@
          }
      }
 -    

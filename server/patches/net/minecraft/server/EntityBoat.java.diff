@@ -1,19 +1,53 @@
 --- EntityBoat.java
 +++ EntityBoat.java
-@@ -1,3 +1,3 @@
+@@ -1,5 +1,16 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
  import java.util.List;
-@@ -7,5 +7,5 @@
++//LilyBukkit start
++import org.bukkit.Location;
++import org.bukkit.entity.Vehicle;
++import org.bukkit.event.vehicle.VehicleCreateEvent;
++import org.bukkit.event.vehicle.VehicleDamageEvent;
++import org.bukkit.event.vehicle.VehicleDestroyEvent;
++import org.bukkit.event.vehicle.VehicleEnterEvent;
++import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
++import org.bukkit.event.vehicle.VehicleMoveEvent;
++import org.bukkit.event.vehicle.VehicleUpdateEvent;
++//LilyBukkit end
+ 
+ public class EntityBoat extends Entity {
+@@ -7,5 +18,22 @@
      public int timeSinceHit;
      public int forwardDirection;
 -    
++    //LilyBukkit start
++    public double maxSpeed = 0.4D;
++
++    @Override
++    public void applyEntityCollision(Entity entity) {
++        org.bukkit.entity.Entity hitEntity = (entity == null) ? null : entity.getBukkitEntity();
++
++        VehicleEntityCollisionEvent event = new VehicleEntityCollisionEvent((Vehicle) this.getBukkitEntity(), hitEntity);
++        this.worldObj.getServer().getPluginManager().callEvent(event);
++
++        if (event.isCancelled()) {
++            return;
++        }
++
++        super.applyEntityCollision(entity);
++    }
++    //LilyBukkit end
 +
      public EntityBoat(final World world) {
          super(world);
-@@ -18,25 +18,25 @@
+@@ -17,50 +45,91 @@
+         this.yOffset = this.height / 2.0f;
          this.canTriggerWalking = false;
++        //LilyBukkit start
++        this.worldObj.getServer().getPluginManager().callEvent(new VehicleCreateEvent((Vehicle) this.getBukkitEntity()));
++        //LilyBukkit end
      }
 -    
 +
@@ -42,16 +76,62 @@
 -    
 +
      @Override
-     public boolean attackEntityFrom(final Entity entity, final int damage) {
-@@ -46,5 +46,5 @@
-         if (this.damageTaken > 40) {
-             for (int i3 = 0; i3 < 3; ++i3) {
+-    public boolean attackEntityFrom(final Entity entity, final int damage) {
+-        this.forwardDirection = -this.forwardDirection;
+-        this.timeSinceHit = 10;
+-        this.damageTaken += damage * 10;
+-        if (this.damageTaken > 40) {
+-            for (int i3 = 0; i3 < 3; ++i3) {
 -                this.entityDropItem(Block.planks.blockID, 1, 0.0f);
-+                this.entityDropItem(Block.PLANKS.blockID, 1, 0.0f);
++    public boolean attackEntityFrom(final Entity entity, int damage) {
++        //LilyBukkit start
++        if (!this.isDead) {
++            Vehicle vehicle = (Vehicle) this.getBukkitEntity();
++            org.bukkit.entity.Entity attacker = (entity == null) ? null : entity.getBukkitEntity();
++
++            VehicleDamageEvent event = new VehicleDamageEvent(vehicle, attacker, damage);
++            this.worldObj.getServer().getPluginManager().callEvent(event);
++
++            if (event.isCancelled()) {
++                return true;
              }
-             for (int i3 = 0; i3 < 2; ++i3) {
-@@ -55,10 +55,10 @@
-         return true;
+-            for (int i3 = 0; i3 < 2; ++i3) {
+-                this.entityDropItem(Item.stick.shiftedIndex, 1, 0.0f);
++            damage = event.getDamage();
++            //LilyBukkit end
++            this.forwardDirection = -this.forwardDirection;
++            this.timeSinceHit = 10;
++            this.damageTaken += damage * 10;
++            if (this.damageTaken > 40) {
++                //LilyBukkit start
++                VehicleDestroyEvent destroyEvent = new VehicleDestroyEvent(vehicle, attacker);
++                this.worldObj.getServer().getPluginManager().callEvent(destroyEvent);
++
++                if (destroyEvent.isCancelled()) {
++                    this.damageTaken = 40; // Maximize damage so this doesn't get triggered again right away
++                    return true;
++                }
++
++                if (this.riddenByEntity != null) {
++                    this.riddenByEntity.mountEntity(this);
++                }
++                //LilyBukkit end
++                for (int i3 = 0; i3 < 3; ++i3) {
++                    this.entityDropItem(Block.PLANKS.blockID, 1, 0.0f);
++                }
++                for (int i3 = 0; i3 < 2; ++i3) {
++                    this.entityDropItem(Item.stick.shiftedIndex, 1, 0.0f);
++                }
++                this.setEntityDead();
+             }
+-            this.setEntityDead();
++            return true;
++            //LilyBukkit start
++        } else {
++            return true;
+         }
+-        return true;
++        //LilyBukkit end
      }
 -    
 +
@@ -63,30 +143,103 @@
 +
      @Override
      public void onUpdate() {
-@@ -130,5 +130,5 @@
++        //LilyBukkit start
++        double prevX = this.posX;
++        double prevY = this.posY;
++        double prevZ = this.posZ;
++        float prevYaw = this.rotationYaw;
++        float prevPitch = this.rotationPitch;
++        //LilyBukkit end
+         super.onUpdate();
+         if (this.timeSinceHit > 0) {
+@@ -89,5 +158,7 @@
+             this.motionZ += this.riddenByEntity.motionZ * 0.2;
+         }
+-        final double d6 = 0.4;
++        //LilyBukkit start
++        final double d6 = this.maxSpeed;
++        //LilyBukkit end
+         if (this.motionX < -d6) {
+             this.motionX = -d6;
+@@ -119,6 +190,5 @@
+                     final double d13 = this.posZ - d9 * d10 * 0.8 - d8 * d11;
+                     this.worldObj.spawnParticle("splash", d12, this.posY - 0.125, d13, this.motionX, this.motionY, this.motionZ);
+-                }
+-                else {
++                } else {
+                     final double d12 = this.posX + d8 + d9 * d10 * 0.7;
+                     final double d13 = this.posZ + d9 - d8 * d10 * 0.7;
+@@ -130,11 +200,10 @@
              this.setEntityDead();
              for (int i6 = 0; i6 < 3; ++i6) {
 -                this.entityDropItem(Block.planks.blockID, 1, 0.0f);
 +                this.entityDropItem(Block.PLANKS.blockID, 1, 0.0f);
              }
              for (int i6 = 0; i6 < 2; ++i6) {
-@@ -162,6 +162,6 @@
-         final List list18 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224, 0.0, 0.20000000298023224));
+                 this.entityDropItem(Item.stick.shiftedIndex, 1, 0.0f);
+             }
+-        }
+-        else {
++        } else {
+             this.motionX *= 0.9900000095367432;
+             this.motionY *= 0.949999988079071;
+@@ -146,8 +215,9 @@
+         final double d14 = this.prevPosZ - this.posZ;
+         if (d9 * d9 + d14 * d14 > 0.001) {
+-            d8 = (float)(Math.atan2(d14, d9) * 180.0 / 3.141592653589793);
++            d8 = (float) (Math.atan2(d14, d9) * 180.0 / 3.141592653589793);
+         }
+         double d15;
+-        for (d15 = d8 - this.rotationYaw; d15 >= 180.0; d15 -= 360.0) {}
++        for (d15 = d8 - this.rotationYaw; d15 >= 180.0; d15 -= 360.0) {
++        }
+         while (d15 < -180.0) {
+             d15 += 360.0;
+@@ -159,19 +229,36 @@
+             d15 = -20.0;
+         }
+-        this.setRotation(this.rotationYaw += (float)d15, this.rotationPitch);
+-        final List list18 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224, 0.0, 0.20000000298023224));
++        this.setRotation(this.rotationYaw += (float) d15, this.rotationPitch);
++        //LilyBukkit start
++        org.bukkit.Server server = this.worldObj.getServer();
++        org.bukkit.World bworld = this.worldObj.getWorld();
++
++        Location from = new Location(bworld, prevX, prevY, prevZ, prevYaw, prevPitch);
++        Location to = new Location(bworld, this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
++        Vehicle vehicle = (Vehicle) this.getBukkitEntity();
++
++        server.getPluginManager().callEvent(new VehicleUpdateEvent(vehicle));
++
++        if (!from.equals(to)) {
++            VehicleMoveEvent event = new VehicleMoveEvent(vehicle, from, to);
++            server.getPluginManager().callEvent(event);
++        }
++        //LilyBukkit end
++        final List<Entity> list18 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(0.20000000298023224, 0.0, 0.20000000298023224));
          if (list18 != null && list18.size() > 0) {
 -            for (int i7 = 0; i7 < list18.size(); ++i7) {
 -                final Entity entity20 = (Entity)list18.get(i7);
-+            for (Object o : list18) {
-+                final Entity entity20 = (Entity) o;
-                 if (entity20 != this.riddenByEntity && entity20.canBePushed() && entity20 instanceof EntityBoat) {
-                     entity20.applyEntityCollision(this);
-@@ -173,5 +173,5 @@
+-                if (entity20 != this.riddenByEntity && entity20.canBePushed() && entity20 instanceof EntityBoat) {
+-                    entity20.applyEntityCollision(this);
++            for (Entity entity : list18) {
++                if (entity != this.riddenByEntity && entity.canBePushed() && entity instanceof EntityBoat) {
++                    entity.applyEntityCollision(this);
+                 }
+             }
+         }
+         if (this.riddenByEntity != null && this.riddenByEntity.isDead) {
++            //LilyBukkit start
++            this.riddenByEntity.ridingEntity = null;
++            //LilyBukkit end
+             this.riddenByEntity = null;
          }
      }
 -    
 +
      @Override
      protected void updateRiderPosition() {
-@@ -180,9 +180,9 @@
+@@ -180,9 +267,9 @@
          this.riddenByEntity.setPosition(this.posX + d1, this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ + d2);
      }
 -    
