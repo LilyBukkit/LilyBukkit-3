@@ -20,7 +20,7 @@ dependencies {
     implementation 'mysql:mysql-connector-java:5.1.14'
     implementation 'org.avaje:ebean:2.7.3'
     //LilyBukkit deps
-    implementation files('lib/lilybukkit-api-1.1.2.jar')
+    implementation files('lib/lilybukkit-api-2.0.0.jar')
 }
 
 group 'net.buj'

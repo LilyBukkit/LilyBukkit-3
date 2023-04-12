@@ -10,7 +10,9 @@
       </option>
       <option name="taskNames">
         <list>
+          <option value="ejectClasses" />
           <option value="createPatches" />
+          <option value="pack" />
         </list>
       </option>
       <option name="vmOptions" />

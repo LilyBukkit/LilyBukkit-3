@@ -1,6 +1,6 @@
 --- Entity.java
 +++ Entity.java
-@@ -1,7 +1,21 @@
+@@ -1,7 +1,22 @@
 -package net.minecraft.src;
 +package net.minecraft.server;
  
@@ -10,6 +10,7 @@
 +//LilyBukkit start
 +import java.util.UUID;
 +
++import io.lilybukkit.lilybukkit3.*;
 +import org.bukkit.Bukkit;
 +import org.bukkit.block.BlockFace;
 +import org.bukkit.entity.*;
@@ -23,21 +24,21 @@
 +
  public abstract class Entity {
      private static int nextEntityID;
-@@ -38,5 +52,5 @@
+@@ -38,5 +53,5 @@
      public float distanceWalkedModified;
      protected boolean canTriggerWalking;
 -    protected float fallDistance;
 +    public float fallDistance; //LilyBukkit - protected -> public
      private int nextStepDistance;
      public double lastTickPosX;
-@@ -52,5 +66,5 @@
+@@ -52,5 +67,5 @@
      public int fireResistance;
      public int fire;
 -    protected int maxAir;
 +    public int maxAir; //LilyBukkit - protected -> public
      protected boolean inWater;
      public int heartsLife;
-@@ -63,9 +77,10 @@
+@@ -63,9 +78,10 @@
      public int chunkCoordY;
      public int chunkCoordZ;
 -    
@@ -50,7 +51,7 @@
 +
      public Entity(final World world) {
          this.entityID = Entity.nextEntityID++;
-@@ -103,27 +118,60 @@
+@@ -103,27 +119,60 @@
          this.setPosition(0.0, 0.0, 0.0);
      }
 -    
@@ -119,7 +120,7 @@
 +
      public void setPosition(final double posX, final double posY, final double posZ) {
          this.posX = posX;
-@@ -134,9 +182,9 @@
+@@ -134,9 +183,9 @@
          this.boundingBox.setBounds(posX - f7, posY - this.yOffset + this.ySize, posZ - f7, posX + f7, posY - this.yOffset + this.ySize + f8, posZ + f7);
      }
 -    
@@ -131,7 +132,7 @@
 +
      public void onEntityUpdate() {
          if (this.ridingEntity != null && this.ridingEntity.isDead) {
-@@ -157,14 +205,14 @@
+@@ -157,14 +206,14 @@
                  }
                  this.worldObj.playSoundAtEntity(this, "random.splash", f1, 1.0f + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4f);
 -                final float f2 = (float)MathHelper.floor_double(this.boundingBox.minY);
@@ -149,7 +150,7 @@
 +                    this.worldObj.spawnParticle("splash", this.posX + f3, f2 + 1.0f, this.posZ + f4, this.motionX, this.motionY, this.motionZ);
                  }
              }
-@@ -172,15 +220,55 @@
+@@ -172,15 +221,55 @@
              this.inWater = true;
              this.fire = 0;
 -        }
@@ -208,7 +209,7 @@
 +            //LilyBukkit end
              this.attackEntityFrom(null, 10);
              this.fire = 600;
-@@ -191,9 +279,9 @@
+@@ -191,9 +280,9 @@
          this.firstUpdate = false;
      }
 -    
@@ -220,14 +221,14 @@
 +
      public boolean isOffsetPositionInLiquid(final double x, final double y, final double z) {
          final AxisAlignedBB axisAlignedBB7 = this.boundingBox.getOffsetBoundingBox(x, y, z);
-@@ -201,5 +289,5 @@
+@@ -201,5 +290,5 @@
          return list8.size() <= 0 && !this.worldObj.getIsAnyLiquid(axisAlignedBB7);
      }
 -    
 +
      public void moveEntity(double x, double y, double z) {
          if (this.noClip) {
-@@ -208,6 +296,5 @@
+@@ -208,6 +297,5 @@
              this.posY = this.boundingBox.minY + this.yOffset - this.ySize;
              this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0;
 -        }
@@ -235,7 +236,7 @@
 +        } else {
              final double d7 = this.posX;
              final double d8 = this.posZ;
-@@ -225,9 +312,7 @@
+@@ -225,9 +313,7 @@
                      if (x < d12 && x >= -d12) {
                          x = 0.0;
 -                    }
@@ -247,7 +248,7 @@
 +                    } else {
                          x += d12;
                      }
-@@ -237,9 +322,7 @@
+@@ -237,9 +323,7 @@
                      if (z < d12 && z >= -d12) {
                          z = 0.0;
 -                    }
@@ -259,7 +260,7 @@
 +                    } else {
                          z += d12;
                      }
-@@ -248,6 +331,6 @@
+@@ -248,6 +332,6 @@
              }
              List list35 = this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox.addCoord(x, y, z));
 -            for (int i20 = 0; i20 < list35.size(); ++i20) {
@@ -268,7 +269,7 @@
 +                y = ((AxisAlignedBB) o2).calculateYOffset(this.boundingBox, y);
              }
              this.boundingBox.offset(0.0, y, 0.0);
-@@ -258,6 +341,6 @@
+@@ -258,6 +342,6 @@
              }
              final boolean z3 = this.onGround || (d10 != y && d10 < 0.0);
 -            for (int i21 = 0; i21 < list35.size(); ++i21) {
@@ -277,7 +278,7 @@
 +                x = ((AxisAlignedBB) o1).calculateXOffset(this.boundingBox, x);
              }
              this.boundingBox.offset(x, 0.0, 0.0);
-@@ -267,6 +350,6 @@
+@@ -267,6 +351,6 @@
                  x = 0.0;
              }
 -            for (int i21 = 0; i21 < list35.size(); ++i21) {
@@ -286,7 +287,7 @@
 +                z = ((AxisAlignedBB) element).calculateZOffset(this.boundingBox, z);
              }
              this.boundingBox.offset(0.0, 0.0, z);
-@@ -286,6 +369,6 @@
+@@ -286,6 +370,6 @@
                  this.boundingBox.setBB(axisAlignedBB17);
                  list35 = this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox.addCoord(d9, y, d11));
 -                for (int i22 = 0; i22 < list35.size(); ++i22) {
@@ -295,7 +296,7 @@
 +                    y = ((AxisAlignedBB) item).calculateYOffset(this.boundingBox, y);
                  }
                  this.boundingBox.offset(0.0, y, 0.0);
-@@ -295,6 +378,6 @@
+@@ -295,6 +379,6 @@
                      x = 0.0;
                  }
 -                for (int i22 = 0; i22 < list35.size(); ++i22) {
@@ -304,7 +305,7 @@
 +                    x = ((AxisAlignedBB) value).calculateXOffset(this.boundingBox, x);
                  }
                  this.boundingBox.offset(x, 0.0, 0.0);
-@@ -304,6 +387,6 @@
+@@ -304,6 +388,6 @@
                      x = 0.0;
                  }
 -                for (int i22 = 0; i22 < list35.size(); ++i22) {
@@ -313,7 +314,7 @@
 +                    z = ((AxisAlignedBB) o).calculateZOffset(this.boundingBox, z);
                  }
                  this.boundingBox.offset(0.0, 0.0, z);
-@@ -318,6 +401,5 @@
+@@ -318,6 +402,5 @@
                      z = d15;
                      this.boundingBox.setBB(axisAlignedBB18);
 -                }
@@ -321,7 +322,7 @@
 +                } else {
                      this.ySize += 0.5;
                  }
-@@ -335,8 +417,7 @@
+@@ -335,8 +418,7 @@
                      this.fallDistance = 0.0f;
                  }
 +            } else if (y < 0.0) {
@@ -332,7 +333,7 @@
 -            }
              if (d9 != x) {
                  this.motionX = 0.0;
-@@ -350,5 +431,24 @@
+@@ -350,5 +432,24 @@
              final double d13 = this.posX - d7;
              final double d14 = this.posZ - d8;
 -            this.distanceWalkedModified += (float)(MathHelper.sqrt_double(d13 * d13 + d14 * d14) * 0.6);
@@ -358,7 +359,7 @@
 +            this.distanceWalkedModified += (float) (MathHelper.sqrt_double(d13 * d13 + d14 * d14) * 0.6);
              if (this.canTriggerWalking && !z2) {
                  final int i23 = MathHelper.floor_double(this.posX);
-@@ -359,9 +459,8 @@
+@@ -359,9 +460,8 @@
                      ++this.nextStepDistance;
                      StepSound stepSound29 = Block.blocksList[i22].stepSound;
 -                    if (this.worldObj.getBlockId(i23, i24 + 1, i25) == Block.snow.blockID) {
@@ -371,7 +372,7 @@
 +                    } else if (!Block.blocksList[i22].material.getIsLiquid()) {
                          this.worldObj.playSoundAtEntity(this, stepSound29.getStepSound(), stepSound29.getVolume() * 0.15f, stepSound29.getPitch());
                      }
-@@ -391,10 +490,17 @@
+@@ -391,10 +491,17 @@
                  if (!z4) {
                      ++this.fire;
 -                    if (this.fire == 0) {
@@ -392,7 +393,7 @@
 +            } else if (this.fire <= 0) {
                  this.fire = -this.fireResistance;
              }
-@@ -405,28 +511,41 @@
+@@ -405,28 +512,41 @@
          }
      }
 -    
@@ -442,7 +443,7 @@
 +        final int i5 = MathHelper.floor_float((float) MathHelper.floor_double(d2));
          final int i6 = MathHelper.floor_double(this.posZ);
          final int i7 = this.worldObj.getBlockId(i4, i5, i6);
-@@ -438,13 +557,13 @@
+@@ -438,13 +558,13 @@
          return false;
      }
 -    
@@ -459,28 +460,28 @@
 +
      public void moveFlying(float f1, float f2, final float f3) {
          float f4 = MathHelper.sqrt_float(f1 * f1 + f2 * f2);
-@@ -462,5 +581,5 @@
+@@ -462,5 +582,5 @@
          }
      }
 -    
 +
      public float getBrightness(final float unused) {
          final int i2 = MathHelper.floor_double(this.posX);
-@@ -470,5 +589,5 @@
+@@ -470,5 +590,5 @@
          return this.worldObj.getBrightness(i2, i3, i4);
      }
 -    
 +
      public void setPositionAndRotation(final double x, final double y, final double z, final float yaw, final float pitch) {
          this.posX = x;
-@@ -490,5 +609,5 @@
+@@ -490,5 +610,5 @@
          this.setPosition(this.posX, this.posY, this.posZ);
      }
 -    
 +
      public void setLocationAndAngles(final double x, final double y, final double z, final float yaw, final float pitch) {
          this.posX = x;
-@@ -503,12 +622,12 @@
+@@ -503,12 +623,12 @@
          this.setPosition(this.posX, this.posY, this.posZ);
      }
 -    
@@ -498,21 +499,21 @@
 +
      public double getDistanceSq(final double x, final double y, final double z) {
          final double d7 = this.posX - x;
-@@ -517,5 +636,5 @@
+@@ -517,5 +637,5 @@
          return d7 * d7 + d8 * d8 + d9 * d9;
      }
 -    
 +
      public double getDistance(final double x, final double y, final double z) {
          final double d7 = this.posX - x;
-@@ -524,5 +643,5 @@
+@@ -524,5 +644,5 @@
          return MathHelper.sqrt_double(d7 * d7 + d8 * d8 + d9 * d9);
      }
 -    
 +
      public double getDistanceSqToEntity(final Entity entity) {
          final double d2 = this.posX - entity.posX;
-@@ -531,8 +650,8 @@
+@@ -531,8 +651,8 @@
          return d2 * d2 + d3 * d3 + d4 * d4;
      }
 -    
@@ -523,14 +524,14 @@
 +
      public void applyEntityCollision(final Entity entity) {
          if (entity.riddenByEntity != this && entity.ridingEntity != this) {
-@@ -559,5 +678,5 @@
+@@ -559,5 +679,5 @@
          }
      }
 -    
 +
      public void addVelocity(final double motionX, final double motionY, final double motionZ) {
          this.motionX += motionX;
-@@ -565,20 +684,20 @@
+@@ -565,20 +685,20 @@
          this.motionZ += motionZ;
      }
 -    
@@ -556,7 +557,7 @@
 +
      public boolean addEntityID(final NBTTagCompound nbttagcompound) {
          final String string2 = this.getEntityString();
-@@ -590,16 +709,26 @@
+@@ -590,16 +710,26 @@
          return false;
      }
 -    
@@ -590,7 +591,7 @@
 +
      public void readFromNBT(final NBTTagCompound nbttagcompound) {
          final NBTTagList nBTTagList2 = nbttagcompound.getTagList("Pos");
-@@ -607,23 +736,23 @@
+@@ -607,23 +737,23 @@
          final NBTTagList nBTTagList4 = nbttagcompound.getTagList("Rotation");
          this.setPosition(0.0, 0.0, 0.0);
 -        this.motionX = ((NBTTagDouble)nBTTagList3.tagAt(0)).doubleValue;
@@ -622,7 +623,7 @@
 +        final float floatValue2 = ((NBTTagFloat) nBTTagList4.tagAt(1)).floatValue;
          this.rotationPitch = floatValue2;
          this.prevRotationPitch = floatValue2;
-@@ -633,39 +762,94 @@
+@@ -633,39 +763,94 @@
          this.onGround = nbttagcompound.getBoolean("OnGround");
          this.setPosition(this.posX, this.posY, this.posZ);
 +        //LilyBukkit start
@@ -664,7 +665,7 @@
 +            if (nbttagcompound.hasKey("WorldUID")) {
 +                bworld = server.getWorld(nbttagcompound.getLong("WorldUID"));
 +            } else if ("".equals(worldName)) {
-+                bworld = ((org.bukkit.craftbukkit.CraftServer) server).getServer().getWorldServer(entityPlayer.dimension).getWorld();
++                bworld = ((CraftServer) server).getServer().getWorldServer(entityPlayer.dimension).getWorld();
 +            } else {
 +                bworld = server.getWorld(worldName);
 +            }
@@ -728,7 +729,7 @@
 +
      public EntityItem entityDropItem(final int itemID, final int count, final float velocity) {
          final EntityItem entityItem4 = new EntityItem(this.worldObj, this.posX, this.posY + velocity, this.posZ, new ItemStack(itemID, count));
-@@ -674,9 +858,9 @@
+@@ -674,9 +859,9 @@
          return entityItem4;
      }
 -    
@@ -740,7 +741,7 @@
 +
      public boolean isEntityInsideOpaqueBlock() {
          final int i1 = MathHelper.floor_double(this.posX);
-@@ -685,14 +869,13 @@
+@@ -685,14 +870,13 @@
          return this.worldObj.isBlockNormalCube(i1, i2, i3);
      }
 -    
@@ -758,7 +759,7 @@
 +        } else {
              this.motionX = 0.0;
              this.motionY = 0.0;
-@@ -731,30 +914,53 @@
+@@ -731,30 +915,53 @@
              this.entityRiderYawDelta -= d1;
              this.entityRiderPitchDelta -= d2;
 -            this.rotationYaw += (float)d1;

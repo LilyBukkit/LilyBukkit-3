@@ -14,18 +14,16 @@
 +    public List<Entity>[] entities;
      public boolean isTerrainPopulated;
      public boolean isModified;
-@@ -27,8 +27,8 @@
+@@ -27,7 +27,7 @@
      public boolean hasEntities;
      public long lastSaveTime;
 -    
 +
      public Chunk(final World world, final int xPosition, final int zPosition) {
 -        this.chunkTileEntityMap = (Map)new HashMap();
--        this.entities = new List[8];
 +        this.chunkTileEntityMap = new HashMap<>();
-+        this.entities = new List<Entity>[8];
+         this.entities = new List[8];
          this.isTerrainPopulated = false;
-         this.isModified = false;
 @@ -38,11 +38,21 @@
          this.worldObj = world;
          this.xPosition = xPosition;
